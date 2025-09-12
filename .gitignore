@@ -11,5 +11,8 @@ htmlcov/
 data/cache/
 data/semtools_cache/
 runs/
+data/cache/
+data/mcp.sqlite
+reports/
 *.parquet
 *.ipynb_checkpoints

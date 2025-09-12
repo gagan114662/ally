@@ -167,6 +167,16 @@ def _import_all_tools():
         from . import execution  # Import execution tools
     except ImportError:
         pass
+    
+    try:
+        from . import memory  # Import memory tools
+    except ImportError:
+        pass
+    
+    try:
+        from . import reporting  # Import reporting tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()
