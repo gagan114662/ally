@@ -95,12 +95,12 @@ jobs:
               log_result = memory_log_run(**sample_data)
               proofs["MEMORY_LOG_OK"] = log_result.ok
               
-              query_result = memory_query("runs", where="run_id='CI_TEST_RUN_001'")
+              query_result = memory_query(table="runs", where="run_id='CI_TEST_RUN_001'")
               proofs["MEMORY_QUERY_COUNT"] = query_result.data["count"] if query_result.ok else 0
               
               # Test reporting
               if query_result.ok and query_result.data["count"] > 0:
-                  report_result = generate_tearsheet("CI_TEST_RUN_001")
+                  report_result = generate_tearsheet(run_id="CI_TEST_RUN_001")
                   proofs["REPORT_OK"] = report_result.ok
                   if report_result.ok:
                       summary_hash = hashlib.sha1(json.dumps({k:v for k,v in report_result.data.items() if k != "html_path"}, sort_keys=True).encode()).hexdigest()
