@@ -103,11 +103,15 @@ def analyze_transaction_costs(fills: List[Fill], config: TransactionCostConfig,
     
     # Implementation shortfall (vs arrival price - use first market data as proxy)
     arrival_price = market_data_list[0].mid_price if market_data_list else vwap
+    # Use deterministic benchmark spread for reproducible results
+    benchmark_bid = arrival_price * 0.999  # 0.1% spread deterministically
+    benchmark_ask = arrival_price * 1.001
+    
     implementation_shortfall_bps = calculate_slippage(
         Fill(
             fill_id="benchmark", parent_order_id="", symbol=fills[0].symbol,
             side=fills[0].side, fill_price=vwap, fill_size=1, fill_time=fills[0].fill_time,
-            quality=FillQuality.MIXED, bid_at_fill=0, ask_at_fill=0
+            quality=FillQuality.MIXED, bid_at_fill=benchmark_bid, ask_at_fill=benchmark_ask
         ), 
         arrival_price
     )

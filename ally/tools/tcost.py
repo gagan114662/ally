@@ -96,7 +96,9 @@ def tcost_simulate_fills(
         # Generate fills based on strategy
         fills = []
         remaining_qty = target_quantity
-        current_time = datetime.now()
+        # Use deterministic timestamp based on seed for reproducibility (timezone-aware)
+        from datetime import timezone
+        current_time = datetime(2024, 1, 15, 10, 30, tzinfo=timezone.utc) + timedelta(seconds=seed % 3600)
         
         if execution_strategy == "twap":
             # Time-weighted average price strategy
