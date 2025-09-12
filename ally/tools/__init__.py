@@ -180,3 +180,10 @@ def _import_all_tools():
 
 # Auto-import tools when module is imported
 _import_all_tools()
+
+# Register reviewer tool
+try:
+    from .reviewer import review_pr as _review_pr
+    TOOL_REGISTRY["reviewer.check_pr"] = _review_pr
+except ImportError:
+    pass
