@@ -177,6 +177,14 @@ def _import_all_tools():
         from . import reporting  # Import reporting tools
     except ImportError:
         pass
+    
+    try:
+        from .data_live import data_fetch_live  # Import live data connector
+        from .web_tavily import web_search_tavily  # Import Tavily web search
+        TOOL_REGISTRY["data.fetch_live"] = data_fetch_live
+        TOOL_REGISTRY["web.search_tavily"] = web_search_tavily
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()

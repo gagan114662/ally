@@ -16,4 +16,4 @@ data/mcp.sqlite
 data/ally_memory.duckdb
 reports/
 *.parquet
-*.ipynb_checkpoints
+*.ipynb_checkpoints*.env
