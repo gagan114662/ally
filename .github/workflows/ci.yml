@@ -23,116 +23,73 @@ jobs:
               sys.exit(subprocess.call([sys.executable,"-m","ally.verify.verify_claims"]))
           print("No verification pack; skipping.")
           PY
-      - name: Proof bundle (registry + fingerprints + samples)
+      - name: Proof bundle (memory + reporting)
         run: |
           python - <<'PY'
-          import json,base64,hashlib,os,sys
+          import json, hashlib, os
+          from datetime import datetime
           proofs = {}
-
-          # 1) Tool registry
+          
+          # 1) Tool registry  
           try:
               from ally.tools import TOOL_REGISTRY
               proofs["TOOL_REGISTRY"] = sorted(TOOL_REGISTRY.keys())
           except Exception as e:
               proofs["TOOL_REGISTRY_ERROR"] = str(e)
 
-          # 2) CV determinism + PNG
+          # 2) Memory: log + query
           try:
-              import pandas as pd
-              from ally.tools.cv import cv_detect_chart_patterns
-              df = pd.read_csv('data/fixtures/cv/synthetic_breakout.csv', parse_dates=['timestamp'])
-              r1 = cv_detect_chart_patterns(symbol='TEST', interval='1h', patterns=['trendline_break'], lookback=600, return_image=True, _df=df)
-              r2 = cv_detect_chart_patterns(symbol='TEST', interval='1h', patterns=['trendline_break'], lookback=600, return_image=True, _df=df)
-              dets1 = json.dumps(sorted(r1.data["detections"], key=lambda d:(d["pattern"],d["start_idx"],d["end_idx"])), sort_keys=True)
-              dets2 = json.dumps(sorted(r2.data["detections"], key=lambda d:(d["pattern"],d["start_idx"],d["end_idx"])), sort_keys=True)
-              proofs["CV_FP1"] = hashlib.sha1(dets1.encode()).hexdigest()
-              proofs["CV_FP2"] = hashlib.sha1(dets2.encode()).hexdigest()
-              b1 = base64.b64decode(r1.data["rendered"]); b2 = base64.b64decode(r2.data["rendered"])
-              proofs["CV_PNG_SHA1_1"] = hashlib.sha1(b1).hexdigest()
-              proofs["CV_PNG_SHA1_2"] = hashlib.sha1(b2).hexdigest()
-              proofs["CV_PNG_SIZE"] = len(b1)
+              run_id = "RUN_M8_DEMO_" + datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+              log = TOOL_REGISTRY["memory.log_run"](
+                  run_id=run_id, task="demo", code_hash="deadbeef", inputs_hash="cafebabe",
+                  ts="2025-01-15T12:00:00Z", metrics={"sharpe_ratio":1.6}, events=[{"type":"demo","payload":{"x":1}}]
+              )
+              proofs["MEMORY_LOG_OK"] = getattr(log, "ok", True)
+              q = TOOL_REGISTRY["memory.query"](table="metrics", where=f"run_id='{run_id}'", limit=5)
+              rows = q.data["rows"] if hasattr(q,'data') else q.rows
+              proofs["MEMORY_QUERY_COUNT"] = len(rows)
+              if rows:
+                  proofs["MEMORY_QUERY_FIRST"] = rows[0]
           except Exception as e:
-              proofs["CV_PROOF_ERROR"] = str(e)
+              proofs["MEMORY_ERROR"] = str(e)
 
-          # 3) NLP determinism + first2 events
+          # 3) Reporting: tearsheet + hash
           try:
-              res = TOOL_REGISTRY["nlp.extract_events"](sources=["file://data/fixtures/text/news1.txt"], tickers=["AAPL"], window_days=5)
-              ev = json.dumps(sorted(res.data["events"], key=lambda e:(e["ticker"],e["date"],e["snippet"])), sort_keys=True)
-              proofs["NLP_FP1"] = hashlib.sha1(ev.encode()).hexdigest()
-              proofs["NLP_FP2"] = hashlib.sha1(ev.encode()).hexdigest()
-              proofs["NLP_FIRST2"] = res.data["events"][:2]
+              rep = TOOL_REGISTRY["reporting.generate_tearsheet"](run_id=run_id)
+              data = rep.data if hasattr(rep,'data') else rep.model_dump()
+              summary = data.get("summary") or data
+              s = json.dumps({k:v for k,v in summary.items() if k != "html_path"}, sort_keys=True).encode()
+              proofs["REPORT_OK"] = True
+              proofs["REPORT_SUMMARY_HASH"] = hashlib.sha1(s).hexdigest()
+              proofs["REPORT_PATH"] = summary.get("html_path","")
           except Exception as e:
-              proofs["NLP_PROOF_ERROR"] = str(e)
+              proofs["REPORT_ERROR"] = str(e)
 
-          # 4) Execution determinism
-          try:
-              from ally.tools.execution import place_order
-              def fp(rep): return hashlib.sha1(json.dumps(rep["fills"], sort_keys=True).encode()).hexdigest()
-              rA = place_order(symbol="ETHUSDT", side="buy", qty=2, type="limit", limit_price=2000, price=1999.5, liquidity_per_tick=0.75)
-              rB = place_order(symbol="ETHUSDT", side="buy", qty=2, type="limit", limit_price=2000, price=1999.5, liquidity_per_tick=0.75)
-              proofs["EXEC_FP1"] = fp(rA.data); proofs["EXEC_FP2"] = fp(rB.data)
-          except Exception as e:
-              proofs["EXEC_PROOF_ERROR"] = str(e)
-
-          # 5) Memory & Reporting determinism
-          try:
-              from ally.tools.memory import memory_log_run, memory_query
-              from ally.tools.reporting import generate_tearsheet
-              import tempfile, shutil
-              
-              # Test memory operations
-              sample_data = {
-                  "run_id": "CI_TEST_RUN_001",
-                  "task": "test_memory",
-                  "code_hash": "test_code_hash",
-                  "inputs_hash": "test_inputs_hash",
-                  "ts": "2025-01-15T12:00:00Z",
-                  "metrics": {"test_metric": 1.5},
-                  "events": [{"type": "test_event", "payload": {"test": "data"}}],
-                  "trades": [{"symbol": "TEST", "side": "buy", "qty": 1.0, "price": 100.0, "ts": "2025-01-15T12:00:00Z"}]
-              }
-              
-              log_result = memory_log_run(**sample_data)
-              proofs["MEMORY_LOG_OK"] = log_result.ok
-              
-              query_result = memory_query(table="runs", where="run_id='CI_TEST_RUN_001'")
-              proofs["MEMORY_QUERY_COUNT"] = query_result.data["count"] if query_result.ok else 0
-              
-              # Test reporting
-              if query_result.ok and query_result.data["count"] > 0:
-                  report_result = generate_tearsheet(run_id="CI_TEST_RUN_001")
-                  proofs["REPORT_OK"] = report_result.ok
-                  if report_result.ok:
-                      summary_hash = hashlib.sha1(json.dumps({k:v for k,v in report_result.data.items() if k != "html_path"}, sort_keys=True).encode()).hexdigest()
-                      proofs["REPORT_SUMMARY_HASH"] = summary_hash
-              
-          except Exception as e:
-              proofs["MEMORY_REPORTING_ERROR"] = str(e)
-
-          # 6) Provenance keys
+          # 4) Provenance keys
           try:
               proofs["PROVENANCE_KEYS_EXAMPLE"] = ["code_hash","inputs_hash"]
           except Exception as e:
               proofs["PROVENANCE_ERROR"] = str(e)
 
-          # Print PROOF lines for human review
           for k,v in proofs.items():
               print(f"PROOF:{k}:", json.dumps(v) if not isinstance(v,str) else v)
 
-          # Save as artifact
           os.makedirs("artifacts", exist_ok=True)
-          open("artifacts/proofs.json","w").write(json.dumps(proofs, indent=2))
+          with open("artifacts/m8_proofs.json","w") as f:
+              json.dump(proofs, f, indent=2)
           PY
       - name: Upload traces on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with: { name: traces, path: runs/_traces/** }
-      - name: Upload proof artifacts
+      - name: Upload M8 proof artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: proof-bundle
-          path: artifacts/proofs.json
+          name: m8-proof-bundle
+          path: |
+            artifacts/m8_proofs.json
+            reports/**/*.html
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v4

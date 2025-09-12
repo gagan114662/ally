@@ -13,6 +13,7 @@ data/semtools_cache/
 runs/
 data/cache/
 data/mcp.sqlite
+data/ally_memory.duckdb
 reports/
 *.parquet
 *.ipynb_checkpoints
