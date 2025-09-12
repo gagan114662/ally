@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OrchSummary",
+  "description": "Schema for orchestrator pipeline summary output",
+  "type": "object",
+  "properties": {
+    "experiment_id": {
+      "type": "string",
+      "description": "Unique identifier for the experiment"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^RUN_[A-Za-z0-9_-]+_[0-9]{8}T[0-9]{6}Z$",
+      "description": "Unique run identifier with timestamp"
+    },
+    "best_params": {
+      "type": "object",
+      "description": "Optimized parameters from backtest",
+      "additionalProperties": true,
+      "minProperties": 1
+    },
+    "kpis": {
+      "type": "object",
+      "description": "Key performance indicators from backtest",
+      "properties": {
+        "annual_return": {"type": "number"},
+        "sharpe_ratio": {"type": "number"},
+        "max_drawdown": {"type": "number"},
+        "win_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "profit_factor": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": {"type": "number"},
+      "minProperties": 1
+    },
+    "report_path": {
+      "oneOf": [
+        {"type": "string", "pattern": "^.+\\.html$"},
+        {"type": "null"}
+      ],
+      "description": "Path to generated HTML tearsheet report, null if not generated"
+    }
+  },
+  "required": ["experiment_id", "run_id", "best_params", "kpis"],
+  "additionalProperties": false
+}
