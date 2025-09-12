@@ -6,13 +6,12 @@ import pytest
 import sys
 from pathlib import Path
 
-# Add Ally to path
+# Add ally to path
 sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "Ally"))
 
-from Ally.tools.mcp import mcp_discover, mcp_call, mcp_list_servers, mcp_list_tools
-from Ally.schemas.base import ToolResult
-from Ally.adapters.mcp_client import MockMCPServer
+from ally.tools.mcp import mcp_discover, mcp_call, mcp_list_servers, mcp_list_tools
+from ally.schemas.base import ToolResult
+from ally.adapters.mcp_client import MockMCPServer
 
 
 def test_mock_mcp_server():

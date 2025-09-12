@@ -9,13 +9,12 @@ import numpy as np
 import base64
 from pathlib import Path
 
-# Add Ally to path
+# Add ally to path
 sys.path.append(str(Path(__file__).parent.parent))
-sys.path.append(str(Path(__file__).parent.parent / "Ally"))
 
-from Ally.tools.cv import cv_detect_chart_patterns, cv_generate_synthetic
-from Ally.schemas.base import ToolResult
-from Ally.utils.ta_rules import detect_engulfings, detect_pinbar, atr
+from ally.tools.cv import cv_detect_chart_patterns, cv_generate_synthetic
+from ally.schemas.base import ToolResult
+from ally.utils.ta_rules import detect_engulfings, detect_pinbar, atr
 
 
 def create_fixtures():

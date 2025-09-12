@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 sys.path.append(str(Path(__file__).parent.parent / "Ally"))
 
-from Ally.utils.serialization import convert_timestamps
+from ally.utils.serialization import convert_timestamps
 
 
 def test_dataframe_index_and_cols_to_iso():
