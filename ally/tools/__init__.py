@@ -180,3 +180,15 @@ def _import_all_tools():
 
 # Auto-import tools when module is imported
 _import_all_tools()
+
+# Register debug tools
+try:
+    from .debug import capture_trace as _dbg_cap, make_repro as _dbg_repro, minimize as _dbg_min, bisect as _dbg_bisect, lint_typecheck as _dbg_lint, propcheck_hashing as _dbg_prop
+    TOOL_REGISTRY["debug.capture_trace"] = _dbg_cap
+    TOOL_REGISTRY["debug.make_repro"]   = _dbg_repro
+    TOOL_REGISTRY["debug.minimize"]     = _dbg_min
+    TOOL_REGISTRY["debug.bisect"]       = _dbg_bisect
+    TOOL_REGISTRY["debug.lint_typecheck"]= _dbg_lint
+    TOOL_REGISTRY["debug.propcheck"]    = _dbg_prop
+except ImportError:
+    pass
