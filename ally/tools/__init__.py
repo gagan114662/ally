@@ -180,3 +180,16 @@ def _import_all_tools():
 
 # Auto-import tools when module is imported
 _import_all_tools()
+
+# Register QuantConnect tools
+try:
+    from .qc_templates import qc_generate_python as _qc_gen, qc_list_templates as _qc_list
+    from .qc_lint import qc_lint as _qc_lint
+    from .qc_lean import qc_smoke_run as _qc_smoke, qc_validate_project_structure as _qc_validate
+    TOOL_REGISTRY["qc.generate_python"] = _qc_gen
+    TOOL_REGISTRY["qc.list_templates"] = _qc_list
+    TOOL_REGISTRY["qc.lint"] = _qc_lint
+    TOOL_REGISTRY["qc.smoke_run"] = _qc_smoke
+    TOOL_REGISTRY["qc.validate_project"] = _qc_validate
+except ImportError:
+    pass
