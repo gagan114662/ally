@@ -4,10 +4,15 @@ Database utilities for Ally - Memory persistence with DuckDB
 
 import os
 import json
+import re
 import duckdb
 from typing import Dict, List, Any, Optional, Union
 from datetime import datetime
 from pathlib import Path
+
+
+# Allowlisted tables for secure query operations
+ALLOWED_TABLES = {"runs", "metrics", "events", "trades"}
 
 
 class DatabaseManager:
@@ -82,6 +87,58 @@ class DatabaseManager:
         
         conn.commit()
     
+    def safe_query(self, table: str, filters: dict = None, limit: int = 100) -> List[Dict[str, Any]]:
+        """
+        Execute safe parameterized query on allowlisted table
+        
+        Args:
+            table: Table name (must be in ALLOWED_TABLES)
+            filters: Dictionary of column=value filters
+            limit: Maximum rows to return
+            
+        Returns:
+            List of rows as dictionaries
+        """
+        if table not in ALLOWED_TABLES:
+            raise ValueError(f"Invalid table: {table}. Allowed: {', '.join(ALLOWED_TABLES)}")
+        
+        filters = filters or {}
+        conn = self._get_connection()
+        
+        # Build parameterized query
+        keys = list(filters.keys())
+        clause = " AND ".join([f"{k} = ?" for k in keys])
+        sql = f"SELECT * FROM {table}"
+        if clause:
+            sql += f" WHERE {clause}"
+        sql += " LIMIT ?"
+        
+        # Parameters in same order as placeholders
+        params = [filters[k] for k in keys] + [int(limit)]
+        
+        result = conn.execute(sql, params).fetchall()
+        columns = [desc[0] for desc in conn.description] if conn.description else []
+        
+        # Convert to list of dicts
+        rows = []
+        for row in result:
+            row_dict = {}
+            for i, col in enumerate(columns):
+                value = row[i]
+                # Convert JSON strings back to objects
+                if col in ['metrics', 'events', 'trades'] and isinstance(value, str):
+                    try:
+                        value = json.loads(value)
+                    except:
+                        pass
+                # Convert timestamps to ISO strings
+                elif isinstance(value, datetime):
+                    value = value.isoformat() + 'Z'
+                row_dict[col] = value
+            rows.append(row_dict)
+        
+        return rows
+    
     def log_run(
         self,
         run_id: str,
@@ -131,16 +188,18 @@ class DatabaseManager:
         self,
         query: str = None,
         table: str = None,
+        where: str = None,
         params: Dict[str, Any] = None,
         limit: int = None
     ) -> Dict[str, Any]:
         """
-        Query runs from database
+        Query runs from database with security improvements
         
         Args:
-            query: Custom SQL query
-            table: Table name for simple SELECT * queries
-            params: Query parameters (not used in current implementation)
+            query: DEPRECATED - Use table + where instead
+            table: Table name for SELECT queries
+            where: DEPRECATED - Use safe filters instead
+            params: Query parameters (not used)
             limit: Maximum rows to return
             
         Returns:
@@ -150,42 +209,34 @@ class DatabaseManager:
             import time
             start_time = time.time()
             
-            conn = self._get_connection()
+            # Default table if none specified
+            if not table and not query:
+                table = "runs"
             
-            # Build query
-            if query:
-                sql = query
-            elif table:
-                sql = f"SELECT * FROM {table}"
+            # Handle legacy where clause for backwards compatibility
+            filters = {}
+            if where:
+                # Legacy support: parse simple where="run_id='<id>'" patterns
+                match = re.fullmatch(r"run_id\s*=\s*'([^']+)'", where)
+                if match:
+                    filters = {"run_id": match.group(1)}
+                else:
+                    # For safety, ignore complex where clauses
+                    print(f"Warning: Ignoring unsafe where clause: {where}")
+            
+            # Use safe query method
+            if table and not query:
+                rows = self.safe_query(table=table, filters=filters, limit=limit or 100)
+                columns = list(rows[0].keys()) if rows else []
             else:
-                sql = "SELECT * FROM runs ORDER BY created_at DESC"
-            
-            if limit:
-                sql += f" LIMIT {limit}"
-            
-            # Execute query
-            result = conn.execute(sql).fetchall()
-            
-            # Get column names
-            columns = [desc[0] for desc in conn.description] if conn.description else []
-            
-            # Convert to list of dicts
-            rows = []
-            for row in result:
-                row_dict = {}
-                for i, col in enumerate(columns):
-                    value = row[i]
-                    # Convert JSON strings back to objects
-                    if col in ['metrics', 'events', 'trades'] and isinstance(value, str):
-                        try:
-                            value = json.loads(value)
-                        except:
-                            pass
-                    # Convert timestamps to ISO strings (only for datetime objects)
-                    elif isinstance(value, datetime):
-                        value = value.isoformat() + 'Z'
-                    row_dict[col] = value
-                rows.append(row_dict)
+                # Fall back to original method for custom queries (DEPRECATED)
+                print("Warning: Custom SQL queries are deprecated for security")
+                conn = self._get_connection()
+                result = conn.execute(query).fetchall()
+                columns = [desc[0] for desc in conn.description] if conn.description else []
+                
+                # Convert to list of dicts (simplified for deprecated path)
+                rows = [dict(zip(columns, row)) for row in result]
             
             execution_time_ms = (time.time() - start_time) * 1000
             
@@ -207,7 +258,7 @@ class DatabaseManager:
     
     def get_run(self, run_id: str) -> Optional[Dict[str, Any]]:
         """
-        Get a specific run by ID
+        Get a specific run by ID (now secure)
         
         Args:
             run_id: Run identifier
@@ -215,8 +266,12 @@ class DatabaseManager:
         Returns:
             Run data as dict or None if not found
         """
-        result = self.query_runs(query=f"SELECT * FROM runs WHERE run_id = '{run_id}'", limit=1)
-        return result["rows"][0] if result["rows"] else None
+        try:
+            rows = self.safe_query(table="runs", filters={"run_id": run_id}, limit=1)
+            return rows[0] if rows else None
+        except Exception as e:
+            print(f"Error getting run {run_id}: {e}")
+            return None
     
     def close(self):
         """Close database connection"""

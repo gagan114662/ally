@@ -43,22 +43,29 @@ def reporting_generate_tearsheet(**kwargs) -> ToolResult:
         # Generate HTML report
         html_content = _generate_html_report(run_data, inputs)
         
-        # Determine output path
+        # Determine output path - generate both absolute and relative paths
         if inputs.output_path:
-            html_path = inputs.output_path
+            html_abs_path = inputs.output_path
+            # Try to make it relative to project root if possible
+            project_root = Path(__file__).parent.parent.parent
+            try:
+                html_rel_path = str(Path(html_abs_path).relative_to(project_root))
+            except ValueError:
+                html_rel_path = html_abs_path  # Use absolute if can't relativize
         else:
-            # Default to reports directory
+            # Default to reports directory with relative path
             project_root = Path(__file__).parent.parent.parent
             reports_dir = project_root / "reports"
             reports_dir.mkdir(exist_ok=True)
-            html_path = str(reports_dir / f"{inputs.run_id}_tearsheet.html")
+            html_rel_path = f"reports/{inputs.run_id}_tearsheet.html"
+            html_abs_path = str(reports_dir / f"{inputs.run_id}_tearsheet.html")
         
-        # Write HTML file
-        with open(html_path, 'w', encoding='utf-8') as f:
+        # Write HTML file using absolute path
+        with open(html_abs_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
         # Get file size
-        file_size = os.path.getsize(html_path)
+        file_size = os.path.getsize(html_abs_path)
         
         # Extract summary data, handling None values
         metrics = run_data.get('metrics', {}) or {}
@@ -74,10 +81,10 @@ def reporting_generate_tearsheet(**kwargs) -> ToolResult:
         if inputs.include_metrics and metrics:
             sections.append("performance")
         
-        # Create report summary
+        # Create report summary with relative path for portability
         summary = ReportSummary(
             run_id=inputs.run_id,
-            html_path=html_path,
+            html_path=html_rel_path,  # Store relative path for portability
             kpis=metrics,
             n_trades=len(trades),
             n_events=len(events),
