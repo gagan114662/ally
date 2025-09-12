@@ -1,0 +1,50 @@
+# QC Symbol Availability and Mapping Database
+# Maps unsupported pairs to supported alternatives
+
+# Supported markets and their capabilities
+markets:
+  usa:
+    name: "USA Equity"
+    symbols: ["SPY", "QQQ", "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "NVDA", "META", "NFLX"]
+    resolutions: ["Second", "Minute", "Hour", "Daily"]
+  
+  binance:
+    name: "Binance Crypto"
+    symbols: ["BTCUSDT", "ETHUSDT", "BNBUSDT", "ADAUSDT", "DOTUSDT", "LINKUSDT"]
+    resolutions: ["Minute", "Hour", "Daily"]
+  
+  coinbase:
+    name: "Coinbase Pro"
+    symbols: ["BTCUSD", "ETHUSD", "LTCUSD"]
+    resolutions: ["Minute", "Hour", "Daily"]
+
+# Symbol mapping for unsupported -> supported pairs
+symbol_mappings:
+  # Crypto mappings
+  "BNBUSD@Bitfinex": "BNBUSDT@Binance"
+  "BNBUSD@bitfinex": "BNBUSDT@Binance"
+  "BTCUSD@Bitfinex": "BTCUSD@Coinbase"
+  "ETHUSD@Bitfinex": "ETHUSD@Coinbase"
+  
+  # Common ticker variations
+  "BRK.A": "BRKA"
+  "BRK.B": "BRKB"
+  
+  # Delisted/moved symbols
+  "FB": "META"
+  "GOOG": "GOOGL"
+
+# Resolution mappings 
+resolution_mappings:
+  "Tick": "Second"
+  "tick": "Second"
+
+# Common issues and their fixes
+common_issues:
+  - pattern: "AddCrypto.*Bitfinex"
+    fix: "Use Binance for crypto pairs"
+    suggested_mapping: "Binance"
+  
+  - pattern: "Resolution\\.Tick"
+    fix: "Use Resolution.Second instead of Tick"
+    suggested_mapping: "Second"

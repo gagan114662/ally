@@ -188,6 +188,7 @@ try:
     from .qc_lean import qc_smoke_run as _qc_smoke, qc_validate_project_structure as _qc_validate
     from .qc_runtime_guard import qc_classify_error as _qc_classify
     from .qc_autorepair import qc_autorepair as _qc_repair
+    from .qc_universe import qc_universe_check as _qc_check, qc_normalize_symbols as _qc_norm, qc_universe_guard as _qc_guard
     TOOL_REGISTRY["qc.generate_python"] = _qc_gen
     TOOL_REGISTRY["qc.list_templates"] = _qc_list
     TOOL_REGISTRY["qc.lint"] = _qc_lint
@@ -195,5 +196,8 @@ try:
     TOOL_REGISTRY["qc.validate_project"] = _qc_validate
     TOOL_REGISTRY["qc.classify_error"] = _qc_classify
     TOOL_REGISTRY["qc.autorepair"] = _qc_repair
+    TOOL_REGISTRY["qc.universe_check"] = _qc_check
+    TOOL_REGISTRY["qc.normalize_symbols"] = _qc_norm
+    TOOL_REGISTRY["qc.universe_guard"] = _qc_guard
 except ImportError:
     pass
