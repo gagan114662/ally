@@ -107,6 +107,11 @@ jobs:
               core.warning('No proofs.json found; skipping PR comment.');
               return;
             }
+            const number = context.payload.pull_request?.number || context.issue.number;
+            if (!number) { 
+              core.warning('No PR number found; skipping'); 
+              return; 
+            }
             const proofs = JSON.parse(fs.readFileSync(p, 'utf8'));
             const lines = Object.entries(proofs).map(([k,v]) => `PROOF:${k}: ${typeof v === 'string' ? v : JSON.stringify(v)}`);
             const body = [
@@ -119,7 +124,7 @@ jobs:
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: number,
               body
             });
       - name: Upload coverage
