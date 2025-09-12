@@ -1,0 +1,24 @@
+patterns:
+  - id: import_qcalgorithm
+    regex: "(?:name 'QCAlgorithm' is not defined)|(?:Unable to import python module.*AlgorithmPythonWrapper)"
+    fix: add_algorithmimports
+
+  - id: ondata_signature
+    regex: "OnData.*takes .* positional arguments"
+    fix: fix_ondata_signature
+
+  - id: datetime_now
+    regex: "\\.now\\(\\)"
+    fix: replace_now_with_self_time
+
+  - id: transactions_orders_attr
+    regex: "SecurityTransactionManager.*no attribute 'Orders'"
+    fix: replace_transactions_orders
+
+  - id: scheduler_every_args
+    regex: "No method matches given arguments for Every"
+    fix: schedule_everyday
+
+  - id: crypto_pair_not_found_bnbusd_bitfinex
+    regex: "Crypto 'BNBUSD' symbol could not be found.*bitfinex"
+    fix: normalize_bnb_to_usdt_binance
