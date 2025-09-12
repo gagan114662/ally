@@ -75,3 +75,12 @@ All tools provide:
 - `code_hash`: Hash of function code
 - Sorted outputs for consistent ordering
 - Fixed random seeds for synthetic data
+
+## M-Reliability — Determinism, Lockfile, Drift & Repro
+
+**PROOF:RELIABILITY**: `{"drift":"none","repro":"ok","lock_sha1":"de87fde283b68293efe066e41963664aaee85f64"}`
+
+- **Zero drift**: Multiple runs produce identical results
+- **Cold repro**: Fresh runner rebuild validation passed  
+- **Lock fingerprint**: SHA1 verified for hermetic builds
+- **Required check**: Enforced on main branch protection
