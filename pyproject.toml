@@ -65,6 +65,9 @@ include = ["ally*"]
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
+markers = [
+    "m9: Milestone 9 orchestrator integration tests"
+]
 
 [tool.coverage.run]
 source = ["ally"]
