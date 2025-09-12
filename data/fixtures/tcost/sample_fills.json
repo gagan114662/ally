@@ -1,0 +1,44 @@
+[
+  {
+    "fill_id": "fill_001",
+    "parent_order_id": "order_123",
+    "symbol": "AAPL",
+    "side": "buy",
+    "fill_price": 150.25,
+    "fill_size": 1000,
+    "fill_time": "2024-01-15T10:30:00Z",
+    "quality": "aggressive",
+    "commission": 5.0,
+    "bid_at_fill": 150.20,
+    "ask_at_fill": 150.30,
+    "volume_before": 50000
+  },
+  {
+    "fill_id": "fill_002", 
+    "parent_order_id": "order_123",
+    "symbol": "AAPL",
+    "side": "buy",
+    "fill_price": 150.22,
+    "fill_size": 500,
+    "fill_time": "2024-01-15T10:33:00Z",
+    "quality": "passive",
+    "commission": 2.5,
+    "bid_at_fill": 150.22,
+    "ask_at_fill": 150.28,
+    "volume_before": 48000
+  },
+  {
+    "fill_id": "fill_003",
+    "parent_order_id": "order_123", 
+    "symbol": "AAPL",
+    "side": "buy",
+    "fill_price": 150.27,
+    "fill_size": 500,
+    "fill_time": "2024-01-15T10:36:00Z",
+    "quality": "mixed",
+    "commission": 2.5,
+    "bid_at_fill": 150.25,
+    "ask_at_fill": 150.31,
+    "volume_before": 52000
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "commission_bps": 1.0,
+  "spread_capture_rate": 0.5,
+  "market_impact_alpha": 0.6,
+  "market_impact_beta": 0.4,
+  "slippage_tolerance_bps": 50,
+  "min_fill_size": 100
+}

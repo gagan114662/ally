@@ -131,3 +131,63 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with: { name: coverage-xml, path: coverage.xml }
+
+  m11:
+    runs-on: ubuntu-latest
+    env:
+      MPLBACKEND: Agg
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11', cache: 'pip' }
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+      - name: Run M11 tests
+        run: pytest tests/test_tcost.py -m m11 -v --maxfail=1
+      - name: Generate M11 proof bundle
+        run: |
+          python scripts/emit_proofs_m11.py
+      - name: Upload M11 proof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m11-proof-bundle
+          path: artifacts/m11_proofs.json
+      - name: Comment M11 PROOF to PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const p = 'artifacts/m11_proofs.json';
+            if (!fs.existsSync(p)) {
+              core.warning('No m11_proofs.json found; skipping PR comment.');
+              return;
+            }
+            const number = context.payload.pull_request?.number || context.issue.number;
+            if (!number) { 
+              core.warning('No PR number found; skipping'); 
+              return; 
+            }
+            const proofs = JSON.parse(fs.readFileSync(p, 'utf8'));
+            const lines = Object.entries(proofs).map(([k,v]) => `PROOF:${k}: ${typeof v === 'string' || typeof v === 'number' ? v : JSON.stringify(v)}`);
+            const body = [
+              '### M11 Proof Bundle (from CI)',
+              '',
+              '**Transaction Costs & Microstructure Analysis**',
+              '',
+              '```',
+              ...lines,
+              '```',
+              '',
+              '✅ **M11 BULLETPROOF** - Deterministic transaction cost analysis with microstructure modeling'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: number,
+              body
+            });

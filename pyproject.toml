@@ -64,6 +64,11 @@ include = ["ally*"]
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
+markers = [
+    "mdata: M-Data Connectors - Live data providers with offline guards tests",
+    "mresearch: M-Research - Evidence-based deep research tests",
+    "m11: M11 - Transaction Costs & Microstructure tests"
+]
 
 [tool.coverage.run]
 source = ["ally"]
