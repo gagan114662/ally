@@ -64,6 +64,9 @@ include = ["ally*"]
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
+markers = [
+    "mreview: M-Reviewer - AI GitHub reviewer tests"
+]
 
 [tool.coverage.run]
 source = ["ally"]
