@@ -177,6 +177,11 @@ def _import_all_tools():
         from . import reporting  # Import reporting tools
     except ImportError:
         pass
+    
+    try:
+        from . import tcost  # Import transaction cost tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()

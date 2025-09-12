@@ -1,0 +1,11 @@
+{
+  "FILLS_FINGERPRINT": "e47f134fa7564edb13b5b90f0bf934467ee7023f",
+  "TCOST_CONFIG": {
+    "asset_class": "equity",
+    "commission_bps": 1.0,
+    "config_hash": "765a91d69029bf029189b9c16710325130b89d64",
+    "market_impact_alpha": 0.6,
+    "regime": "normal"
+  },
+  "TCOST_IMPACT_BPS": 1.2
+}

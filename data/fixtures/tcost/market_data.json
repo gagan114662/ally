@@ -1,0 +1,35 @@
+[
+  {
+    "symbol": "AAPL",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "bid_price": 150.20,
+    "ask_price": 150.30,
+    "bid_size": 1000,
+    "ask_size": 800,
+    "last_price": 150.25,
+    "volume_1m": 1200,
+    "volatility_1h": 0.018
+  },
+  {
+    "symbol": "AAPL", 
+    "timestamp": "2024-01-15T10:33:00Z",
+    "bid_price": 150.22,
+    "ask_price": 150.28,
+    "bid_size": 900,
+    "ask_size": 1100,
+    "last_price": 150.24,
+    "volume_1m": 980,
+    "volatility_1h": 0.019
+  },
+  {
+    "symbol": "AAPL",
+    "timestamp": "2024-01-15T10:36:00Z", 
+    "bid_price": 150.25,
+    "ask_price": 150.31,
+    "bid_size": 1200,
+    "ask_size": 700,
+    "last_price": 150.27,
+    "volume_1m": 1450,
+    "volatility_1h": 0.017
+  }
+]
