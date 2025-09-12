@@ -152,6 +152,11 @@ def _import_all_tools():
         from . import cv  # Import computer vision tools
     except ImportError:
         pass
+    
+    try:
+        from . import nlp  # Import NLP tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()

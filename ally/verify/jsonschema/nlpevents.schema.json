@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NLPEventOut",
+  "type": "object",
+  "required": ["events", "window_days", "audit_hash"],
+  "properties": {
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ticker", "date", "category", "sentiment", "confidence", "snippet", "source_path"],
+        "properties": {
+          "ticker": {
+            "type": "string",
+            "pattern": "^[A-Z]{1,5}$"
+          },
+          "date": {
+            "type": "string",
+            "pattern": "Z$"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["earnings", "guidance", "product", "litigation", "regulatory", "macro", "other"]
+          },
+          "sentiment": {
+            "type": "string",
+            "enum": ["neg", "neu", "pos"]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "snippet": {
+            "type": "string"
+          },
+          "source_path": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "window_days": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 30
+    },
+    "audit_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}
