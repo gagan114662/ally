@@ -1,0 +1,169 @@
+Metadata-Version: 2.4
+Name: ally
+Version: 0.1.0
+Summary: Local-first CLI agent system with deterministic tools and audit trails
+Author-email: Gagan <gagan@example.com>
+License: MIT License
+        
+        Copyright (c) 2024 Gagan
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+Project-URL: Homepage, https://github.com/gagan114662/Ally
+Project-URL: Repository, https://github.com/gagan114662/Ally
+Project-URL: Issues, https://github.com/gagan114662/Ally/issues
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas>=1.5.0
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: typer>=0.9.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: requests>=2.28.0
+Requires-Dist: matplotlib>=3.5.0
+Requires-Dist: jsonschema>=4.0.0
+Requires-Dist: pyyaml>=6.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.10.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: mypy>=1.0.0; extra == "dev"
+Requires-Dist: types-requests>=2.28.0; extra == "dev"
+Requires-Dist: opencv-python-headless>=4.5.0; extra == "dev"
+Requires-Dist: scikit-image>=0.19.0; extra == "dev"
+Requires-Dist: Pillow>=9.0.0; extra == "dev"
+Requires-Dist: beautifulsoup4>=4.11.0; extra == "dev"
+Requires-Dist: lxml>=4.9.0; extra == "dev"
+Dynamic: license-file
+
+# 🤖 Ally - Local-First CLI Agent System
+
+[![CI](https://github.com/gagan114662/Ally/actions/workflows/ci.yml/badge.svg)](https://github.com/gagan114662/Ally/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+
+> **Local-first CLI agent system with deterministic tools, audit trails, and modular architecture.**
+
+Ally is a Python CLI framework for building AI agents that work with structured data, web APIs, computer vision, and quantitative analysis - all while maintaining reproducibility and audit trails.
+
+## 🚀 Quick Start
+
+```bash
+# Clone and setup
+git clone https://github.com/gagan114662/Ally.git
+cd Ally
+python -m venv .venv && source .venv/bin/activate
+pip install -e .[dev]
+
+# Run tests
+pytest -q
+
+# Try CV pattern detection
+ally run cv.detect_chart_patterns --symbol AAPL --lookback 100
+ally run cv.generate_synthetic --pattern engulfing_bull --rows 50
+
+# List all available tools
+ally list
+```
+
+## 🛠️ Core Tools
+
+### Computer Vision (Milestone 4) ✅
+```bash
+# Detect chart patterns with visual + numeric confirmation
+ally run cv.detect_chart_patterns --symbol TSLA --lookback 100
+
+# Generate synthetic test data
+ally run cv.generate_synthetic --pattern pin_bar_bull --rows 20
+```
+
+### Web & Data Tools
+```bash
+# Fetch and parse web content
+ally run web.fetch --url "https://example.com" --prompt "Extract key metrics"
+
+# Load OHLCV data
+ally run data.load_ohlcv --symbol AAPL --period 1d --lookback 100
+```
+
+## 🧪 Testing & Verification
+
+All tools include deterministic behavior with reproducible hashes:
+
+```bash
+# Run full test suite
+pytest -q
+
+# Run verification pack (if present)
+python -m ally.verify.verify_claims
+
+# Check specific tool with verification
+ally run cv.detect_chart_patterns --verify --symbol TEST_DATA
+```
+
+## 📊 Example: CV Pattern Detection
+
+```python
+from ally.tools.cv import cv_detect_chart_patterns
+from ally.schemas.cv import CVDetectIn
+
+# Detect bullish engulfing pattern
+result = cv_detect_chart_patterns(CVDetectIn(
+    symbol="AAPL", 
+    lookback=100,
+    patterns=["engulfing_bull"]
+))
+
+print(f"Found {len(result.detections)} patterns")
+# Outputs: base64 chart + numeric confirmations + audit hash
+```
+
+## 🔐 Security
+
+- **No secrets in git**: All API keys via environment variables
+- **Input validation**: Pydantic schemas prevent injection  
+- **Audit trails**: Every operation logged with deterministic hashes
+- **Network isolation**: Tests work offline with synthetic data
+
+## 📁 Project Structure
+
+```
+ally/
+├── cli/           # Typer CLI interface
+├── schemas/       # Pydantic input/output models  
+├── tools/         # Core tool implementations
+├── utils/         # Shared utilities (audit, plotting, etc.)
+└── verify/        # Verification pack for claims
+
+tests/             # Test suite with synthetic fixtures
+data/fixtures/     # Deterministic test data
+```
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing guidelines, and code style.
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file.
+
+---
+
+**Built for quantitative researchers, algorithmic traders, and AI engineers who need reliable, auditable tools.**

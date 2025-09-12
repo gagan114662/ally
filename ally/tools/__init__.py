@@ -177,6 +177,12 @@ def _import_all_tools():
         from . import reporting  # Import reporting tools
     except ImportError:
         pass
+    
+    try:
+        from .backtest_wfo import bt_walkforward  # Import WFO backtest tool
+        TOOL_REGISTRY["bt.walkforward"] = bt_walkforward
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()

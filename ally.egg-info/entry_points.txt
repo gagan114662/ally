@@ -1,0 +1,2 @@
+[console_scripts]
+ally = ally.cli.main:app
