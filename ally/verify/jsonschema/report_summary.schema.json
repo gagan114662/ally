@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Report Summary Schema",
+  "type": "object",
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "kpis": {
+      "type": "object",
+      "properties": {
+        "annual_return": {"type": "number"},
+        "sharpe_ratio": {"type": "number"},
+        "max_drawdown": {"type": "number"},
+        "win_rate": {"type": "number"},
+        "profit_factor": {"type": "number"}
+      },
+      "required": ["annual_return", "sharpe_ratio", "max_drawdown", "win_rate", "profit_factor"],
+      "additionalProperties": true
+    },
+    "n_trades": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sections": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "html_path": {
+      "type": "string"
+    }
+  },
+  "required": ["run_id", "kpis", "n_trades", "sections", "html_path"],
+  "additionalProperties": false
+}

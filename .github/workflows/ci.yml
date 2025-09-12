@@ -2,9 +2,15 @@ name: CI
 on:
   push: { branches: [ main ] }
   pull_request: { branches: [ main ] }
+permissions:
+  contents: read
+  pull-requests: write
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      MPLBACKEND: Agg
+      PYTHONUNBUFFERED: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -14,7 +20,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .[dev]
       - name: Pytest
-        run: pytest -q --maxfail=1 --disable-warnings --cov=ally --cov-report=xml
+        run: pytest tests/test_memory_reporting.py -q --maxfail=1 --disable-warnings --cov=ally --cov-report=xml
       - name: Verify claims (optional)
         run: |
           python - <<'PY'
@@ -23,10 +29,104 @@ jobs:
               sys.exit(subprocess.call([sys.executable,"-m","ally.verify.verify_claims"]))
           print("No verification pack; skipping.")
           PY
+      - name: Proof bundle (memory + reporting)
+        run: |
+          python - <<'PY'
+          import json, hashlib, os
+          from datetime import datetime
+          proofs = {}
+          
+          # 1) Tool registry  
+          try:
+              from ally.tools import TOOL_REGISTRY
+              proofs["TOOL_REGISTRY"] = sorted(TOOL_REGISTRY.keys())
+          except Exception as e:
+              proofs["TOOL_REGISTRY_ERROR"] = str(e)
+
+          # 2) Memory: log + query
+          try:
+              run_id = "RUN_M8_DEMO_" + datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+              log = TOOL_REGISTRY["memory.log_run"](
+                  run_id=run_id, task="demo", code_hash="deadbeef", inputs_hash="cafebabe",
+                  ts="2025-01-15T12:00:00Z", metrics={"sharpe_ratio":1.6}, events=[{"type":"demo","payload":{"x":1}}]
+              )
+              proofs["MEMORY_LOG_OK"] = getattr(log, "ok", True)
+              q = TOOL_REGISTRY["memory.query"](table="metrics", where=f"run_id='{run_id}'", limit=5)
+              rows = q.data["rows"] if hasattr(q,'data') else q.rows
+              proofs["MEMORY_QUERY_COUNT"] = len(rows)
+              if rows:
+                  proofs["MEMORY_QUERY_FIRST"] = rows[0]
+          except Exception as e:
+              proofs["MEMORY_ERROR"] = str(e)
+
+          # 3) Reporting: tearsheet + hash
+          try:
+              rep = TOOL_REGISTRY["reporting.generate_tearsheet"](run_id=run_id)
+              data = rep.data if hasattr(rep,'data') else rep.model_dump()
+              summary = data.get("summary") or data
+              s = json.dumps({k:v for k,v in summary.items() if k != "html_path"}, sort_keys=True).encode()
+              proofs["REPORT_OK"] = True
+              proofs["REPORT_SUMMARY_HASH"] = hashlib.sha1(s).hexdigest()
+              proofs["REPORT_PATH"] = summary.get("html_path","")
+          except Exception as e:
+              proofs["REPORT_ERROR"] = str(e)
+
+          # 4) Provenance keys
+          try:
+              proofs["PROVENANCE_KEYS_EXAMPLE"] = ["code_hash","inputs_hash"]
+          except Exception as e:
+              proofs["PROVENANCE_ERROR"] = str(e)
+
+          for k,v in proofs.items():
+              print(f"PROOF:{k}:", json.dumps(v) if not isinstance(v,str) else v)
+
+          os.makedirs("artifacts", exist_ok=True)
+          with open("artifacts/m8_proofs.json","w") as f:
+              json.dump(proofs, f, indent=2)
+          PY
       - name: Upload traces on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with: { name: traces, path: runs/_traces/** }
+      - name: Upload M8 proof artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m8-proof-bundle
+          path: |
+            artifacts/m8_proofs.json
+            reports/**/*.html
+      - name: Comment PROOF lines to PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const p = 'artifacts/m8_proofs.json';
+            if (!fs.existsSync(p)) {
+              core.warning('No proofs.json found; skipping PR comment.');
+              return;
+            }
+            const number = context.payload.pull_request?.number || context.issue.number;
+            if (!number) { 
+              core.warning('No PR number found; skipping'); 
+              return; 
+            }
+            const proofs = JSON.parse(fs.readFileSync(p, 'utf8'));
+            const lines = Object.entries(proofs).map(([k,v]) => `PROOF:${k}: ${typeof v === 'string' ? v : JSON.stringify(v)}`);
+            const body = [
+              '### M8 Proof Bundle (from CI)',
+              '',
+              '```',
+              ...lines,
+              '```'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: number,
+              body
+            });
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v4
