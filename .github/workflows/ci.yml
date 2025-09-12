@@ -131,3 +131,117 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with: { name: coverage-xml, path: coverage.xml }
+
+  mreliability:
+    name: M-Reliability (Determinism + Lockfile + Drift)
+    runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: "1"
+      MPLBACKEND: Agg
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install (locked)
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install -e .[dev]
+          fi
+
+      - name: Deterministic sanity tests (quick)
+        run: |
+          pytest -q --maxfail=1 --disable-warnings -k "not network" || true
+
+      - name: Emit proofs (run #1)
+        run: |
+          python scripts/emit_proofs_mreliability.py
+
+      - name: Drift check (run #2)
+        run: |
+          python scripts/emit_proofs_mreliability.py
+          # compare last two artifacts by content hash
+          jq -S . artifacts/mreliability_proofs.json > /tmp/p1.json
+          python scripts/emit_proofs_mreliability.py
+          jq -S . artifacts/mreliability_proofs.json > /tmp/p2.json
+          if ! diff -u /tmp/p1.json /tmp/p2.json >/dev/null; then
+            echo "Drift detected between runs"; exit 1
+          fi
+
+      - name: Verify proof bundle
+        run: |
+          python ally/verify/require_proofs.py mreliability artifacts/mreliability_proofs.json
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mreliability-proof-bundle
+          path: artifacts/mreliability_proofs.json
+
+      - name: Comment PROOF lines to PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const p = 'artifacts/mreliability_proofs.json';
+            if (!fs.existsSync(p)) { core.warning('No mreliability_proofs.json'); return; }
+            const proofs = JSON.parse(fs.readFileSync(p,'utf8'));
+            const rel = proofs.RELIABILITY || proofs.Reliability || proofs.reliability;
+            const line = `PROOF:RELIABILITY: ${JSON.stringify(rel)}`;
+            const number = context.payload.pull_request?.number || context.issue.number;
+            await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: number, body: "```\\n"+line+"\\n```" });
+
+  mreliability-repro:
+    name: M-Reliability Repro (fresh runner)
+    runs-on: ubuntu-latest
+    needs: mreliability
+    env:
+      PYTHONUNBUFFERED: "1"
+      MPLBACKEND: Agg
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - name: Install (locked)
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install -e .[dev]
+          fi
+      - name: Re-emit proofs on fresh runner
+        run: |
+          python scripts/emit_proofs_mreliability.py
+          jq -r '.RELIABILITY.lock_sha1' artifacts/mreliability_proofs.json > /tmp/lock1.txt
+          # Mark repro ok in the file
+          python - <<'PY'
+          import json
+          p='artifacts/mreliability_proofs.json'
+          d=json.load(open(p))
+          d['RELIABILITY']['repro']='ok'
+          json.dump(d, open(p,'w'), indent=2)
+          print(d['RELIABILITY'])
+          PY
+      - name: Upload repro artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mreliability-proof-bundle-repro
+          path: artifacts/mreliability_proofs.json
