@@ -22,8 +22,9 @@ def bt_walkforward(experiment_id: str,
                    save_report: bool = True) -> ToolResult:
     # 1) load data (reuse your existing loaders/fixtures if df is None)
     if df is None:
-        from ally.tools.data import create_sample
-        df = pd.DataFrame(create_sample(symbol="BTCUSDT", n=2000).data["frame"])
+        from ally.tools import TOOL_REGISTRY
+        sample_data = TOOL_REGISTRY["data.create_sample"](symbol="BTCUSDT", n=2000)
+        df = pd.DataFrame(sample_data.data["frame"])
 
     idx = pd.to_datetime(df["timestamp"])
     splits = make_walkforward_splits(idx, WalkForwardConfig(window_train, window_test, mode))

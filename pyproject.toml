@@ -68,6 +68,9 @@ include = ["ally*"]
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
+markers = [
+    "m10: M10 - Walk-Forward Optimization and Purged Cross-Validation tests"
+]
 
 [tool.coverage.run]
 source = ["ally"]
