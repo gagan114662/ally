@@ -1,0 +1,44 @@
+{
+  "TOOL_REGISTRY": [
+    "bt.normalize_metrics",
+    "bt.run",
+    "cv.detect_chart_patterns",
+    "cv.generate_synthetic",
+    "data.create_sample",
+    "data.load_ohlcv",
+    "exec.amend_order",
+    "exec.cancel_order",
+    "exec.place_order",
+    "exec.reset_broker",
+    "features.build",
+    "features.validate_leakage",
+    "mcp.call",
+    "mcp.discover",
+    "mcp.list_servers",
+    "mcp.list_tools",
+    "memory.log_run",
+    "memory.query",
+    "nlp.event_signals",
+    "nlp.extract_events",
+    "nlp.generate_sample",
+    "reporting.generate_tearsheet",
+    "risk.check_limits",
+    "web.fetch",
+    "web.read_tables",
+    "web.search"
+  ],
+  "MEMORY_LOG_OK": true,
+  "MEMORY_QUERY_COUNT": 1,
+  "MEMORY_QUERY_FIRST": {
+    "run_id": "RUN_M8_DEMO_20250912T192839Z",
+    "key": "sharpe_ratio",
+    "value": 1.6
+  },
+  "REPORT_OK": true,
+  "REPORT_SUMMARY_HASH": "38a3fe3099169309e17a40af98536f45eb849f47",
+  "REPORT_PATH": "reports/tearsheet_38a3fe3099169309e17a40af98536f45eb849f47.html",
+  "PROVENANCE_KEYS_EXAMPLE": [
+    "code_hash",
+    "inputs_hash"
+  ]
+}

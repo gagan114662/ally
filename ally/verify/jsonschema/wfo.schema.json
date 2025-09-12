@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WFOSummary",
+  "type": "object",
+  "required": ["experiment_id","n_splits","mode","embargo_frac","kpis_train","kpis_oos","deflated_sharpe","spa_pvalue","splits"],
+  "properties": {
+    "experiment_id": {"type":"string"},
+    "n_splits": {"type":"integer","minimum":1},
+    "mode": {"type":"string","enum":["expanding","sliding"]},
+    "embargo_frac": {"type":"number","minimum":0.0,"maximum":0.5},
+    "kpis_train": {"type":"object"},
+    "kpis_oos": {"type":"object"},
+    "deflated_sharpe": {"type":"number"},
+    "spa_pvalue": {"type":"number","minimum":0.0,"maximum":1.0},
+    "splits": {"type":"array","items":{"type":"object"}},
+    "report_path": {"type":["string","null"]}
+  }
+}
