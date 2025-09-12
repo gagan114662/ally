@@ -21,8 +21,8 @@ pip install -e .[dev]
 pytest -q
 
 # Try CV pattern detection
-ally run cv_detect_chart_patterns --symbol AAPL --lookback 100
-ally run cv_generate_synthetic --pattern engulfing_bull --rows 50
+ally run cv.detect_chart_patterns --symbol AAPL --lookback 100
+ally run cv.generate_synthetic --pattern engulfing_bull --rows 50
 
 # List all available tools
 ally list
@@ -33,19 +33,19 @@ ally list
 ### Computer Vision (Milestone 4) ✅
 ```bash
 # Detect chart patterns with visual + numeric confirmation
-ally run cv_detect_chart_patterns --symbol TSLA --lookback 100
+ally run cv.detect_chart_patterns --symbol TSLA --lookback 100
 
 # Generate synthetic test data
-ally run cv_generate_synthetic --pattern pin_bar_bull --rows 20
+ally run cv.generate_synthetic --pattern pin_bar_bull --rows 20
 ```
 
 ### Web & Data Tools
 ```bash
 # Fetch and parse web content
-ally run web_fetch --url "https://example.com" --prompt "Extract key metrics"
+ally run web.fetch --url "https://example.com" --prompt "Extract key metrics"
 
-# Run backtests with technical indicators
-ally run data_backtest --strategy momentum --lookback 252 --symbols AAPL,MSFT
+# Load OHLCV data
+ally run data.load_ohlcv --symbol AAPL --period 1d --lookback 100
 ```
 
 ## 🧪 Testing & Verification
@@ -60,7 +60,7 @@ pytest -q
 python -m ally.verify.verify_claims
 
 # Check specific tool with verification
-ally run cv_detect_chart_patterns --verify --symbol TEST_DATA
+ally run cv.detect_chart_patterns --verify --symbol TEST_DATA
 ```
 
 ## 📊 Example: CV Pattern Detection
