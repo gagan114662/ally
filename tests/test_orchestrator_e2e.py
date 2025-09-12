@@ -8,6 +8,8 @@ from ally.tools import TOOL_REGISTRY
 from ally.schemas.orch import OrchInput, OrchSummary
 from ally.schemas.base import ToolResult
 
+pytestmark = pytest.mark.m9
+
 
 @pytest.fixture
 def temp_runs_dir():
