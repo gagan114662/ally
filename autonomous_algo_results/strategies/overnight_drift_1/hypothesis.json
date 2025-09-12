@@ -1,0 +1,39 @@
+{
+  "name": "overnight_drift_1",
+  "template": "overnight_drift",
+  "variant": {
+    "name": "OvernightDrift_DR2_LB30_V049",
+    "description": "Strategy exploiting overnight vs intraday return patterns - Drift threshold: 2.0%",
+    "parameters": {},
+    "universe_size": 200,
+    "min_price": 20.0,
+    "signal_type": "overnight_drift_pattern",
+    "lookback_periods": [
+      30
+    ],
+    "target_volatility": 0.08,
+    "max_position_size": 0.1,
+    "data_requirements": [
+      "price",
+      "volume"
+    ],
+    "complexity_score": 3
+  },
+  "research_card": {
+    "hypothesis_statement": "Systematic overnight_drift strategy with {}",
+    "entry_exit_rules": "Standard momentum entry/exit",
+    "data_needs": [
+      "price",
+      "volume"
+    ],
+    "expected_drivers": "Market inefficiency exploitation",
+    "failure_modes": [
+      "Market regime changes",
+      "Volatility spikes"
+    ],
+    "param_space": {},
+    "computational_budget": 20
+  },
+  "score": 48.0,
+  "created_at": "2025-09-12T11:20:10.600960"
+}

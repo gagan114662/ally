@@ -1,0 +1,6 @@
+
+    Sample PDF Content
+    
+    This would contain tabular data extracted from a real PDF.
+    In production, this would use libraries like camelot-py or tabula-py.
+    

@@ -1,0 +1,39 @@
+{
+  "name": "momentum_volatility_regime_1",
+  "template": "momentum_volatility_regime",
+  "variant": {
+    "name": "MomentumVolatilityRegime_VIX20_LB126_V055",
+    "description": "Momentum strategy that switches off during high volatility periods - VIX threshold: 20",
+    "parameters": {},
+    "universe_size": 500,
+    "min_price": 5.0,
+    "signal_type": "momentum_with_vol_regime",
+    "lookback_periods": [
+      126
+    ],
+    "target_volatility": 0.12,
+    "max_position_size": 0.04,
+    "data_requirements": [
+      "price",
+      "volume"
+    ],
+    "complexity_score": 3
+  },
+  "research_card": {
+    "hypothesis_statement": "Systematic momentum_volatility_regime strategy with {}",
+    "entry_exit_rules": "Standard momentum entry/exit",
+    "data_needs": [
+      "price",
+      "volume"
+    ],
+    "expected_drivers": "Market inefficiency exploitation",
+    "failure_modes": [
+      "Market regime changes",
+      "Volatility spikes"
+    ],
+    "param_space": {},
+    "computational_budget": 20
+  },
+  "score": 48.0,
+  "created_at": "2025-09-12T11:31:55.409249"
+}

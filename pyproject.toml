@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ally"
+version = "0.1.0"
+description = "Local-first CLI agent system with deterministic tools and audit trails"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Gagan", email = "gagan@example.com"}
+]
+requires-python = ">=3.8"
+dependencies = [
+    "pandas>=1.5.0",
+    "numpy>=1.21.0",
+    "typer>=0.9.0",
+    "pydantic>=2.0.0",
+    "requests>=2.28.0",
+    "matplotlib>=3.5.0",
+    "jsonschema>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    
+    # Code quality
+    "ruff>=0.1.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    
+    # Type stubs
+    "types-requests>=2.28.0",
+    
+    # CV dependencies
+    "opencv-python-headless>=4.5.0",
+    "scikit-image>=0.19.0",
+    "Pillow>=9.0.0",
+    
+    # Optional API integrations
+    "beautifulsoup4>=4.11.0",
+    "lxml>=4.9.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/gagan114662/Ally"
+Repository = "https://github.com/gagan114662/Ally"
+Issues = "https://github.com/gagan114662/Ally/issues"
+
+[project.scripts]
+ally = "ally.cli.main:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ally*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-v --tb=short --strict-markers"
+
+[tool.coverage.run]
+source = ["ally"]
+omit = ["tests/*"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py38"

@@ -1,0 +1,41 @@
+{
+  "name": "value_quality_momentum_1",
+  "template": "value_quality_momentum",
+  "variant": {
+    "name": "ValueQualityMomentum_V40Q30M30_V025",
+    "description": "Cross-sectional factor blend combining value, quality, and momentum signals - Weights: V:0.4, Q:0.3, M:0.3",
+    "parameters": {},
+    "universe_size": 800,
+    "min_price": 10.0,
+    "signal_type": "multi_factor_blend",
+    "lookback_periods": [
+      63,
+      126,
+      252
+    ],
+    "target_volatility": 0.13,
+    "max_position_size": 0.05,
+    "data_requirements": [
+      "price",
+      "volume"
+    ],
+    "complexity_score": 3
+  },
+  "research_card": {
+    "hypothesis_statement": "Systematic value_quality_momentum strategy with {}",
+    "entry_exit_rules": "Standard momentum entry/exit",
+    "data_needs": [
+      "price",
+      "volume"
+    ],
+    "expected_drivers": "Market inefficiency exploitation",
+    "failure_modes": [
+      "Market regime changes",
+      "Volatility spikes"
+    ],
+    "param_space": {},
+    "computational_budget": 20
+  },
+  "score": 48.0,
+  "created_at": "2025-09-12T11:20:10.600914"
+}

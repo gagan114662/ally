@@ -1,0 +1,35 @@
+{
+  "name": "factor_blend_1",
+  "universe": {
+    "type": "coarse_fundamental",
+    "top_n": 800,
+    "min_price": 5.0,
+    "filters": []
+  },
+  "alpha": {
+    "signal": "factor_blend",
+    "lookbacks": [
+      252
+    ],
+    "regime_filter": "VIX<25"
+  },
+  "execution": {
+    "rebalance": "weekly",
+    "delay": "1d",
+    "slippage_model": "constant",
+    "slippage_rate": 0.0005
+  },
+  "risk": {
+    "target_vol": 0.14,
+    "max_leverage": 1.2,
+    "stop_loss": 0.1,
+    "max_position": 0.03
+  },
+  "params": {},
+  "constraints": {
+    "dd_max": 0.2,
+    "sharpe_min": 1.0,
+    "cagr_min": 0.25,
+    "avg_pnl_min": 0.0075
+  }
+}

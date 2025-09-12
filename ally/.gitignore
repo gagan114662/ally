@@ -1,0 +1,16 @@
+.python-version
+pyproject.toml
+__pycache__/
+.env
+.vscode
+.venv
+uv.lock
+test*
+canvas
+.github
+*.sqlite
+database/
+Dockerfile
+compose.yml
+.dockerignore
+bin/

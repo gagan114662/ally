@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+.coverage*
+data/cache/
+data/semtools_cache/
+runs/
+*.parquet
+*.ipynb_checkpoints

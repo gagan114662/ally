@@ -1,0 +1,12 @@
+2025-09-12 11:12:33,018 - __main__ - INFO - 🚀 Starting Autonomous Algo Strategy Developer
+2025-09-12 11:12:33,018 - __main__ - INFO - Budget: 3 strategies, Dry run: True
+2025-09-12 11:12:33,018 - __main__ - ERROR - Failed to initialize QuantConnect: 'QuantConnectConfig' object has no attribute 'get'
+2025-09-12 11:12:33,018 - __main__ - INFO - 🔍 Starting Research Loop - generating 3 hypotheses
+2025-09-12 11:12:33,018 - __main__ - INFO - Found 5 hypothesis templates
+2025-09-12 11:12:33,018 - __main__ - ERROR - Error generating variants for <autonomous_quant.core.hypothesis_library.MomentumTemplate object at 0x116665940>: Unknown template: <autonomous_quant.core.hypothesis_library.MomentumTemplate object at 0x116665940>
+2025-09-12 11:12:33,018 - __main__ - ERROR - Error generating variants for <autonomous_quant.core.hypothesis_library.MeanReversionTemplate object at 0x116665a90>: Unknown template: <autonomous_quant.core.hypothesis_library.MeanReversionTemplate object at 0x116665a90>
+2025-09-12 11:12:33,018 - __main__ - ERROR - Error generating variants for <autonomous_quant.core.hypothesis_library.CalendarAnomalyTemplate object at 0x116665be0>: Unknown template: <autonomous_quant.core.hypothesis_library.CalendarAnomalyTemplate object at 0x116665be0>
+2025-09-12 11:12:33,019 - __main__ - ERROR - Error generating variants for <autonomous_quant.core.hypothesis_library.FactorBlendTemplate object at 0x116665d30>: Unknown template: <autonomous_quant.core.hypothesis_library.FactorBlendTemplate object at 0x116665d30>
+2025-09-12 11:12:33,019 - __main__ - ERROR - Error generating variants for <autonomous_quant.core.hypothesis_library.IntradayGapTemplate object at 0x116665e80>: Unknown template: <autonomous_quant.core.hypothesis_library.IntradayGapTemplate object at 0x116665e80>
+2025-09-12 11:12:33,019 - __main__ - INFO - ✅ Research Loop completed - 0 ranked hypotheses
+2025-09-12 11:12:33,019 - __main__ - ERROR - ❌ Orchestration failed: No hypotheses generated in research loop

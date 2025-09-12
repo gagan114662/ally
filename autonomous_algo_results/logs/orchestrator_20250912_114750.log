@@ -1,0 +1,63 @@
+2025-09-12 11:47:50,422 - __main__ - INFO - 🚀 Starting Autonomous Algo Strategy Developer
+2025-09-12 11:47:50,423 - __main__ - INFO - Budget: 1 strategies, Dry run: True
+2025-09-12 11:47:50,423 - __main__ - WARNING - QuantConnect credentials not found - running in simulation mode
+2025-09-12 11:47:50,423 - __main__ - INFO - 🔍 Starting Research Loop - generating 1 hypotheses
+2025-09-12 11:47:50,423 - __main__ - INFO - Found 11 hypothesis templates
+2025-09-12 11:47:50,424 - __main__ - INFO - ✅ Research Loop completed - 1 ranked hypotheses
+2025-09-12 11:47:50,424 - __main__ - INFO - ⚙️ Starting Strategy Synthesis Loop - 1 hypotheses
+2025-09-12 11:47:50,426 - __main__ - INFO - ✅ Generated strategy: momentum_1
+2025-09-12 11:47:50,426 - __main__ - INFO - ✅ Strategy Synthesis completed - 1 candidates
+2025-09-12 11:47:50,426 - __main__ - INFO - 📋 Skipping backtests (dry run or no QC credentials)
+2025-09-12 11:47:50,426 - __main__ - INFO - 🎯 Starting Optimization & Guardrails Loop
+2025-09-12 11:47:50,426 - __main__ - INFO - Starting optimization loop for 1 candidates
+2025-09-12 11:47:50,427 - __main__ - INFO - Optimizing candidate 1/1: momentum_1
+2025-09-12 11:47:50,427 - autonomous_quant.core.optimization_engine - WARNING - Bayesian optimization requires scikit-optimize. Falling back to grid search.
+2025-09-12 11:47:50,427 - autonomous_quant.core.optimization_engine - INFO - Starting grid search optimization for momentum_1
+2025-09-12 11:47:50,428 - autonomous_quant.core.optimization_engine - INFO - Grid search will evaluate 1000 parameter combinations
+2025-09-12 11:47:50,429 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 60, 'vol_target': 0.05}: 'annual_return'
+2025-09-12 11:47:50,429 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 60, 'vol_target': 0.1}: 'annual_return'
+2025-09-12 11:47:50,430 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 60, 'vol_target': 0.15000000000000002}: 'annual_return'
+2025-09-12 11:47:50,436 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 60, 'vol_target': 0.2}: 'annual_return'
+2025-09-12 11:47:50,460 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,473 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,473 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,486 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,573 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,587 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 60, 'vol_target': 0.25}: 'annual_return'
+2025-09-12 11:47:50,576 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,586 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,591 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,640 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 108, 'vol_target': 0.05}: 'annual_return'
+2025-09-12 11:47:50,640 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,644 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 108, 'vol_target': 0.1}: 'annual_return'
+2025-09-12 11:47:50,644 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 108, 'vol_target': 0.15000000000000002}: 'annual_return'
+2025-09-12 11:47:50,658 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,664 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,682 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,696 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,696 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 108, 'vol_target': 0.2}: 'annual_return'
+2025-09-12 11:47:50,711 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,720 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,721 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 108, 'vol_target': 0.25}: 'annual_return'
+2025-09-12 11:47:50,737 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,743 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,744 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,747 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 156, 'vol_target': 0.05}: 'annual_return'
+2025-09-12 11:47:50,752 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 156, 'vol_target': 0.1}: 'annual_return'
+2025-09-12 11:47:50,775 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,787 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,808 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,825 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,833 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 156, 'vol_target': 0.15000000000000002}: 'annual_return'
+2025-09-12 11:47:50,833 - autonomous_quant.core.optimization_engine - INFO - Early stopping triggered: No improvement for 8 iterations
+2025-09-12 11:47:50,840 - __main__ - WARNING - Error evaluating parameters {'position_size': 0.01, 'rebalance_frequency': 'daily', 'lookback_short': 5, 'lookback_long': 156, 'vol_target': 0.2}: 'annual_return'
+2025-09-12 11:47:50,837 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,869 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,886 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:47:50,892 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,914 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,915 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:47:50,916 - __main__ - WARNING - ✗ momentum_1 failed anti-overfitting validation
+2025-09-12 11:47:50,916 - __main__ - INFO - Optimization loop completed. 0 candidates passed validation
+2025-09-12 11:47:50,916 - __main__ - WARNING - ⚠️ No candidates passed optimization validation
+2025-09-12 11:47:50,916 - __main__ - ERROR - ❌ Orchestration failed: ' font-family'

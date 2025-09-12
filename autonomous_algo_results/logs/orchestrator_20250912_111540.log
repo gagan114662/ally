@@ -1,0 +1,11 @@
+2025-09-12 11:15:40,089 - autonomous_quant.orchestrator.run - INFO - 🚀 Starting Autonomous Algo Strategy Developer
+2025-09-12 11:15:40,089 - autonomous_quant.orchestrator.run - INFO - Budget: 1 strategies, Dry run: True
+2025-09-12 11:15:40,089 - autonomous_quant.orchestrator.run - WARNING - QuantConnect credentials not found - running in simulation mode
+2025-09-12 11:15:40,089 - autonomous_quant.orchestrator.run - INFO - 🔍 Starting Research Loop - generating 1 hypotheses
+2025-09-12 11:15:40,089 - autonomous_quant.orchestrator.run - INFO - Found 5 hypothesis templates
+2025-09-12 11:15:40,089 - autonomous_quant.orchestrator.run - INFO - ✅ Research Loop completed - 1 ranked hypotheses
+2025-09-12 11:15:40,089 - autonomous_quant.orchestrator.run - INFO - ⚙️ Starting Strategy Synthesis Loop - 1 hypotheses
+2025-09-12 11:15:40,090 - autonomous_quant.orchestrator.run - INFO - ✅ Generated strategy: momentum_1
+2025-09-12 11:15:40,090 - autonomous_quant.orchestrator.run - INFO - ✅ Strategy Synthesis completed - 1 candidates
+2025-09-12 11:15:40,090 - autonomous_quant.orchestrator.run - INFO - 📋 Skipping backtests (dry run or no QC credentials)
+2025-09-12 11:15:40,091 - autonomous_quant.orchestrator.run - INFO - ✅ Orchestration completed in 0.0s

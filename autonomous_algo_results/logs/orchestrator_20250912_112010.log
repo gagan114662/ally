@@ -1,0 +1,21 @@
+2025-09-12 11:20:10,599 - __main__ - INFO - 🚀 Starting Autonomous Algo Strategy Developer
+2025-09-12 11:20:10,599 - __main__ - INFO - Budget: 11 strategies, Dry run: True
+2025-09-12 11:20:10,600 - __main__ - WARNING - QuantConnect credentials not found - running in simulation mode
+2025-09-12 11:20:10,600 - __main__ - INFO - 🔍 Starting Research Loop - generating 11 hypotheses
+2025-09-12 11:20:10,600 - __main__ - INFO - Found 11 hypothesis templates
+2025-09-12 11:20:10,600 - __main__ - INFO - ✅ Research Loop completed - 11 ranked hypotheses
+2025-09-12 11:20:10,601 - __main__ - INFO - ⚙️ Starting Strategy Synthesis Loop - 11 hypotheses
+2025-09-12 11:20:10,602 - __main__ - INFO - ✅ Generated strategy: momentum_1
+2025-09-12 11:20:10,603 - __main__ - INFO - ✅ Generated strategy: momentum_volatility_regime_1
+2025-09-12 11:20:10,603 - __main__ - INFO - ✅ Generated strategy: momentum_macro_regime_1
+2025-09-12 11:20:10,604 - __main__ - INFO - ✅ Generated strategy: mean_reversion_1
+2025-09-12 11:20:10,605 - __main__ - INFO - ✅ Generated strategy: mean_reversion_etf_1
+2025-09-12 11:20:10,607 - __main__ - INFO - ✅ Generated strategy: calendar_1
+2025-09-12 11:20:10,608 - __main__ - INFO - ✅ Generated strategy: earnings_seasonality_1
+2025-09-12 11:20:10,610 - __main__ - INFO - ✅ Generated strategy: factor_blend_1
+2025-09-12 11:20:10,611 - __main__ - INFO - ✅ Generated strategy: value_quality_momentum_1
+2025-09-12 11:20:10,613 - __main__ - INFO - ✅ Generated strategy: intraday_gap_1
+2025-09-12 11:20:10,614 - __main__ - INFO - ✅ Generated strategy: overnight_drift_1
+2025-09-12 11:20:10,614 - __main__ - INFO - ✅ Strategy Synthesis completed - 11 candidates
+2025-09-12 11:20:10,615 - __main__ - INFO - 📋 Skipping backtests (dry run or no QC credentials)
+2025-09-12 11:20:10,616 - __main__ - ERROR - ❌ Orchestration failed: ' font-family'

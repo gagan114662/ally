@@ -1,0 +1,39 @@
+{
+  "name": "factor_blend_1",
+  "template": "factor_blend",
+  "variant": {
+    "name": "FactorBlend_quality_momentum_V695",
+    "description": "Cross-sectional factor blend (value + quality + momentum) - quality, momentum",
+    "parameters": {},
+    "universe_size": 800,
+    "min_price": 5.0,
+    "signal_type": "factor_blend",
+    "lookback_periods": [
+      252
+    ],
+    "target_volatility": 0.14,
+    "max_position_size": 0.03,
+    "data_requirements": [
+      "price",
+      "volume"
+    ],
+    "complexity_score": 3
+  },
+  "research_card": {
+    "hypothesis_statement": "Systematic factor_blend strategy with {}",
+    "entry_exit_rules": "Standard momentum entry/exit",
+    "data_needs": [
+      "price",
+      "volume"
+    ],
+    "expected_drivers": "Market inefficiency exploitation",
+    "failure_modes": [
+      "Market regime changes",
+      "Volatility spikes"
+    ],
+    "param_space": {},
+    "computational_budget": 20
+  },
+  "score": 48.0,
+  "created_at": "2025-09-12T11:20:10.600885"
+}

@@ -1,0 +1,47 @@
+2025-09-12 11:48:35,285 - __main__ - INFO - 🚀 Starting Autonomous Algo Strategy Developer
+2025-09-12 11:48:35,285 - __main__ - INFO - Budget: 1 strategies, Dry run: True
+2025-09-12 11:48:35,285 - __main__ - WARNING - QuantConnect credentials not found - running in simulation mode
+2025-09-12 11:48:35,285 - __main__ - INFO - 🔍 Starting Research Loop - generating 1 hypotheses
+2025-09-12 11:48:35,285 - __main__ - INFO - Found 11 hypothesis templates
+2025-09-12 11:48:35,286 - __main__ - INFO - ✅ Research Loop completed - 1 ranked hypotheses
+2025-09-12 11:48:35,286 - __main__ - INFO - ⚙️ Starting Strategy Synthesis Loop - 1 hypotheses
+2025-09-12 11:48:35,289 - __main__ - INFO - ✅ Generated strategy: momentum_1
+2025-09-12 11:48:35,289 - __main__ - INFO - ✅ Strategy Synthesis completed - 1 candidates
+2025-09-12 11:48:35,289 - __main__ - INFO - 📋 Skipping backtests (dry run or no QC credentials)
+2025-09-12 11:48:35,289 - __main__ - INFO - 🎯 Starting Optimization & Guardrails Loop
+2025-09-12 11:48:35,290 - __main__ - INFO - Starting optimization loop for 1 candidates
+2025-09-12 11:48:35,290 - __main__ - INFO - Optimizing candidate 1/1: momentum_1
+2025-09-12 11:48:35,290 - autonomous_quant.core.optimization_engine - WARNING - Bayesian optimization requires scikit-optimize. Falling back to grid search.
+2025-09-12 11:48:35,290 - autonomous_quant.core.optimization_engine - INFO - Starting grid search optimization for momentum_1
+2025-09-12 11:48:35,292 - autonomous_quant.core.optimization_engine - INFO - Grid search will evaluate 1000 parameter combinations
+2025-09-12 11:48:35,349 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,353 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,355 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,366 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,398 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,413 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,424 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,434 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,446 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,452 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,462 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,480 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,484 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,488 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,495 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,511 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,529 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,530 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,531 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,554 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,558 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,573 - AntiOverfitting - INFO - 🔍 Starting anti-overfitting validation for momentum_1
+2025-09-12 11:48:35,576 - autonomous_quant.core.optimization_engine - INFO - Early stopping triggered: No improvement for 8 iterations
+2025-09-12 11:48:35,578 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,585 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,586 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,586 - AntiOverfitting - INFO - ✅ Validation complete for momentum_1: Overfitted=True, Confidence=0.00
+2025-09-12 11:48:35,587 - __main__ - WARNING - ✗ momentum_1 failed anti-overfitting validation
+2025-09-12 11:48:35,587 - __main__ - INFO - Optimization loop completed. 0 candidates passed validation
+2025-09-12 11:48:35,587 - __main__ - WARNING - ⚠️ No candidates passed optimization validation
+2025-09-12 11:48:35,587 - __main__ - ERROR - ❌ Orchestration failed: ' font-family'

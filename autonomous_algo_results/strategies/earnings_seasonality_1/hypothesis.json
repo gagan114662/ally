@@ -1,0 +1,39 @@
+{
+  "name": "earnings_seasonality_1",
+  "template": "earnings_seasonality",
+  "variant": {
+    "name": "EarningsSeasonality_january_BO5_V961",
+    "description": "Calendar effects with earnings announcement filters - january effect with 5-day blackout",
+    "parameters": {},
+    "universe_size": 1000,
+    "min_price": 5.0,
+    "signal_type": "seasonal_january",
+    "lookback_periods": [
+      252
+    ],
+    "target_volatility": 0.16,
+    "max_position_size": 0.03,
+    "data_requirements": [
+      "price",
+      "volume"
+    ],
+    "complexity_score": 3
+  },
+  "research_card": {
+    "hypothesis_statement": "Systematic earnings_seasonality strategy with {}",
+    "entry_exit_rules": "Standard momentum entry/exit",
+    "data_needs": [
+      "price",
+      "volume"
+    ],
+    "expected_drivers": "Market inefficiency exploitation",
+    "failure_modes": [
+      "Market regime changes",
+      "Volatility spikes"
+    ],
+    "param_space": {},
+    "computational_budget": 20
+  },
+  "score": 48.0,
+  "created_at": "2025-09-12T11:20:10.600859"
+}
