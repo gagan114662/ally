@@ -28,11 +28,18 @@ def extract_tickers(text: str, whitelist: Optional[List[str]] = None) -> List[st
     
     tickers = set()
     
+    # Common non-ticker words to exclude
+    exclude_words = {
+        'I', 'A', 'THE', 'AND', 'OR', 'NOT', 'FOR', 'CEO', 'CFO', 'IPO', 
+        'SEC', 'FDA', 'FTC', 'DOJ', 'CPI', 'GDP', 'ETF', 'AI', 'ML', 'IT',
+        'US', 'UK', 'EU', 'FOMC', 'EPS', 'PE', 'PEG', 'ROI', 'YOY', 'QOQ'
+    }
+    
     # Find all matches
     for match in re.finditer(pattern, text):
         ticker = match.group(1)
         # Filter out common words that aren't tickers
-        if ticker not in {'I', 'A', 'THE', 'AND', 'OR', 'NOT', 'FOR', 'CEO', 'CFO', 'IPO', 'SEC', 'FDA', 'FTC', 'DOJ', 'CPI', 'GDP', 'ETF'}:
+        if ticker not in exclude_words:
             tickers.add(ticker)
     
     # Add parenthetical tickers (more likely to be real tickers)

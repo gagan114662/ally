@@ -53,6 +53,10 @@ python -m ally.verify.verify_claims
 # Run specific milestone tests
 pytest tests/test_cv_detect.py -v
 pytest tests/test_nlp_events.py -v
+
+# CLI examples
+ally run nlp.extract_events --json '{"sources":["file://data/fixtures/text/news1.txt"],"tickers":["AAPL"],"window_days":5}'
+ally run nlp.generate_sample --json '{"ticker":"TSLA","event_type":"litigation"}'
 ```
 
 ## Verification Output Format

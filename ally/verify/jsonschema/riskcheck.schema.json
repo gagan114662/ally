@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RiskCheckOut",
+  "type": "object",
+  "required": ["allow", "violations", "audit_hash"],
+  "properties": {
+    "allow": {
+      "type": "boolean"
+    },
+    "violations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "severity", "message", "subject"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": ["LEVERAGE_LIMIT", "EXPOSURE_LIMIT", "SINGLE_NOTIONAL", "ORDER_QTY", "POSITION_LIMIT", "DENYLIST", "ALLOWLIST"]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["hard", "soft"]
+          },
+          "message": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "audit_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

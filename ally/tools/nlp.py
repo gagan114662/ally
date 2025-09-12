@@ -167,6 +167,11 @@ def nlp_extract_events(**kwargs) -> ToolResult:
     return convert_timestamps(result)
 
 
+# Register alias for backward compatibility
+from ..tools import TOOL_REGISTRY
+TOOL_REGISTRY["nlp.event_signals"] = TOOL_REGISTRY["nlp.extract_events"]
+
+
 @register("nlp.generate_sample")
 def nlp_generate_sample(**kwargs) -> ToolResult:
     """

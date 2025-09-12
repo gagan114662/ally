@@ -157,6 +157,16 @@ def _import_all_tools():
         from . import nlp  # Import NLP tools
     except ImportError:
         pass
+    
+    try:
+        from . import risk  # Import risk tools
+    except ImportError:
+        pass
+    
+    try:
+        from . import execution  # Import execution tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()

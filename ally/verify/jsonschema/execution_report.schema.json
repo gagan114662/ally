@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExecutionReport",
+  "type": "object",
+  "required": ["broker_order_id", "symbol", "side", "type", "status", "avg_price", "filled_qty", "remaining_qty", "fills"],
+  "properties": {
+    "broker_order_id": {
+      "type": "string"
+    },
+    "client_order_id": {
+      "type": ["string", "null"]
+    },
+    "symbol": {
+      "type": "string"
+    },
+    "side": {
+      "type": "string",
+      "enum": ["buy", "sell"]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["market", "limit"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["accepted", "working", "partially_filled", "filled", "canceled", "rejected"]
+    },
+    "avg_price": {
+      "type": "number",
+      "minimum": 0
+    },
+    "filled_qty": {
+      "type": "number",
+      "minimum": 0
+    },
+    "remaining_qty": {
+      "type": "number",
+      "minimum": 0
+    },
+    "fills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["price", "qty", "ts"],
+        "properties": {
+          "price": {
+            "type": "number",
+            "minimum": 0
+          },
+          "qty": {
+            "type": "number",
+            "minimum": 0
+          },
+          "ts": {
+            "type": "string",
+            "pattern": "Z$"
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object"
+    }
+  }
+}
