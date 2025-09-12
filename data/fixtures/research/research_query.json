@@ -1,0 +1,8 @@
+{
+  "query": "What is the growth outlook for TechCorp over the next 3 years?",
+  "expected_claims": 2,
+  "expected_evidence_count": 5,
+  "expected_unique_after_dedup": 5,
+  "methodology": "bayesian_aggregation",
+  "dedup_threshold": 0.8
+}

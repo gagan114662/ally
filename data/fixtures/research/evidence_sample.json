@@ -1,0 +1,32 @@
+[
+  {
+    "source": "sec_filing",
+    "content": "The company reported a 15% increase in quarterly revenue, reaching $2.1 billion. This growth was primarily driven by strong demand in the technology sector and improved operational efficiency.",
+    "grade": "high",
+    "metadata": {"filing_type": "10-Q", "quarter": "Q3 2024", "company": "TechCorp"}
+  },
+  {
+    "source": "news_article",
+    "content": "Industry analysts predict continued growth for TechCorp based on their recent product launches and market positioning. The company's innovative approach to AI integration has attracted significant investor interest.",
+    "grade": "medium",
+    "metadata": {"publication": "TechNews", "date": "2024-03-15", "author": "Jane Smith"}
+  },
+  {
+    "source": "analyst_report", 
+    "content": "Our analysis shows TechCorp's revenue growth trajectory remains strong, with projected annual growth of 12-18% over the next three years. Key drivers include market expansion and technological advantages.",
+    "grade": "high",
+    "metadata": {"analyst_firm": "Financial Insights", "rating": "BUY", "price_target": "$150"}
+  },
+  {
+    "source": "press_release",
+    "content": "TechCorp announced the launch of three new AI-powered products that are expected to capture significant market share in the enterprise software segment.",
+    "grade": "medium", 
+    "metadata": {"date": "2024-03-20", "type": "product_launch"}
+  },
+  {
+    "source": "competitor_analysis",
+    "content": "Compared to competitors, TechCorp maintains a technological edge but faces increasing competition from emerging startups. Market saturation in core segments may impact future growth rates.",
+    "grade": "medium",
+    "metadata": {"analyst": "Market Research Inc", "competitive_position": "strong"}
+  }
+]
