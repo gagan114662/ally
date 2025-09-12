@@ -232,6 +232,49 @@ class PandasInOnDataRule(QCLintRule):
                         })
 
 
+class TransactionsOrdersRule(QCLintRule):
+    """Detect .Transactions.Orders property usage"""
+    
+    def __init__(self):
+        super().__init__("QC007", "Use Transactions.GetOrders() instead of .Orders property", autofix=True)
+    
+    def visit(self, node: ast.AST, source: str, file_path: str) -> None:
+        if ".Transactions.Orders" in source:
+            self.violations.append({
+                "line": 1,
+                "column": 0,
+                "message": "Use Transactions.GetOrders() method instead of .Orders property",
+                "rule_id": self.rule_id
+            })
+    
+    def fix(self, source: str, violations: List[Dict[str, Any]]) -> str:
+        if violations:
+            source = source.replace(".Transactions.Orders", ".Transactions.GetOrders()")
+        return source
+
+
+class ScheduleEveryRule(QCLintRule):
+    """Detect invalid DateRules.Every() usage"""
+    
+    def __init__(self):
+        super().__init__("QC008", "Use DateRules.EveryDay() or proper DayOfWeek enum", autofix=True)
+    
+    def visit(self, node: ast.AST, source: str, file_path: str) -> None:
+        if "DateRules.Every(" in source and "DayOfWeek" not in source and "EveryDay()" not in source:
+            self.violations.append({
+                "line": 1,
+                "column": 0,
+                "message": "Use DateRules.EveryDay() or DayOfWeek enum instead of Every() with invalid args",
+                "rule_id": self.rule_id
+            })
+    
+    def fix(self, source: str, violations: List[Dict[str, Any]]) -> str:
+        if violations:
+            import re
+            source = re.sub(r"DateRules\.Every\s*\([^)]*\)", "DateRules.EveryDay()", source)
+        return source
+
+
 def qc_lint(file_path: str, autofix: bool = False) -> ToolResult:
     """
     Lint QuantConnect algorithm file
@@ -270,7 +313,9 @@ def qc_lint(file_path: str, autofix: bool = False) -> ToolResult:
             RequiredMethodsRule(),
             OnDataSignatureRule(),
             DatetimeNowRule(),
-            PandasInOnDataRule()
+            PandasInOnDataRule(),
+            TransactionsOrdersRule(),
+            ScheduleEveryRule()
         ]
         
         all_violations = []
