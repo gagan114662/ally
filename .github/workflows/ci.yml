@@ -2,6 +2,9 @@ name: CI
 on:
   push: { branches: [ main ] }
   pull_request: { branches: [ main ] }
+permissions:
+  contents: read
+  pull-requests: write
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -93,6 +96,32 @@ jobs:
           path: |
             artifacts/m8_proofs.json
             reports/**/*.html
+      - name: Comment PROOF lines to PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const p = 'artifacts/m8_proofs.json';
+            if (!fs.existsSync(p)) {
+              core.warning('No proofs.json found; skipping PR comment.');
+              return;
+            }
+            const proofs = JSON.parse(fs.readFileSync(p, 'utf8'));
+            const lines = Object.entries(proofs).map(([k,v]) => `PROOF:${k}: ${typeof v === 'string' ? v : JSON.stringify(v)}`);
+            const body = [
+              '### M8 Proof Bundle (from CI)',
+              '',
+              '```',
+              ...lines,
+              '```'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v4
