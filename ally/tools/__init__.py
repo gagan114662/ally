@@ -177,6 +177,16 @@ def _import_all_tools():
         from . import reporting  # Import reporting tools
     except ImportError:
         pass
+    
+    try:
+        from . import data_live  # Import data live tools
+    except ImportError:
+        pass
+    
+    try:
+        from . import research  # Import research tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()
