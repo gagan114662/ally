@@ -151,7 +151,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e .[dev]
-      - name: Generate QC algorithm
+      - name: Universe Guard Check
+        run: |
+          python -c "
+          from ally.tools import TOOL_REGISTRY
+          import json
+          # Pre-flight check symbols before generation
+          test_symbols = ['SPY', 'BRKA', 'BNBUSD']
+          guard_result = TOOL_REGISTRY['qc.universe_guard'](test_symbols, 'Minute')
+          print('Universe Guard:', 'PASS' if guard_result.ok else 'WARN')
+          if guard_result.data.get('normalizations'):
+              print('Normalizations:', guard_result.data['normalizations'])
+          "
+      - name: Generate QC algorithm  
         run: |
           python -c "
           from ally.tools import TOOL_REGISTRY
@@ -372,8 +384,8 @@ jobs:
           from ally.tools import TOOL_REGISTRY
           import json, pathlib
           
-          # Test symbol sets with known problematic pairs
-          test_symbols = ["SPY", "QQQ", "BNBUSD", "BTCUSD"]
+          # Test symbol sets with edge cases
+          test_symbols = ["SPY", "QQQ", "BNBUSD", "BTCUSD", "BRKA", "BRK.B", "FB"]
           
           # Check universe availability
           check_result = TOOL_REGISTRY['qc.universe_check'](test_symbols, "Minute")
@@ -384,6 +396,13 @@ jobs:
           # Run full universe guard
           guard_result = TOOL_REGISTRY['qc.universe_guard'](test_symbols, "Minute")
           
+          # History smoke test
+          final_symbols = guard_result.data.get("final_symbols", test_symbols)
+          history_result = TOOL_REGISTRY['qc.history_smoke'](final_symbols[:3], "Daily")  # Test first 3
+          
+          # Resolution matrix
+          matrix_result = TOOL_REGISTRY['qc.resolution_matrix'](["SPY", "BTCUSD", "BNBUSDT"])
+          
           # Create artifacts
           pathlib.Path("artifacts").mkdir(exist_ok=True)
           
@@ -391,6 +410,8 @@ jobs:
               "check": check_result.data,
               "normalize": norm_result.data,  
               "guard": guard_result.data,
+              "history": history_result.data,
+              "matrix": matrix_result.data,
               "test_symbols": test_symbols
           }
           
@@ -402,6 +423,9 @@ jobs:
           print("PROOF:QC_SYMBOL_MAPS:", norm_result.data.get("mapping_count", 0))
           normalized_summary = [f"{m['original']}→{m['normalized']}" for m in norm_result.data.get("normalized", [])[:3]]
           print("PROOF:QC_NORMALIZED:", json.dumps(normalized_summary))
+          print("PROOF:QC_ALIAS_COUNT:", norm_result.data.get("alias_count", 0))
+          print("PROOF:QC_HISTORY_SMOKE:", "ok" if history_result.ok else "fail")
+          print("PROOF:QC_RESOLUTION_MATRIX:", json.dumps(dict(list(matrix_result.data.get("resolution_matrix", {}).items())[:2])))
           PY
       - name: Upload Universe Guard artifacts
         uses: actions/upload-artifact@v4
@@ -420,7 +444,10 @@ jobs:
             const lines = [
               `PROOF:QC_UNIVERSE_CHECK: ok`,
               `PROOF:QC_SYMBOL_MAPS: ${j.normalize.mapping_count}`,
-              `PROOF:QC_NORMALIZED: ${JSON.stringify(j.normalize.normalized.slice(0,2).map(m => m.original + '→' + m.normalized))}`
+              `PROOF:QC_NORMALIZED: ${JSON.stringify(j.normalize.normalized.slice(0,2).map(m => m.original + '→' + m.normalized))}`,
+              `PROOF:QC_ALIAS_COUNT: ${j.normalize.alias_count}`,
+              `PROOF:QC_HISTORY_SMOKE: ${j.history.success_count === j.history.total_symbols ? 'ok' : 'fail'}`,
+              `PROOF:QC_RESOLUTION_MATRIX: ${JSON.stringify(Object.keys(j.matrix.resolution_matrix || {}).slice(0,2))}`
             ];
             const body = ['### M-QC Universe/Data Guard Proofs','','```',...lines,'```'].join('\n');
             const number = context.payload.pull_request?.number || context.issue.number;

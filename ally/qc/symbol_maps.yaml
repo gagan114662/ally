@@ -23,16 +23,21 @@ symbol_mappings:
   # Crypto mappings
   "BNBUSD@Bitfinex": "BNBUSDT@Binance"
   "BNBUSD@bitfinex": "BNBUSDT@Binance"
+  "BNBUSD": "BNBUSDT"  # Simple case without exchange
   "BTCUSD@Bitfinex": "BTCUSD@Coinbase"
   "ETHUSD@Bitfinex": "ETHUSD@Coinbase"
   
-  # Common ticker variations
-  "BRK.A": "BRKA"
-  "BRK.B": "BRKB"
+  # Common ticker variations (normalize to QC canonical forms)
+  "BRKA": "BRK.A"
+  "BRK A": "BRK.A"
+  "brk.a": "BRK.A"
+  "BRKB": "BRK.B"
+  "BRK B": "BRK.B"
+  "brk.b": "BRK.B"
   
-  # Delisted/moved symbols
+  # Delisted/moved symbols (post-rename canonical)
   "FB": "META"
-  "GOOG": "GOOGL"
+  # Note: GOOG and GOOGL are both valid (different share classes) - no forced mapping
 
 # Resolution mappings 
 resolution_mappings:
