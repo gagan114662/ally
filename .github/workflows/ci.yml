@@ -618,3 +618,50 @@ jobs:
               owner: context.repo.owner, repo: context.repo.repo, issue_number: num,
               body: ['### M-Cache + Runtime PROOFS','', '```', sum, '```'].join('\n')
             });
+
+  m-realdata:
+    name: M-RealData Gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -e .[dev]
+      # Dry-run: ensures no code claims live without receipts
+      - name: Dry check (no live)
+        run: |
+          python scripts/emit_proofs_mrealdata.py --dry > mrealdata_proofs.json
+          cat mrealdata_proofs.json
+      - name: Post PROOF (dry)
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const p = JSON.parse(fs.readFileSync('mrealdata_proofs.json','utf8'));
+            core.summary.addHeading('M-RealData Proofs (dry)');
+            for (const [k,v] of Object.entries(p)) core.summary.addRaw(`PROOF:${k}: ${JSON.stringify(v)}\n`);
+            await core.summary.write();
+            
+            const number = context.payload.pull_request?.number || context.issue.number;
+            if (number) {
+              const lines = Object.entries(p).map(([k,v]) => `PROOF:${k}: ${typeof v === 'string' ? v : JSON.stringify(v)}`);
+              const body = [
+                '### M-RealData Gate Proofs (dry)',
+                '',
+                '```',
+                ...lines,
+                '```'
+              ].join('\n');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: number,
+                body
+              });
+            }

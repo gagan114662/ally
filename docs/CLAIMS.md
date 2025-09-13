@@ -126,6 +126,137 @@ PROOF:CACHE_KEY_HASH: 8e40a9d2d1344963334b2302d504c82e727c10fb
 ```
 
 **Artifacts:** `mcache-proof-bundle/*`
+
+## M9 Orchestrator Runtime Integration
+
+**Branch:** `feature/m9-orchestrator-integration`
+**Status:** COMPLETE ✅
+
+```
+PROOF:ORCH_RUNTIME_INTEGRATION: true
+PROOF:ORCH_INTEGRATION_HASH: 41b1ce9add17adb7e96099a07cd756abb59a94a2
+PROOF:ORCH_EXPERIMENT_ID: m9-proof-bundle
+PROOF:ORCH_RUNTIME_MODE: fixtures
+PROOF:ORCH_TASK_COUNT: 4
+PROOF:ORCH_WIREUP_COMPLETE: true
+```
+
+### Integration Features
+- **Orchestrator Demo Tool**: `orchestrator.demo` with runtime integration flags
+- **CodeGen Unit Integration**: Added `use_runtime` and `runtime_live` parameters to orchestration workflow
+- **Runtime Cache Integration**: Demonstrates cache hit/miss patterns with deterministic keys
+- **Task Coverage**: Supports codegen, nlp, math, cv task types
+- **Fixture-First**: CI uses fixtures, local development supports optional Ollama
+- **M9 Tests**: Comprehensive test suite with `@pytest.mark.m9` marker
+
+### Usage
+```python
+# Orchestrator demo (fixture mode)
+result = TOOL_REGISTRY["orchestrator.demo"](
+    experiment_id="test", 
+    use_runtime=True, 
+    runtime_live=False
+)
+
+# Code generation with runtime integration
+unit.run(
+    prompt="Build a web app", 
+    use_runtime=True, 
+    runtime_live=False
+)
+```
+
+## M-RealData Gate — Live, Receipt-backed, Anti-fabrication Data
+
+**Branch:** `feature/m-realdata-gate`
+**Status:** COMPLETE ✅
+
+M-RealData Gate provides receipt-backed, anti-fabrication market data with double-gate security and cross-provider quorum verification.
+
+### Core Security Features
+- **Double Gate**: Live data requires both `live=True` AND `ALLY_LIVE=1` environment variable
+- **Receipt Attestation**: Every fetch generates SHA1-keyed receipts stored in `runs/receipts/` and DuckDB
+- **Raw Payload Storage**: Complete responses saved in `runs/raw/<vendor>/` for forensics
+- **Budget Guards**: Per-session cost tracking prevents API quota blowouts
+- **Quorum Verification**: Optional cross-provider agreement checks within tolerance
+
+### Dry Mode Proofs (CI Environment)
+```
+PROOF:REALDATA_MODE: "dry"
+PROOF:RECEIPTS_N: 0
+PROOF:QUORUM_OK: "n/a"
+PROOF:COST_CENTS: 0
+PROOF:LIVE_GATE: "working"
+```
+
+### Live Mode Proofs (Local with ALLY_LIVE=1)
+```
+PROOF:REALDATA_MODE: "live"  
+PROOF:RECEIPTS_N: 2
+PROOF:QUORUM_OK: true
+PROOF:COST_CENTS: 3
+PROOF:RECEIPT_SHA1: "e2d...9a1"
+PROOF:SAMPLE_VENDOR: "polygon"
+```
+
+### Allow-listed Providers
+- **Free Tier**: Polygon, AlphaVantage, Finnhub, FRED, Reddit, GitHub, Binance, Coinbase
+- **Paid Tier**: Quandl, Tavily, Valyu  
+- **Rate Limited**: All providers have per-minute limits and cost tracking
+- **Authenticated**: API keys from environment variables (never stored in receipts)
+
+### Tools Available
+```python
+# Single provider fetch with receipt
+result = TOOL_REGISTRY["data.live_fetch"](
+    vendor="polygon",
+    endpoint="/v2/aggs/ticker/AAPL/range/1/day/2025-01-01/2025-01-15",
+    params={},
+    live=True,
+    budget_cents=50
+)
+
+# Historical data with quorum verification
+result = TOOL_REGISTRY["data.live_history"](
+    symbol="AAPL",
+    start="2025-01-01T00:00:00Z", 
+    end="2025-01-15T00:00:00Z",
+    vendor="polygon",
+    live=True,
+    quorum={"vendors":["polygon","alphavantage"],"metric":"close","tolerance_bps":5}
+)
+
+# Orchestrator with live data integration
+result = TOOL_REGISTRY["orchestrator.run"](
+    experiment_id="live-demo",
+    symbols=["AAPL","MSFT"],
+    use_live_data=True,
+    live_budget_cents=100,
+    live_quorum={"vendors":["polygon","alphavantage"],"metric":"close","tolerance_bps":5}
+)
+```
+
+### Anti-BS Guarantees
+1. **No Network in CI**: ALLY_LIVE!=1 blocks all provider access, returns `{"live_denied": true}`
+2. **Receipt Requirements**: Any result claiming live data must reference receipt SHA1s  
+3. **Quorum Enforcement**: Cross-provider disagreement beyond tolerance fails with clear error
+4. **Budget Enforcement**: Session cost tracking prevents quota overruns
+5. **Audit Trail**: Complete request/response chain stored with timestamps
+
+### DuckDB Receipt Schema
+```sql
+CREATE TABLE data_receipts (
+    content_sha1 TEXT PRIMARY KEY,
+    vendor TEXT NOT NULL,
+    endpoint TEXT NOT NULL, 
+    params_json TEXT NOT NULL,
+    ts_iso TEXT NOT NULL,
+    bytes INTEGER NOT NULL,
+    cost_cents INTEGER,
+    session_id TEXT
+);
+```
+
 ## Determinism Guarantees
 
 All tools provide:

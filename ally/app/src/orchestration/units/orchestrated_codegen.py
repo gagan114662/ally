@@ -6,6 +6,8 @@ from app.utils.ascii_art import ASCII_ART
 from pathlib import Path
 import uuid
 
+from ally.tools import TOOL_REGISTRY
+
 
 PROMPTS_DIR = Path(__file__).resolve().parents[3]
 
@@ -37,6 +39,8 @@ class CodeGenUnit(BaseUnit):
         stream: bool = False,
         show_welcome: bool = True,
         working_dir: str = None,
+        use_runtime: bool = False,
+        runtime_live: bool = False,
     ) -> bool:
         """Execute the complete project generation workflow."""
 
@@ -58,7 +62,7 @@ class CodeGenUnit(BaseUnit):
             )
 
             return self._execute_generation_workflow(
-                working_dir, user_input, recursion_limit, config, stream
+                working_dir, user_input, recursion_limit, config, stream, use_runtime, runtime_live
             )
 
         except KeyboardInterrupt:
@@ -75,11 +79,17 @@ class CodeGenUnit(BaseUnit):
         recursion_limit: int,
         config: dict,
         stream: bool,
+        use_runtime: bool,
+        runtime_live: bool,
     ) -> bool:
         """Execute the main generation workflow steps."""
 
         brainstorming_thread_id = str(uuid.uuid4())
         code_generation_thread_id = str(uuid.uuid4())
+        
+        # Runtime demo - show orchestrator integration
+        if use_runtime:
+            self._demo_runtime_integration(user_input, use_runtime, runtime_live)
 
         # Step 1: Context Engineering
         self._run_brainstorming_phase(
@@ -287,6 +297,40 @@ class CodeGenUnit(BaseUnit):
             + user_input
             + f"\n\nIMPORTANT: Place your entire work inside {working_dir}"
         )
+
+    def _demo_runtime_integration(self, user_input: str, use_runtime: bool, runtime_live: bool):
+        """Demonstrate runtime integration within orchestrator workflow."""
+        
+        self.ui.status_message(
+            title="Runtime Integration Demo",
+            message=f"Demonstrating orchestrator runtime integration (live={runtime_live})",
+            style="accent",
+        )
+        
+        try:
+            # Use the orchestrator demo tool to show integration
+            result = TOOL_REGISTRY["orchestrator.demo"](
+                experiment_id=f"orch-{uuid.uuid4().hex[:8]}",
+                use_runtime=use_runtime,
+                runtime_live=runtime_live,
+                tasks=[
+                    {"task": "codegen", "prompt": f"Generate code scaffolding for: {user_input[:50]}..."},
+                    {"task": "nlp", "prompt": f"Analyze requirements: {user_input[:50]}..."},
+                ]
+            )
+            
+            if result.ok:
+                runtime_stats = result.data["runtime_stats"]
+                self.ui.status_message(
+                    title="Runtime Integration Success",
+                    message=f"Mode: {runtime_stats['runtime_mode']}, Tasks: {len(result.data['task_results'])}",
+                    style="success",
+                )
+            else:
+                self.ui.error("Runtime integration demo failed")
+                
+        except Exception as e:
+            self.ui.error(f"Runtime demo error: {e}")
 
     def _enhance_agents(self):
         """Integrate web search capabilities into agents."""
