@@ -126,11 +126,128 @@ PROOF:CACHE_KEY_HASH: 8e40a9d2d1344963334b2302d504c82e727c10fb
 ```
 
 **Artifacts:** `mcache-proof-bundle/*`
+
+## M-Receipts-Everywhere — End-to-End Provenance
+
+**PR:** https://github.com/gagan114662/ally/pull/23  
+**Commit:** [pending]  
+**CI Job:** M-Receipts-Everywhere (End-to-End Provenance)
+
+```
+PROOF:ORCHESTRATOR_TOOLS: ["orchestrator.demo", "orchestrator.run"]
+PROOF:DEMO_OK: true
+PROOF:DEMO_RECEIPTS_LINKED: 0
+PROOF:RUN_OK: true
+PROOF:RUN_RECEIPTS_LINKED: 0
+PROOF:PROVENANCE_HASH: f4a1655deddc22dc...
+PROOF:RECEIPT_SUMMARY_COST: 125
+PROOF:RECEIPT_SUMMARY_VENDORS: ["test_provider_1", "test_provider_2"]
+PROOF:SCHEMA_VALIDATION_OK: true
+PROOF:DB_INSERT_OK: true
+PROOF:MRECEIPTS_STATUS: operational
+PROOF:MRECEIPTS_DET_HASH: 46ca8c1e06918f8ea57cb6631b4de2d11e9e3727
+```
+
+### M-Receipts Claims
+
+### RECV-001: Receipt Reference Schema
+- **Claim**: ReceiptRef captures (content_sha1, vendor, endpoint, ts_iso, cost_cents) for provenance linking
+- **Verification**: Schema validation passes with all required fields
+- **Expected**: SCHEMA_VALIDATION_OK: true
+
+### RECV-002: Orchestrator Receipt Wiring  
+- **Claim**: orchestrator.demo and orchestrator.run include receipt references in output
+- **Verification**: Both tools return provenance section with receipts_linked count
+- **Expected**: DEMO_OK: true, RUN_OK: true
+
+### RECV-003: Provenance Hash Computation
+- **Claim**: compute_provenance_hash creates SHA256 of inputs + outputs + receipts
+- **Verification**: Hash computed from test inputs/outputs/receipts is deterministic
+- **Expected**: PROVENANCE_HASH matches expected pattern
+
+### RECV-004: Database Receipt Integration
+- **Claim**: Receipt storage and retrieval via enhanced DatabaseManager
+- **Verification**: insert_receipt and get_receipt_stats methods work
+- **Expected**: DB_INSERT_OK: true, DB_STATS_OK: true
+
+### RECV-005: End-to-End Receipt Linking
+- **Claim**: Runs link to all receipts generated during execution session
+- **Verification**: link_receipts_to_run returns appropriate ReceiptRef objects
+- **Expected**: Receipt linking operational for both dry and live modes
+
+**Artifacts:** `mreceipts-proof-bundle/*`
+
+## M-Receipts Invariants — Claims & Proof
+
+**Invariant:** If `live == true`, outputs MUST include ≥1 `ReceiptRef` with `content_sha1`, `vendor`, `endpoint`, and ISO-Z `ts_iso`.
+
+**Verification:**
+- CI job `M-Receipts Invariants` runs `tests/test_receipts_invariants.py`.
+- Proof lines:
+  - `PROOF:RECEIPTS_INVARIANTS: ok`
+  - `PROOF:RECEIPTS_DIFF_CLI: ok`
+  - `PROOF:RECEIPTS_VERIFY_REGISTERED: ok`
+
+### RECV-INV-001: Hard Invariant Enforcement
+- **Claim**: assert_receipts_invariants({"live":true, "receipts":[]}) raises AssertionError
+- **Verification**: Test function blocks live outputs without receipts
+- **Expected**: RECEIPTS_INVARIANTS: ok
+
+### RECV-INV-002: CLI Verification Tools  
+- **Claim**: receipts.verify and receipts.diff tools are registered and functional
+- **Verification**: Tools can verify receipt files and compare numeric series
+- **Expected**: RECEIPTS_DIFF_CLI: ok, RECEIPTS_VERIFY_REGISTERED: ok
+
+### RECV-INV-003: Tearsheet Provenance Box
+- **Claim**: Generated tearsheets include visible provenance section
+- **Verification**: HTML contains receipt count, hash, vendors, timestamps
+- **Expected**: Provenance box visible in all tearsheet outputs
+
+**Artifacts:** `receipts-invariants-proof-bundle/*`
+
+## M-FactorLens — Residual Alpha & Factor Exposure (BULLETPROOF)
+
+**CI Job:** M-FactorLens
+
+### M-FactorLens Claims
+
+#### MF-001: Exposures computed with OLS-NeweyWest (HAC) — no look-ahead
+- **Claim**: Factor exposures use Newey-West standard errors with configurable lag structure
+- **Verification**: Check that OLS regression includes HAC standard error correction
+- **Expected**: T-statistics computed with HAC-corrected standard errors
+
+#### MF-002: Residual alpha (bps) & t-stat via rolling window (252d, step 21)
+- **Claim**: Rolling window alpha estimation with 252-day windows, 21-day steps
+- **Verification**: Verify rolling regression parameters and alpha annualization
+- **Expected**: Alpha in basis points, annualized from daily returns
+
+#### MF-003: PIT alignment — no forward fill; dates strictly intersected
+- **Claim**: Factor and return data aligned point-in-time, no forward-looking bias
+- **Verification**: Test shifted factor dates fail alignment; no forward fill
+- **Expected**: Only overlapping dates used, no future factor values
+
+#### MF-004: Deterministic outputs — stable SHA1 proof hash
+- **Claim**: Same inputs produce identical factor analysis outputs
+- **Verification**: Run analysis twice with same seed, compare deterministic hash
+- **Expected**: Identical SHA1 hash across runs
+
+### Proof (CI):
+```
+PROOF:FACTOR_SET: ["MKT","SMB","HML","RMW","CMA","MOM"]
+PROOF:ALPHA_TSTAT: <x.xx>
+PROOF:R2: <0.xx>
+PROOF:RES_ALPHA_MEAN: <yy.y>
+PROOF:FACTORLENS_HASH: <sha1>
+```
+
+**Artifacts:** `factorlens-proof-bundle/*`
+
 ## Determinism Guarantees
 
 All tools provide:
-- `audit_hash`: SHA256 of inputs + outputs
+- `audit_hash`: SHA256 of inputs + outputs + receipts
 - `inputs_hash`: Hash of input parameters
 - `code_hash`: Hash of function code
 - Sorted outputs for consistent ordering
 - Fixed random seeds for synthetic data
+- Receipt provenance tracking via content_sha1 links

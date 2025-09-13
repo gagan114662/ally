@@ -65,6 +65,19 @@ class DatabaseManager:
             )
         """)
 
+        self.conn.execute("""
+            CREATE TABLE IF NOT EXISTS data_receipts (
+                content_sha1 TEXT PRIMARY KEY,
+                vendor TEXT,
+                endpoint TEXT,
+                params_json TEXT,
+                ts_iso TEXT,
+                bytes INTEGER,
+                cost_cents INTEGER,
+                session_id TEXT
+            )
+        """)
+
         if not DUCKDB_AVAILABLE:
             self.conn.commit()
 
@@ -152,6 +165,66 @@ class DatabaseManager:
         except Exception as e:
             print(f"Error querying database: {e}")
             return {"rows": [], "count": 0}
+
+    def insert_receipt(self, receipt) -> bool:
+        """Insert a data receipt into the database."""
+        try:
+            import json
+            
+            self.conn.execute("""
+                INSERT OR REPLACE INTO data_receipts 
+                (content_sha1, vendor, endpoint, params_json, ts_iso, bytes, cost_cents, session_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                receipt.content_sha1,
+                receipt.vendor,
+                receipt.endpoint,
+                json.dumps(receipt.params, sort_keys=True),
+                receipt.ts_iso,
+                receipt.bytes,
+                receipt.cost_cents,
+                getattr(receipt, 'session_id', None)
+            ))
+            
+            if not DUCKDB_AVAILABLE:
+                self.conn.commit()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error inserting receipt: {e}")
+            return False
+
+    def get_receipt_stats(self) -> Optional[Dict[str, Any]]:
+        """Get receipt statistics from database."""
+        try:
+            result = self.conn.execute("""
+                SELECT 
+                    COUNT(*) as total_receipts,
+                    COUNT(DISTINCT vendor) as unique_vendors,
+                    SUM(cost_cents) as total_cost_cents,
+                    SUM(bytes) as total_bytes
+                FROM data_receipts
+            """).fetchone()
+            
+            if DUCKDB_AVAILABLE:
+                return {
+                    "total_receipts": result[0],
+                    "unique_vendors": result[1], 
+                    "total_cost_cents": result[2] or 0,
+                    "total_bytes": result[3] or 0
+                }
+            else:
+                return {
+                    "total_receipts": result["total_receipts"],
+                    "unique_vendors": result["unique_vendors"],
+                    "total_cost_cents": result["total_cost_cents"] or 0,
+                    "total_bytes": result["total_bytes"] or 0
+                }
+                
+        except Exception as e:
+            print(f"Error getting receipt stats: {e}")
+            return None
 
     def close(self):
         """Close database connection."""

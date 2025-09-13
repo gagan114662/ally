@@ -49,23 +49,30 @@ def generate_tearsheet(
     # Generate plots
     plots = _generate_plots(trades, metrics)
     
-    # Create HTML content
+    # Create summary for deterministic file naming and HTML generation
+    import hashlib
+    summary = ReportSummary(
+        run_id=run_id,
+        task=run_data.get("task", "tearsheet_generation"),
+        ts_iso=run_data.get("ts", "2025-01-01T00:00:00Z"), 
+        kpis=kpis,
+        n_trades=len(trades),
+        sections=["overview", "equity_curve", "drawdown", "by_symbol", "trades_table"],
+        html_path="",  # Will be set below
+        audit_hash=hashlib.sha256(f"{run_id}-tearsheet".encode()).hexdigest(),
+        inputs_hash=hashlib.sha256(run_id.encode()).hexdigest(),
+        code_hash=hashlib.sha256(generate_tearsheet.__code__.co_code).hexdigest()
+    )
+    
+    # Create HTML content with summary data
     html_content = _create_html_tearsheet(
         run_id=run_id,
         run_data=run_data,
         kpis=kpis,
         trades=trades,
         events=events,
-        plots=plots
-    )
-    
-    # Create summary for deterministic file naming
-    summary = ReportSummary(
-        run_id=run_id,
-        kpis=kpis,
-        n_trades=len(trades),
-        sections=["overview", "equity_curve", "drawdown", "by_symbol", "trades_table"],
-        html_path=""  # Will be set below
+        plots=plots,
+        summary_dict=summary.model_dump()
     )
     
     # Generate deterministic filename
@@ -195,13 +202,35 @@ def _generate_plots(trades: List[Dict], metrics: Dict[str, float]) -> Dict[str, 
     return plots
 
 
+def _render_provenance_box(summary_dict: Dict) -> str:
+    """Render provenance box showing receipt information."""
+    receipts = summary_dict.get("receipts", [])
+    lines = [
+        "<div style='border:1px solid #ddd;padding:12px;border-radius:10px;margin-top:16px;'>",
+        "<b>Provenance</b><br/>",
+        f"Receipts: {len(receipts)}<br/>",
+        f"Provenance Hash: {summary_dict.get('audit_hash', 'N/A')[:16]}...<br/>",
+    ]
+    if receipts:
+        first_ts = receipts[0].get("ts_iso", "-")
+        last_ts = receipts[-1].get("ts_iso", "-")
+        lines.append(f"First/Last Receipt: {first_ts} → {last_ts}<br/>")
+        vendors = sorted({r.get('vendor','?') for r in receipts})
+        lines.append(f"Vendors: {', '.join(vendors)}")
+    else:
+        lines.append("No receipts (dry/fixture mode)")
+    lines.append("</div>")
+    return "\n".join(lines)
+
+
 def _create_html_tearsheet(
     run_id: str,
     run_data: Dict,
     kpis: Dict[str, float],
     trades: List[Dict],
     events: List[Dict],
-    plots: Dict[str, str]
+    plots: Dict[str, str],
+    summary_dict: Dict = None
 ) -> str:
     """Create self-contained HTML tearsheet."""
     
@@ -316,6 +345,11 @@ def _create_html_tearsheet(
     <div class="section">
         <h2>Events</h2>
         {events_html}
+    </div>
+    
+    <div class="section">
+        <h2>Provenance</h2>
+        {_render_provenance_box(summary_dict or {})}
     </div>
     
     <div style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #ddd; color: #7f8c8d; font-size: 12px;">

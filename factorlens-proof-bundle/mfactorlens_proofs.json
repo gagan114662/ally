@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "timestamp": "2025-09-13T17:53:14.353890+00:00",
+    "version": "1.0",
+    "determinism_seed": 1337
+  },
+  "factor_set": {
+    "name": "FF5+Mom",
+    "columns": [
+      "MKT",
+      "SMB",
+      "HML",
+      "RMW",
+      "CMA",
+      "MOM"
+    ],
+    "frequency": "D"
+  },
+  "exposures": {
+    "r2": 0.0008944445851774008,
+    "exposures": [
+      {
+        "factor": "MKT",
+        "beta": 0.0009426360848293416,
+        "tstat": 2.768942505735463
+      },
+      {
+        "factor": "SMB",
+        "beta": -0.0020182000667700803,
+        "tstat": -4.826812393091402
+      },
+      {
+        "factor": "HML",
+        "beta": 0.00043497858459323746,
+        "tstat": 0.9340495313187508
+      },
+      {
+        "factor": "RMW",
+        "beta": -0.0017414964265103638,
+        "tstat": -2.7902225863765366
+      },
+      {
+        "factor": "CMA",
+        "beta": 0.0008012779250472502,
+        "tstat": 1.053485735677895
+      },
+      {
+        "factor": "MOM",
+        "beta": -0.00039128241457203616,
+        "tstat": -1.2272808528981012
+      }
+    ],
+    "method": "OLS-NeweyWest",
+    "lags": 5
+  },
+  "residual_alpha": {
+    "meta": {
+      "name": "FF5+Mom",
+      "frequency": "D",
+      "columns": [
+        "MKT",
+        "SMB",
+        "HML",
+        "RMW",
+        "CMA",
+        "MOM"
+      ]
+    },
+    "exposures": {
+      "r2": 0.0,
+      "exposures": [],
+      "method": "OLS-NeweyWest",
+      "lags": 5
+    },
+    "residual": {
+      "alpha_bps": 0.0,
+      "alpha_tstat": 0.0,
+      "r2": 0.0,
+      "window_days": 252,
+      "residual_series_path": ""
+    },
+    "det_hash": "c172d826a1d525f841ed0cd9d846bb0f9ef0bca9",
+    "ts_utc": "2025-09-13 17:53:14.334649+00:00"
+  },
+  "proofs": {
+    "FACTOR_SET": [
+      "MKT",
+      "SMB",
+      "HML",
+      "RMW",
+      "CMA",
+      "MOM"
+    ],
+    "ALPHA_TSTAT": 0.0,
+    "R2": 0.0008944445851774008,
+    "RES_ALPHA_MEAN": 0.0,
+    "FACTORLENS_HASH": "c172d826a1d525f841ed0cd9d846bb0f9ef0bca9"
+  }
+}
