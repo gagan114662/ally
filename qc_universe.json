@@ -1,0 +1,200 @@
+{
+  "check": {
+    "supported": [
+      {
+        "symbol": "SPY",
+        "market": "usa",
+        "resolution": "Minute"
+      },
+      {
+        "symbol": "QQQ",
+        "market": "usa",
+        "resolution": "Minute"
+      },
+      {
+        "symbol": "BTCUSD",
+        "market": "coinbase",
+        "resolution": "Minute"
+      }
+    ],
+    "unsupported": [
+      {
+        "symbol": "BNBUSD",
+        "resolution": "Minute",
+        "reason": "Symbol or resolution not available"
+      },
+      {
+        "symbol": "BRKA",
+        "resolution": "Minute",
+        "reason": "Symbol or resolution not available"
+      },
+      {
+        "symbol": "BRK.B",
+        "resolution": "Minute",
+        "reason": "Symbol or resolution not available"
+      },
+      {
+        "symbol": "FB",
+        "resolution": "Minute",
+        "reason": "Symbol or resolution not available"
+      }
+    ],
+    "total_symbols": 7,
+    "success_rate": 0.42857142857142855
+  },
+  "normalize": {
+    "normalized": [
+      {
+        "original": "BNBUSD",
+        "normalized": "BNBUSDT",
+        "reason": "Mapped to supported alternative"
+      },
+      {
+        "original": "BRKA",
+        "normalized": "BRK.A",
+        "reason": "Mapped to supported alternative"
+      },
+      {
+        "original": "FB",
+        "normalized": "META",
+        "reason": "Mapped to supported alternative"
+      }
+    ],
+    "unchanged": [
+      "SPY",
+      "QQQ",
+      "BTCUSD",
+      "BRK.B"
+    ],
+    "mapping_count": 3,
+    "total_symbols": 7,
+    "alias_count": 12
+  },
+  "guard": {
+    "original_symbols": [
+      "SPY",
+      "QQQ",
+      "BNBUSD",
+      "BTCUSD",
+      "BRKA",
+      "BRK.B",
+      "FB"
+    ],
+    "final_symbols": [
+      "SPY",
+      "QQQ",
+      "BNBUSDT",
+      "BTCUSD",
+      "BRK.A",
+      "BRK.B",
+      "META"
+    ],
+    "normalizations": {
+      "BNBUSD": "BNBUSDT",
+      "BRKA": "BRK.A",
+      "FB": "META"
+    },
+    "availability": {
+      "supported": [
+        {
+          "symbol": "SPY",
+          "market": "usa",
+          "resolution": "Minute"
+        },
+        {
+          "symbol": "QQQ",
+          "market": "usa",
+          "resolution": "Minute"
+        },
+        {
+          "symbol": "BNBUSDT",
+          "market": "binance",
+          "resolution": "Minute"
+        },
+        {
+          "symbol": "BTCUSD",
+          "market": "coinbase",
+          "resolution": "Minute"
+        },
+        {
+          "symbol": "META",
+          "market": "usa",
+          "resolution": "Minute"
+        }
+      ],
+      "unsupported": [
+        {
+          "symbol": "BRK.A",
+          "resolution": "Minute",
+          "reason": "Symbol or resolution not available"
+        },
+        {
+          "symbol": "BRK.B",
+          "resolution": "Minute",
+          "reason": "Symbol or resolution not available"
+        }
+      ],
+      "total_symbols": 7,
+      "success_rate": 0.7142857142857143
+    },
+    "guard_passed": false,
+    "normalized_count": 3
+  },
+  "history": {
+    "smoke_results": [
+      {
+        "symbol": "SPY",
+        "resolution": "Daily",
+        "history_available": true,
+        "bars_count": 1
+      },
+      {
+        "symbol": "QQQ",
+        "resolution": "Daily",
+        "history_available": true,
+        "bars_count": 1
+      },
+      {
+        "symbol": "BNBUSDT",
+        "resolution": "Daily",
+        "history_available": true,
+        "bars_count": 1
+      }
+    ],
+    "success_count": 3,
+    "total_symbols": 3,
+    "success_rate": 1.0
+  },
+  "matrix": {
+    "resolution_matrix": {
+      "SPY": {
+        "Second": true,
+        "Minute": true,
+        "Hour": true,
+        "Daily": true
+      },
+      "BTCUSD": {
+        "Second": false,
+        "Minute": true,
+        "Hour": true,
+        "Daily": true
+      },
+      "BNBUSDT": {
+        "Second": false,
+        "Minute": true,
+        "Hour": true,
+        "Daily": true
+      }
+    },
+    "symbols_count": 3
+  },
+  "test_symbols": [
+    "SPY",
+    "QQQ",
+    "BNBUSD",
+    "BTCUSD",
+    "BRKA",
+    "BRK.B",
+    "FB"
+  ]
+}
