@@ -1,0 +1,9 @@
+name: QC Lean Pin
+on: [workflow_dispatch, pull_request]
+jobs:
+  lean_pin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "LEAN_VERSION=1.0.122" >> $GITHUB_ENV
+      - run: echo "PROOF:LEAN_SHA:${{ env.LEAN_VERSION }}"

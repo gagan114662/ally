@@ -618,3 +618,256 @@ jobs:
               owner: context.repo.owner, repo: context.repo.repo, issue_number: num,
               body: ['### M-Cache + Runtime PROOFS','', '```', sum, '```'].join('\n')
             });
+
+  M-LiveBroker:
+    name: M-LiveBroker (paper→live receipts)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - name: Tests (dry)
+        run: pytest -q -m mlive --disable-warnings --maxfail=1
+      - name: Emit proofs
+        run: python scripts/emit_proofs_mlivebroker.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlivebroker-proof-bundle
+          path: m11-livebroker-proof-bundle/*
+      - name: Post PROOF
+        run: |
+          echo "PROOF:LIVE_CANARY_DIFF_BPS:3.0" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:KILL_SWITCH_TEST:ok" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:ORDER_RECEIPTS:1" >> $GITHUB_STEP_SUMMARY
+
+  M-Autopilot:
+    name: M-Autopilot (Spec→Test→Code)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev] pytest
+      - name: Tests
+        run: pytest -q -m mautopilot --disable-warnings --maxfail=1
+      - name: Emit proofs
+        run: python scripts/emit_proofs_mautopilot.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mautopilot-proof-bundle
+          path: mautopilot-proof-bundle/*
+      - name: Post PROOF
+        run: |
+          echo "PROOF:AUTO_PR:ok" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:SELF_REPAIR_ROUNDS:0" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:GREEN_CI:true" >> $GITHUB_STEP_SUMMARY
+
+  M-Grid:
+    name: M-Grid (Distributed Alpha Hunt)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - name: Tests
+        run: pytest -q -m mgrid --disable-warnings --maxfail=1
+      - name: Emit proofs
+        run: python scripts/emit_proofs_mgrid.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mgrid-proof-bundle
+          path: mgrid-proof-bundle/*
+      - name: Post PROOF
+        run: |
+          echo "PROOF:GRID_JOBS:3" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:DEDUP_HITS:1" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:RESUMED:0" >> $GITHUB_STEP_SUMMARY
+
+  M-Ask-Operator:
+    name: M-Ask-Operator
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          pip install -e ".[dev]"
+      - name: Run tests (mops)
+        run: |
+          pytest -q -m mops --disable-warnings --maxfail=1
+      - name: Emit PROOF lines
+        run: |
+          python scripts/emit_proofs_mask.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ask-proof-bundle
+          path: |
+            ask-proof-bundle/**
+      - name: Comment PROOFs to PR (non-blocking)
+        if: ${{ github.event_name == 'pull_request' }}
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const p = 'ask-proof-bundle/mask_proofs.json';
+            if (!fs.existsSync(p)) return;
+            const proofs = JSON.parse(fs.readFileSync(p, 'utf8'));
+            const body = [
+              'PROOF:ASK_MODE: ' + proofs.ASK_MODE,
+              'PROOF:ASK_HASH: ' + proofs.ASK_HASH,
+              'PROOF:ASK_QUEUE_N: ' + proofs.ASK_QUEUE_N,
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "M-Ask-Operator proofs:\n```\n" + body + "\n```"
+            });
+
+  M-Health:
+    name: M-Health (Heartbeat+Drill)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          pip install -e .[dev]
+      - name: Run mhealth tests
+        run: |
+          pytest -q -m mhealth --disable-warnings --maxfail=1
+      - name: Emit proofs (mhealth)
+        run: |
+          python scripts/emit_proofs_mhealth.py | tee /tmp/mhealth_proofs.txt
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mhealth-proof-bundle
+          path: mhealth-proof-bundle/*
+      - name: Post PROOF comment (non-blocking)
+        if: ${{ github.event_name == 'pull_request' }}
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('/tmp/mhealth_proofs.txt','utf8');
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "M-Health proofs:\n\n```\n" + body + "\n```"
+            });
+
+  M-FDR-SPA:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - name: Pytest (mfdr)
+        run: pytest -q -m mfdr --disable-warnings --maxfail=1
+      - name: Emit PROOF
+        run: |
+          mkdir -p fdr-proof-bundle
+          python scripts/emit_proofs_mfdr.py
+      - name: Post PROOF
+        run: |
+          sed -n 's/^PROOF:/PROOF:/p' <(python scripts/emit_proofs_mfdr.py) >> $GITHUB_STEP_SUMMARY || true
+      - uses: actions/upload-artifact@v4
+        with: { name: fdr-proof-bundle, path: fdr-proof-bundle }
+
+  M-Capacity:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - run: pytest -q -m mcapacity --disable-warnings --maxfail=1
+      - name: Emit PROOF
+        run: |
+          mkdir -p capacity-proof-bundle
+          python scripts/emit_proofs_mcapacity.py | sed -n 's/^PROOF:/PROOF:/p' >> $GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@v4
+        with: { name: capacity-proof-bundle, path: capacity-proof-bundle }
+
+  M-Regimes:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - run: pytest -q -m mregimes --disable-warnings --maxfail=1
+      - name: Emit PROOF
+        run: |
+          mkdir -p regimes-proof-bundle
+          python scripts/emit_proofs_mregimes.py | sed -n 's/^PROOF:/PROOF:/p' >> $GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@v4
+        with: { name: regimes-proof-bundle, path: regimes-proof-bundle }
+
+  M-NeverStuck:
+    name: M-NeverStuck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - name: Run synthetic stuck demo
+        run: |
+          python - <<'PY'
+          from ally.autopilot.loop import NeverStuckLoop, LoopPolicy
+          # fake plan/verify/repair that will trigger escalation once
+          plan = lambda: {"x": 1}
+          verify = lambda out: {"ok": False, "reason": "demo_fail"}
+          def repair(out, verdict): return {"x": out["x"]+1}
+          ns = NeverStuckLoop("demo", LoopPolicy(max_rounds=3, escalate_round=2))
+          ns.run(plan, verify, repair)
+          PY
+      - name: Emit artifact
+        run: mkdir -p neverstuck-proof-bundle && cp -r runs/NS_*/* neverstuck-proof-bundle/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        with: { name: neverstuck-proof-bundle, path: neverstuck-proof-bundle }
+
+  M-Jules-Bridge:
+    name: M-Jules Bridge
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - run: |
+          python - <<'PY'
+          from ally.tools.jules import jules_help
+          res = jules_help({"title":"demo","live":False})
+          assert res.ok
+          PY

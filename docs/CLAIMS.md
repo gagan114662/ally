@@ -126,6 +126,33 @@ PROOF:CACHE_KEY_HASH: 8e40a9d2d1344963334b2302d504c82e727c10fb
 ```
 
 **Artifacts:** `mcache-proof-bundle/*`
+
+### M-Ask-Operator (Ask the Operator bridge)
+
+**Claims**
+- ops.ask provides a CI-safe dry mode (no network) and a guarded live mode (requires `live=true` AND `ALLY_LIVE=1`).
+- Live path routes through `runtime.generate` deterministically (temp=0, seed=1337) using the model router.
+- Dry path persists requests to `runs/supervisor/ask_queue.json` for operator triage.
+
+**How to verify**
+- CI job **M-Ask-Operator** runs `pytest -m mops` and prints PROOF lines:
+  - `PROOF:ASK_MODE: dry`
+  - `PROOF:ASK_HASH: <sha1>`
+  - `PROOF:ASK_QUEUE_N: <int>`
+
+### M-Health (Heartbeat + Kill-Switch Drill)
+
+**Claims**
+- Heartbeat rotates on schedule and is persisted.
+- Kill-switch drill responds within bounded time.
+
+**CI Proofs**
+- `PROOF:HEARTBEAT_ROTATING: ok`
+- `PROOF:HEARTBEAT_PATH: runs/heartbeat/HEARTBEAT_CANARY.json`
+- `PROOF:KILL_SWITCH_DRILL: ok`
+- `PROOF:KILL_SWITCH_TTR_SEC: <float>`
+- `PROOF:DRILL_VERSION: v1`
+
 ## Determinism Guarantees
 
 All tools provide:
