@@ -71,7 +71,8 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
 markers = [
-    "receipts: tests for receipt invariants and CLI tools"
+    "receipts: tests for receipt invariants and CLI tools",
+    "pit: tests for point-in-time universe and bias detection"
 ]
 
 [tool.coverage.run]

@@ -197,6 +197,11 @@ def _import_all_tools():
         from . import receipts  # Import receipts tools
     except ImportError:
         pass
+    
+    try:
+        from . import pit  # Import PIT tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()
