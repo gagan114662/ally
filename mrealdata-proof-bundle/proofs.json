@@ -1,0 +1,9 @@
+{
+  "REALDATA_MODE": "dry",
+  "RECEIPTS_N": 0,
+  "QUORUM_OK": "n/a",
+  "COST_CENTS": 0,
+  "LIVE_ACCESS": "denied",
+  "LIVE_GATE": "working",
+  "TOOLS_REGISTERED": true
+}

@@ -635,34 +635,58 @@ jobs:
       # Dry-run: ensures no code claims live without receipts
       - name: Dry check (no live)
         run: |
-          python scripts/emit_proofs_mrealdata.py --dry > mrealdata_proofs.json
-          cat mrealdata_proofs.json
+          python scripts/emit_proofs_mrealdata.py --dry
+      - name: Upload M-RealData proofs
+        uses: actions/upload-artifact@v4
+        with:
+          name: mrealdata-proof-bundle
+          path: mrealdata-proof-bundle/**
+        if: always()
+      - name: DuckDB receipts sanity
+        run: |
+          python - <<'PY'
+          from ally.utils.db import get_db_manager
+          db = get_db_manager()
+          stats = db.get_receipt_stats()
+          print(f"Receipts in database: {stats['total_receipts']}")
+          if stats['total_receipts'] > 0:
+              print(f"By vendor: {stats['by_vendor']}")
+              print(f"Total cost: {stats['total_cost_cents']} cents")
+          PY
       - name: Post PROOF (dry)
         if: always()
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            const p = JSON.parse(fs.readFileSync('mrealdata_proofs.json','utf8'));
-            core.summary.addHeading('M-RealData Proofs (dry)');
-            for (const [k,v] of Object.entries(p)) core.summary.addRaw(`PROOF:${k}: ${JSON.stringify(v)}\n`);
-            await core.summary.write();
+            let proofsText = '';
             
-            const number = context.payload.pull_request?.number || context.issue.number;
-            if (number) {
-              const lines = Object.entries(p).map(([k,v]) => `PROOF:${k}: ${typeof v === 'string' ? v : JSON.stringify(v)}`);
-              const body = [
-                '### M-RealData Gate Proofs (dry)',
-                '',
-                '```',
-                ...lines,
-                '```'
-              ].join('\n');
+            try {
+              proofsText = fs.readFileSync('mrealdata-proof-bundle/proofs.txt', 'utf8');
+            } catch (e) {
+              proofsText = 'PROOF:ERROR: Failed to read proofs file';
+            }
+            
+            // Always add to job summary
+            await core.summary
+              .addHeading('M-RealData Gate Proofs (dry)')
+              .addCodeBlock(proofsText)
+              .write();
+            
+            // PR comment if this is a pull request
+            if (context.payload.pull_request) {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: number,
-                body
+                issue_number: context.payload.pull_request.number,
+                body: [
+                  '### M-RealData Gate Proofs (dry)',
+                  '',
+                  '```',
+                  proofsText,
+                  '```'
+                ].join('\n')
               });
             }
 

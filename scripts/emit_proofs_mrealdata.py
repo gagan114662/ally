@@ -175,14 +175,31 @@ def main():
     verification = verify_tools_exist()
     proofs["TOOLS_REGISTERED"] = all(verification.values())
     
+    # Create proof bundle directory and files
+    from pathlib import Path
+    bundle_dir = Path("mrealdata-proof-bundle")
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Write JSON format for programmatic access
+    with open(bundle_dir / "proofs.json", "w") as f:
+        json.dump(proofs, f, indent=2)
+    
+    # Write plain text format for comments
+    proof_lines = []
+    for key, value in proofs.items():
+        if not key.startswith("TOOLS_") and key != "ERROR":
+            proof_lines.append(f"PROOF:{key}: {json.dumps(value) if isinstance(value, (dict, list)) else value}")
+    
+    with open(bundle_dir / "proofs.txt", "w") as f:
+        f.write("\n".join(proof_lines))
+    
     # Print proofs in CI-friendly format
     print(json.dumps(proofs, indent=2))
     
     # Also print individual PROOF lines for easy copying
     print("\n# Individual PROOF lines:")
-    for key, value in proofs.items():
-        if not key.startswith("TOOLS_") and key != "ERROR":
-            print(f"PROOF:{key}: {json.dumps(value) if isinstance(value, (dict, list)) else value}")
+    for line in proof_lines:
+        print(line)
 
 
 if __name__ == "__main__":
