@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ally"
-version = "0.1.0"
+version = "0.9.5.dev0"
 description = "Local-first CLI agent system with deterministic tools and audit trails"
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -70,6 +70,9 @@ include = ["ally*"]
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
+markers = [
+    "receipts: tests for receipt invariants and CLI tools"
+]
 
 [tool.coverage.run]
 source = ["ally"]
