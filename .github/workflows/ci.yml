@@ -856,3 +856,18 @@ jobs:
         run: mkdir -p neverstuck-proof-bundle && cp -r runs/NS_*/* neverstuck-proof-bundle/ 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         with: { name: neverstuck-proof-bundle, path: neverstuck-proof-bundle }
+
+  M-Jules-Bridge:
+    name: M-Jules Bridge
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - run: |
+          python - <<'PY'
+          from ally.tools.jules import jules_help
+          res = jules_help({"title":"demo","live":False})
+          assert res.ok
+          PY

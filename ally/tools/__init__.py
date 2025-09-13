@@ -300,3 +300,10 @@ try:
     _register_ops_bridge()
 except ImportError:
     pass
+
+# Register Jules tools
+try:
+    from .jules import jules_help as _jules_help
+    TOOL_REGISTRY["jules.help"] = _jules_help
+except ImportError:
+    pass
