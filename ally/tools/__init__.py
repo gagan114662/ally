@@ -203,6 +203,11 @@ def _import_all_tools():
     except ImportError:
         pass
 
+    try:
+        from . import ops  # Import ops tools
+    except ImportError:
+        pass
+
 # Auto-import tools when module is imported
 _import_all_tools()
 
@@ -253,5 +258,12 @@ except ImportError:
 try:
     from .grid import run as _grid_run
     TOOL_REGISTRY["grid.run"] = _grid_run
+except ImportError:
+    pass
+
+# Register ops tools
+try:
+    from .ops import register as _register_ops
+    _register_ops()
 except ImportError:
     pass
