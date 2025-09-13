@@ -832,3 +832,27 @@ jobs:
           python scripts/emit_proofs_mregimes.py | sed -n 's/^PROOF:/PROOF:/p' >> $GITHUB_STEP_SUMMARY
       - uses: actions/upload-artifact@v4
         with: { name: regimes-proof-bundle, path: regimes-proof-bundle }
+
+  M-NeverStuck:
+    name: M-NeverStuck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - name: Run synthetic stuck demo
+        run: |
+          python - <<'PY'
+          from ally.autopilot.loop import NeverStuckLoop, LoopPolicy
+          # fake plan/verify/repair that will trigger escalation once
+          plan = lambda: {"x": 1}
+          verify = lambda out: {"ok": False, "reason": "demo_fail"}
+          def repair(out, verdict): return {"x": out["x"]+1}
+          ns = NeverStuckLoop("demo", LoopPolicy(max_rounds=3, escalate_round=2))
+          ns.run(plan, verify, repair)
+          PY
+      - name: Emit artifact
+        run: mkdir -p neverstuck-proof-bundle && cp -r runs/NS_*/* neverstuck-proof-bundle/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        with: { name: neverstuck-proof-bundle, path: neverstuck-proof-bundle }

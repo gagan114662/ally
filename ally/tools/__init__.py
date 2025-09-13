@@ -293,3 +293,10 @@ try:
     TOOL_REGISTRY["regimes.gate"] = _regime_gate
 except ImportError:
     pass
+
+# Register ops bridge
+try:
+    from .ops_bridge import register as _register_ops_bridge
+    _register_ops_bridge()
+except ImportError:
+    pass
