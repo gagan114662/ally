@@ -96,6 +96,21 @@ Each claim outputs:
 - `risk_parity`: Equal risk contribution through iterative optimization
 - `hrp`: Hierarchical Risk Parity using correlation-based clustering
 
+## M-Router — Task-Aware Model Selection
+
+**PR:** https://github.com/gagan114662/ally/pull/20  
+**Commit:** e65c686  
+**CI Job:** M-Router (Task-Aware Model Selection)
+
+```
+PROOF:ROUTER_MATRIX: {"codegen":"llama3.1-8b-instruct","cv":"llava-phi-3-mini","math":"deepseek-math-7b","nlp":"llama3.1-8b"}
+PROOF:ROUTER_FALLBACK: ok
+PROOF:EVAL_DET_HASH: f4a1655deddc22dc06eabf8a45f0c6029ca7472b
+PROOF:ROUTER_DET: 46ca8c1e06918f8ea57cb6631b4de2d11e9e3727
+```
+
+**Artifacts:** `mrouter-proof-bundle/*`
+
 ## Determinism Guarantees
 
 All tools provide:
