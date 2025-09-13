@@ -780,3 +780,23 @@ jobs:
               issue_number: context.issue.number,
               body: "M-Health proofs:\n\n```\n" + body + "\n```"
             });
+
+  M-FDR-SPA:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - name: Pytest (mfdr)
+        run: pytest -q -m mfdr --disable-warnings --maxfail=1
+      - name: Emit PROOF
+        run: |
+          mkdir -p fdr-proof-bundle
+          python scripts/emit_proofs_mfdr.py
+      - name: Post PROOF
+        run: |
+          sed -n 's/^PROOF:/PROOF:/p' <(python scripts/emit_proofs_mfdr.py) >> $GITHUB_STEP_SUMMARY || true
+      - uses: actions/upload-artifact@v4
+        with: { name: fdr-proof-bundle, path: fdr-proof-bundle }

@@ -272,3 +272,10 @@ try:
     _register_ops()
 except ImportError:
     pass
+
+# Register FDR tools
+try:
+    from .fdr import fdr_gate as _fdr_gate
+    TOOL_REGISTRY["fdr.gate"] = _fdr_gate
+except ImportError:
+    pass
