@@ -71,7 +71,8 @@ testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
 markers = [
-    "mfdr: M-FDR Gate tests with Benjamini-Hochberg correction"
+    "mfdr: M-FDR Gate tests with Benjamini-Hochberg correction",
+    "mpromotion: M-Promotion Gate tests with holdout validation and bundling"
 ]
 
 [tool.coverage.run]

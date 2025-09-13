@@ -820,3 +820,44 @@ jobs:
                 body
               });
             }
+
+  m_promotion_gate:
+    name: M-Promotion Gate
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          pip install -e .[dev]
+      - name: Run tests (mpromotion)
+        run: |
+          pytest -q -m mpromotion --disable-warnings --maxfail=1
+      - name: Emit PROOF lines
+        run: |
+          python scripts/emit_proofs_mpromotion.py | tee mpromotion_proofs.txt
+          echo "----- PROOFS ABOVE -----"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mpromotion-proof-bundle
+          path: |
+            mpromotion_proofs.txt
+            runs/promotion/**
+      - name: Comment proofs (non-blocking)
+        if: ${{ github.event_name == 'pull_request' }}
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('mpromotion_proofs.txt','utf8');
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: "M-Promotion Gate PROOFS:\n\n```\n" + body + "\n```"
+            });

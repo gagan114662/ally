@@ -267,3 +267,14 @@ def run_pipeline(
 
     except Exception as e:
         return ToolResult.error([f"Pipeline error: {str(e)}"])
+
+
+# at bottom, add convenience wrapper
+from .promotion import holdout_gate as _holdout_gate, promotion_bundle as _promotion_bundle
+@register("orchestrator.holdout_gate")
+def orch_holdout_gate(**kwargs):
+    return _holdout_gate(**kwargs)
+
+@register("orchestrator.promotion_bundle")
+def orch_promotion_bundle(**kwargs):
+    return _promotion_bundle(**kwargs)
