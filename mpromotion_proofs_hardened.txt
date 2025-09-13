@@ -1,0 +1,17 @@
+PROOF:PROMO_DECISION: PASS
+PROOF:PROMO_HOLDOUT_T: 2.230868
+PROOF:PROMO_BETAS_OK: True
+PROOF:PROMO_TURNOVER_X: 1.2
+PROOF:PROMO_COST_BPS: 8.5
+PROOF:RECEIPTS_PRESENT: True
+PROOF:PIT_SNAPSHOT_HASH: test_pit_abc123
+PROOF:FDR_RUN_ID: test_fdr_run_001
+PROOF:FDR_Q: 0.05
+PROOF:ADV_OK: True
+PROOF:HOLDOUT_GAP_OK: True
+PROOF:STRESS_T_OK: True
+PROOF:TCOST_MODEL_HASH: mock_tcost_v1
+PROOF:PROMO_DET_HASH: 082a2dbd3be3f77b
+PROOF:BUNDLE_SHA1: a17e4b8e6d3f77865847ffd79d52748e515522a1
+PROOF:BUNDLE_PATH: runs/promotion/PROMO_demo_strategy.zip
+{"gate": {"strategy_id": "demo_strategy", "selection_sha1": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef", "alpha_tstat": 2.2308678494144076, "betas_ok": true, "turnover_x": 1.2, "impact_bps": 8.5, "decision": "PASS", "holdout_days": 21, "receipts_present": true, "receipts_count": 3, "pit_snapshot_hash": "test_pit_abc123", "fdr_run_id": "test_fdr_run_001", "fdr_q": 0.05, "adv_ok": true, "holdout_gap_ok": true, "stress_t_ok": true, "tcost_model_hash": "mock_tcost_v1", "promo_det_hash": "082a2dbd3be3f77b"}, "bundle": {"bundle_path": "runs/promotion/PROMO_demo_strategy.zip", "bundle_sha1": "a17e4b8e6d3f77865847ffd79d52748e515522a1", "manifest": {"strategy_id": "demo_strategy", "selection_sha1": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef", "code_hash": "35934ebfe1fb9a77d05a57e5783b3447522f03c6", "params_hash": "na", "receipts_sha1": [], "metrics": {}, "decision": "PENDING", "artifacts": {"code/strategy.py": "build/qc/AllyQCRepairTest.py", "factors/exposures.csv": "runs/promotion/mock_data/exposures.csv", "oos/returns.csv": "runs/promotion/mock_data/returns.csv", "pit/snapshot.json": "runs/promotion/mock_data/snapshot.json", "receipts.json": "runs/promotion/mock_data/receipts.json"}, "created_at": "2025-09-13T18:53:52Z", "bundle_sha1": "a17e4b8e6d3f77865847ffd79d52748e515522a1"}}}

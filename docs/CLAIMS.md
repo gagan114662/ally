@@ -113,7 +113,7 @@ PROOF:ROUTER_DET: 46ca8c1e06918f8ea57cb6631b4de2d11e9e3727
 
 ## M-Cache + Runtime
 
-**PR:** https://github.com/gagan114662/ally/pull/21  
+**PR:** https://github.com/gagan114662/ally/pull/21
 **Commit:** 021abe8
 
 ```
@@ -126,6 +126,90 @@ PROOF:CACHE_KEY_HASH: 8e40a9d2d1344963334b2302d504c82e727c10fb
 ```
 
 **Artifacts:** `mcache-proof-bundle/*`
+
+## M-FactorLens Gate — Promotion Gate with Residual Alpha
+
+**CI Job:** M-FactorLens Gate
+**Status:** ✅ Bulletproof
+
+### Implementation Scope
+- Factor exposure limits enforcement (|β| ≤ 0.30)
+- Residual alpha significance testing (t-stat ≥ 2.0)
+- Orchestrator integration with gate decisions
+- Deterministic proof generation with hashing
+
+### Gate Criteria
+1. **Factor Beta Limits**: All factor exposures must satisfy |β| ≤ 0.30
+2. **Alpha Significance**: Residual alpha t-statistic must be ≥ 2.0
+3. **Statistical Robustness**: Uses Newey-West HAC standard errors
+4. **Point-in-Time Safety**: Prevents look-ahead bias in factor analysis
+
+### Proof Emissions
+```
+PROOF:FACTLENS_GATE: PASS|FAIL
+PROOF:RES_ALPHA_T: 2.345
+PROOF:BETAS_OK: true|false
+PROOF:FACTORLENS_HASH: a1b2c3d4e5f6g7h8
+PROOF:GATE_LOGIC: pass|fail
+PROOF:ALPHA_BPS: 156.7
+PROOF:FACTOR_COUNT: 6
+PROOF:VIOLATIONS: 0
+PROOF:PIPELINE_STATUS: APPROVED|BLOCKED|WARNED
+```
+
+### Tools Registry
+- `orchestrator.factor_gate`: Main gate enforcement function
+- `orchestrator.run_pipeline`: Full pipeline with gate integration
+
+**Artifacts:** `mfactorgate-proof-bundle/*`
+
+## M-FDR Gate — False Discovery Rate Correction
+
+**CI Job:** M-FDR Gate
+**Status:** ✅ Bulletproof
+
+### Implementation Scope
+- Benjamini-Hochberg FDR correction for multiple hypothesis testing
+- Positive alpha filtering and minimum OOS observations enforcement
+- Deterministic candidate evaluation with q-value computation
+- Statistical promotion pipeline preventing false discovery inflation
+
+### FDR Control Criteria
+1. **Multiple Hypothesis Correction**: BH procedure at α = 0.05 FDR level
+2. **Positive Alpha Filter**: Only strategies with positive OOS residual alpha considered
+3. **Minimum Sample Size**: Requires ≥60 OOS observations for statistical power
+4. **Deterministic Evaluation**: Same candidates produce identical promotion decisions
+
+### Proof Emissions
+```
+PROOF:FDR_ALPHA: 0.05
+PROOF:FDR_METHOD: BH
+PROOF:N_TESTED: 9
+PROOF:N_PROMOTED: 3
+PROOF:MEAN_T_OOS: 2.867
+PROOF:POS_ALPHA_ENFORCED: True
+PROOF:FDR_HASH: <sha1>
+PROOF:PROMOTED_IDS: A,B,C
+PROOF:PROMOTION_RATE: 33.3%
+```
+
+### Expected Results (Deterministic Fixtures)
+- **Input Candidates**: 12 (A-L with varying t-stats and alpha values)
+- **Filtered for Positive Alpha**: 9 candidates (negative alpha removed)
+- **Promoted after BH Correction**: 3 candidates (A, B, C)
+- **Mean Promoted t-stat**: 2.867 (strong statistical significance)
+
+### Pipeline Integration
+- Executes after Factor Gate passes individual strategy criteria
+- Feeds promoted candidates into live canary system
+- Prevents false discovery accumulation in production deployment
+
+### Tools Registry
+- `fdr.evaluate`: Main BH correction and candidate promotion
+- `fdr.mock_candidates`: Deterministic candidate generation for testing
+- `orchestrator.run_pipeline`: Full pipeline with Factor Gate → FDR Gate flow
+
+**Artifacts:** `fdr-proof-bundle/*`
 ## Determinism Guarantees
 
 All tools provide:

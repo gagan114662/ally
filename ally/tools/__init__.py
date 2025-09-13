@@ -142,6 +142,11 @@ def _import_all_tools():
         from . import features  # Import features tools
     except ImportError:
         pass
+
+    try:
+        from . import factors  # Import factors tools
+    except ImportError:
+        pass
     
     try:
         from . import bt  # Import backtest tools
@@ -185,6 +190,21 @@ def _import_all_tools():
     
     try:
         from . import runtime  # Import runtime tools
+    except ImportError:
+        pass
+
+    try:
+        from . import orchestrator  # Import orchestrator tools
+    except ImportError:
+        pass
+
+    try:
+        from . import fdr  # Import FDR tools
+    except ImportError:
+        pass
+
+    try:
+        from . import promotion  # Import promotion tools
     except ImportError:
         pass
 

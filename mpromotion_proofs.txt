@@ -1,0 +1,8 @@
+PROOF:PROMO_DECISION: PASS
+PROOF:PROMO_HOLDOUT_T: 2.230868
+PROOF:PROMO_BETAS_OK: True
+PROOF:PROMO_TURNOVER_X: 2.5
+PROOF:PROMO_COST_BPS: 12.0
+PROOF:BUNDLE_SHA1: 2bd7fb3d4c50ad76b79e582828a11d95810ca482
+PROOF:BUNDLE_PATH: runs/promotion/PROMO_demo_strategy.zip
+{"gate": {"strategy_id": "demo_strategy", "selection_sha1": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef", "alpha_tstat": 2.2308678494144076, "betas_ok": true, "turnover_x": 2.5, "impact_bps": 12.0, "decision": "PASS", "holdout_days": 21}, "bundle": {"bundle_path": "runs/promotion/PROMO_demo_strategy.zip", "bundle_sha1": "2bd7fb3d4c50ad76b79e582828a11d95810ca482", "manifest": {"strategy_id": "demo_strategy", "selection_sha1": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef", "code_hash": "35934ebfe1fb9a77d05a57e5783b3447522f03c6", "params_hash": "na", "receipts_sha1": [], "metrics": {}, "decision": "PENDING", "artifacts": {"code/strategy.py": "build/qc/AllyQCRepairTest.py"}, "created_at": "2025-09-13T18:51:28Z", "bundle_sha1": "2bd7fb3d4c50ad76b79e582828a11d95810ca482"}}}
