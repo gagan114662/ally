@@ -192,6 +192,11 @@ def _import_all_tools():
         from . import orchestrator  # Import orchestrator tools
     except ImportError:
         pass
+    
+    try:
+        from . import receipts  # Import receipts tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()

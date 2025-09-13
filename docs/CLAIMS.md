@@ -177,6 +177,34 @@ PROOF:MRECEIPTS_DET_HASH: 46ca8c1e06918f8ea57cb6631b4de2d11e9e3727
 
 **Artifacts:** `mreceipts-proof-bundle/*`
 
+## M-Receipts Invariants — Claims & Proof
+
+**Invariant:** If `live == true`, outputs MUST include ≥1 `ReceiptRef` with `content_sha1`, `vendor`, `endpoint`, and ISO-Z `ts_iso`.
+
+**Verification:**
+- CI job `M-Receipts Invariants` runs `tests/test_receipts_invariants.py`.
+- Proof lines:
+  - `PROOF:RECEIPTS_INVARIANTS: ok`
+  - `PROOF:RECEIPTS_DIFF_CLI: ok`
+  - `PROOF:RECEIPTS_VERIFY_REGISTERED: ok`
+
+### RECV-INV-001: Hard Invariant Enforcement
+- **Claim**: assert_receipts_invariants({"live":true, "receipts":[]}) raises AssertionError
+- **Verification**: Test function blocks live outputs without receipts
+- **Expected**: RECEIPTS_INVARIANTS: ok
+
+### RECV-INV-002: CLI Verification Tools  
+- **Claim**: receipts.verify and receipts.diff tools are registered and functional
+- **Verification**: Tools can verify receipt files and compare numeric series
+- **Expected**: RECEIPTS_DIFF_CLI: ok, RECEIPTS_VERIFY_REGISTERED: ok
+
+### RECV-INV-003: Tearsheet Provenance Box
+- **Claim**: Generated tearsheets include visible provenance section
+- **Verification**: HTML contains receipt count, hash, vendors, timestamps
+- **Expected**: Provenance box visible in all tearsheet outputs
+
+**Artifacts:** `receipts-invariants-proof-bundle/*`
+
 ## Determinism Guarantees
 
 All tools provide:
