@@ -187,6 +187,11 @@ def _import_all_tools():
         from . import runtime  # Import runtime tools
     except ImportError:
         pass
+    
+    try:
+        from . import orchestrator  # Import orchestrator tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()

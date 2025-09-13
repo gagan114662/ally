@@ -1,0 +1,37 @@
+{
+  "ORCHESTRATOR_TOOLS": [
+    "orchestrator.demo",
+    "orchestrator.run"
+  ],
+  "ORCHESTRATOR_COUNT": 2,
+  "DEMO_OK": true,
+  "DEMO_RECEIPTS_LINKED": 0,
+  "DEMO_AUDIT_HASH": "a4c6190f8a0deeef...",
+  "DEMO_REPORT_RUN_ID": "3745fff0...",
+  "DEMO_RECEIPTS_COUNT": 0,
+  "RUN_OK": true,
+  "RUN_RECEIPTS_LINKED": 0,
+  "RUN_AUDIT_HASH": "c6b3b178200825b8...",
+  "RUN_REPORT_TASK": "orchestrator.run:EXP_RECEIPTS_TEST",
+  "RUN_RECEIPTS_COUNT": 0,
+  "PROVENANCE_HASH": "77cd16af5bcf0ab8...",
+  "RECEIPT_SUMMARY_COST": 125,
+  "RECEIPT_SUMMARY_VENDORS": [
+    "test_provider_1",
+    "test_provider_2"
+  ],
+  "SCHEMA_VALIDATION_OK": true,
+  "SCHEMA_RECEIPTS_COUNT": 2,
+  "SCHEMA_VENDORS_COUNT": 2,
+  "DB_INSERT_OK": true,
+  "DB_STATS_OK": true,
+  "DB_TOTAL_RECEIPTS": 1,
+  "MRECEIPTS_STATUS": "operational",
+  "MRECEIPTS_FEATURES": [
+    "receipt_refs",
+    "provenance_hash",
+    "orchestrator_wiring",
+    "db_integration",
+    "schema_validation"
+  ]
+}
