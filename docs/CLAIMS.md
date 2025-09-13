@@ -67,6 +67,22 @@ Each claim outputs:
 3. Schema validation result (PASS/FAIL)
 4. Numeric confirmation values
 
+## QC Guarantees ✅
+
+### QC-001: Runtime Assertions
+- **Claim**: Runtime assertion helpers inject into QuantConnect algorithms
+- **Verification**: Run `qc.inject_asserts` on algorithm file
+- **PROOF:QC_ASSERTS**: ok
+- **PROOF:QC_ASSERT_TRIPS**: 0
+- **PROOF:QC_ASSERT_HELPERS**: 5
+
+#### Available Assertion Helpers
+- `assert_indicator_ready`: Validates indicator IsReady state
+- `assert_warmup_complete`: Checks warmup period completion
+- `assert_orders_filled`: Verifies expected order fills
+- `assert_history_available`: Confirms history data access
+- `assert_portfolio_value`: Guards minimum portfolio value
+
 ## Determinism Guarantees
 
 All tools provide:
