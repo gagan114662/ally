@@ -1,3 +1,1 @@
-"""
-Broker adapters for Ally execution system
-"""
+# ally/adapters/brokers/__init__.py

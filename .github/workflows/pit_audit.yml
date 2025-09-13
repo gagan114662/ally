@@ -1,0 +1,15 @@
+name: M-PIT Joins Audit
+on: [pull_request]
+jobs:
+  pit_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - run: |
+          python - <<'PY'
+          from ally.tools.pit_audit import audit_pit_joins
+          assert audit_pit_joins()["ok"]
+          PY

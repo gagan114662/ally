@@ -1,0 +1,10 @@
+name: Protection Sanity
+on: [pull_request]
+permissions: { contents: read }
+jobs:
+  protection_sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo expected checks (manual verify)
+        run: |
+          echo "PROOF:REQUIRED_CHECKS_EXPECTED:M-LiveBroker,M-Grid,M-Autopilot,M-Ask-Operator,M-Health,M-FDR-SPA,M-Capacity,M-Regimes,M-NeverStuck,M-Jules-Bridge"
