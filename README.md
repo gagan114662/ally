@@ -39,6 +39,13 @@ ally run cv.detect_chart_patterns --symbol TSLA --lookback 100
 ally run cv.generate_synthetic --pattern pin_bar_bull --rows 20
 ```
 
+### Model Router (offline & deterministic)
+```bash
+# Task-aware model selection using offline fixtures
+ally run router.build_matrix
+# Prints PROOF lines and returns the chosen engine per task using fixtures only.
+```
+
 ### Web & Data Tools
 ```bash
 # Fetch and parse web content
