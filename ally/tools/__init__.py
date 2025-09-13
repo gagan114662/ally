@@ -191,6 +191,7 @@ try:
     from .qc_universe import (qc_universe_check as _qc_check, qc_normalize_symbols as _qc_norm, 
                               qc_universe_guard as _qc_guard, qc_history_smoke as _qc_history,
                               qc_resolution_matrix as _qc_matrix, canonical_equity as _qc_canonical)
+    from .qc_asserts import qc_inject_asserts as _qc_inject, qc_validate_asserts as _qc_validate
     TOOL_REGISTRY["qc.generate_python"] = _qc_gen
     TOOL_REGISTRY["qc.list_templates"] = _qc_list
     TOOL_REGISTRY["qc.lint"] = _qc_lint
@@ -204,5 +205,7 @@ try:
     TOOL_REGISTRY["qc.history_smoke"] = _qc_history
     TOOL_REGISTRY["qc.resolution_matrix"] = _qc_matrix
     TOOL_REGISTRY["qc.canonical_equity"] = _qc_canonical
+    TOOL_REGISTRY["qc.inject_asserts"] = _qc_inject
+    TOOL_REGISTRY["qc.validate_asserts"] = _qc_validate
 except ImportError:
     pass
