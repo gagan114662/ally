@@ -1,0 +1,18 @@
+{
+  "codegen": [
+    {"prompt": "write a python function add(a,b)", "gold": "def add(a,b):\n    return a+b"},
+    {"prompt": "class with __init__ and method",  "gold": "class Foo:\n    def __init__(self,x): self.x=x\n    def get(self): return self.x"}
+  ],
+  "nlp": [
+    {"prompt": "summarize: Apple beats earnings", "gold": "apple beat earnings guidance strong results"},
+    {"prompt": "sentiment: market selloff news",  "gold": "negative market sell off risk off"}
+  ],
+  "math": [
+    {"prompt": "2+2=?", "gold": "4"},
+    {"prompt": "sqrt(9) + 1", "gold": "4"}
+  ],
+  "cv": [
+    {"prompt": "describe image of rising chart", "gold": "uptrend green candles higher highs"},
+    {"prompt": "describe image of bear move",    "gold": "downtrend red candles lower lows"}
+  ]
+}
