@@ -1,0 +1,6 @@
+{
+  "codegen": ["def add(a,b):\n    return a+b", "class Foo:\n    def __init__(self,x): self.x=x"],
+  "nlp": ["apple beat earnings guidance", "market sell off negative"],
+  "math": ["4", "4"],
+  "cv": ["uptrend", "downtrend"]
+}
