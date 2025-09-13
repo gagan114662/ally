@@ -208,6 +208,11 @@ def _import_all_tools():
     except ImportError:
         pass
 
+    try:
+        from . import health  # Import health tools
+    except ImportError:
+        pass
+
 # Auto-import tools when module is imported
 _import_all_tools()
 

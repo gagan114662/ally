@@ -140,6 +140,19 @@ PROOF:CACHE_KEY_HASH: 8e40a9d2d1344963334b2302d504c82e727c10fb
   - `PROOF:ASK_HASH: <sha1>`
   - `PROOF:ASK_QUEUE_N: <int>`
 
+### M-Health (Heartbeat + Kill-Switch Drill)
+
+**Claims**
+- Heartbeat rotates on schedule and is persisted.
+- Kill-switch drill responds within bounded time.
+
+**CI Proofs**
+- `PROOF:HEARTBEAT_ROTATING: ok`
+- `PROOF:HEARTBEAT_PATH: runs/heartbeat/HEARTBEAT_CANARY.json`
+- `PROOF:KILL_SWITCH_DRILL: ok`
+- `PROOF:KILL_SWITCH_TTR_SEC: <float>`
+- `PROOF:DRILL_VERSION: v1`
+
 ## Determinism Guarantees
 
 All tools provide:
