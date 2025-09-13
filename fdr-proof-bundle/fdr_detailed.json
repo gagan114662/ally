@@ -1,0 +1,35 @@
+{
+  "n_tested": 7,
+  "n_promoted": 3,
+  "promoted_ids": [
+    "A",
+    "B",
+    "C"
+  ],
+  "q_values": {
+    "A": 0.009619931130822046,
+    "B": 0.013060693102688314,
+    "C": 0.028978438186955408,
+    "D": 0.06252547196985797,
+    "E": 0.10060489351619246,
+    "F": 0.15588346962733554,
+    "G": 0.23013934044341644
+  },
+  "method": "BH",
+  "alpha": 0.05,
+  "groups": [
+    "default"
+  ],
+  "mean_t_promoted": 2.8666666666666667,
+  "pos_alpha_enforced": true,
+  "det_hash": "88dad73efa570d1bd998b775e45b5d6e6d137e09",
+  "proofs": {
+    "FDR_ALPHA": 0.05,
+    "FDR_METHOD": "BH",
+    "N_TESTED": 7,
+    "N_PROMOTED": 3,
+    "MEAN_T_OOS": 2.867,
+    "POS_ALPHA_ENFORCED": true,
+    "FDR_HASH": "88dad73efa570d1bd998b775e45b5d6e6d137e09"
+  }
+}
