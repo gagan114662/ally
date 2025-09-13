@@ -190,7 +190,7 @@ jobs:
         with: { python-version: '3.11' }
       - run: pip install -e .[dev]
       - name: Pytest (M-FactorLens only)
-        run: pytest -q -m mfl --disable-warnings --maxfail=1
+        run: pytest tests/test_factorlens.py -q --disable-warnings --maxfail=1
       - name: Emit Proofs
         run: python scripts/emit_proofs_mfactorlens.py | tee factorlens-proof-bundle/console.txt
       - name: Upload artifacts
