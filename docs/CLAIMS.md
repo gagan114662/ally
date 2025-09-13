@@ -205,6 +205,43 @@ PROOF:MRECEIPTS_DET_HASH: 46ca8c1e06918f8ea57cb6631b4de2d11e9e3727
 
 **Artifacts:** `receipts-invariants-proof-bundle/*`
 
+## M-FactorLens — Residual Alpha & Factor Exposure (BULLETPROOF)
+
+**CI Job:** M-FactorLens
+
+### M-FactorLens Claims
+
+#### MF-001: Exposures computed with OLS-NeweyWest (HAC) — no look-ahead
+- **Claim**: Factor exposures use Newey-West standard errors with configurable lag structure
+- **Verification**: Check that OLS regression includes HAC standard error correction
+- **Expected**: T-statistics computed with HAC-corrected standard errors
+
+#### MF-002: Residual alpha (bps) & t-stat via rolling window (252d, step 21)
+- **Claim**: Rolling window alpha estimation with 252-day windows, 21-day steps
+- **Verification**: Verify rolling regression parameters and alpha annualization
+- **Expected**: Alpha in basis points, annualized from daily returns
+
+#### MF-003: PIT alignment — no forward fill; dates strictly intersected
+- **Claim**: Factor and return data aligned point-in-time, no forward-looking bias
+- **Verification**: Test shifted factor dates fail alignment; no forward fill
+- **Expected**: Only overlapping dates used, no future factor values
+
+#### MF-004: Deterministic outputs — stable SHA1 proof hash
+- **Claim**: Same inputs produce identical factor analysis outputs
+- **Verification**: Run analysis twice with same seed, compare deterministic hash
+- **Expected**: Identical SHA1 hash across runs
+
+### Proof (CI):
+```
+PROOF:FACTOR_SET: ["MKT","SMB","HML","RMW","CMA","MOM"]
+PROOF:ALPHA_TSTAT: <x.xx>
+PROOF:R2: <0.xx>
+PROOF:RES_ALPHA_MEAN: <yy.y>
+PROOF:FACTORLENS_HASH: <sha1>
+```
+
+**Artifacts:** `factorlens-proof-bundle/*`
+
 ## Determinism Guarantees
 
 All tools provide:

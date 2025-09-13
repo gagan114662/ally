@@ -72,7 +72,8 @@ python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
 markers = [
     "receipts: tests for receipt invariants and CLI tools",
-    "pit: tests for point-in-time universe and bias detection"
+    "pit: tests for point-in-time universe and bias detection",
+    "mfl: tests for M-FactorLens factor exposure and residual alpha"
 ]
 
 [tool.coverage.run]

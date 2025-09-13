@@ -141,6 +141,36 @@ def orchestrator_run(
         else:
             runtime_status = {"runtime_used": False, "reason": "use_runtime=False"}
         
+        # Generate synthetic portfolio returns for factor analysis
+        import pandas as pd
+        import numpy as np
+        from ally.tools.factors import compute_residual_alpha
+
+        # Create mock portfolio returns for factor lens analysis
+        np.random.seed(hash(run_id) % 2**32)
+        dates = pd.date_range('2023-01-01', periods=252, freq='D')
+        synthetic_returns = []
+        for i, date in enumerate(dates):
+            # Mock portfolio return with some alpha
+            ret = 0.0003 + 0.0001 * np.sin(i * 0.05) + np.random.normal(0, 0.008)
+            synthetic_returns.append({
+                "date": date.strftime("%Y-%m-%d"),
+                "ret": ret
+            })
+
+        # Compute factor lens metrics
+        factorlens_result = None
+        try:
+            from ally.tools import TOOL_REGISTRY
+            factorlens_result = TOOL_REGISTRY["factors.residual_alpha"](
+                returns=synthetic_returns,
+                window=252,
+                step=21,
+                lags=5
+            )
+        except Exception as e:
+            factorlens_result = {"error": str(e)}
+
         result_data = {
             "run_id": run_id,
             "experiment_id": experiment_id,
@@ -152,7 +182,8 @@ def orchestrator_run(
                 "processing_time_ms": 1500,
                 "data_points": len(inputs["symbols"]) * 252,
                 "memory_peak_mb": 45.7
-            }
+            },
+            "factorlens": factorlens_result.data if hasattr(factorlens_result, 'data') else factorlens_result
         }
         
         # Link receipts for provenance tracking

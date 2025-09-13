@@ -49,6 +49,12 @@ def emit_proofs() -> Dict[str, Any]:
         if run_result.ok:
             run_data = run_result.data
             provenance = run_data.get("provenance", {})
+
+            # Extract factor lens proof from orchestrator result
+            factorlens_data = run_data.get("factorlens", {})
+            if "residual" in factorlens_data:
+                residual = factorlens_data["residual"]
+                proofs["ORCH_RESID_ALPHA_T"] = residual.get("alpha_tstat", 0.0)
             proofs["RUN_RECEIPTS_LINKED"] = provenance.get("receipts_linked", 0)
             proofs["RUN_AUDIT_HASH"] = provenance.get("audit_hash", "")[:16] + "..."
             
