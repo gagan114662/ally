@@ -182,6 +182,11 @@ def _import_all_tools():
         from . import router  # Import router tools
     except ImportError:
         pass
+    
+    try:
+        from . import runtime  # Import runtime tools
+    except ImportError:
+        pass
 
 # Auto-import tools when module is imported
 _import_all_tools()

@@ -111,6 +111,21 @@ PROOF:ROUTER_DET: 46ca8c1e06918f8ea57cb6631b4de2d11e9e3727
 
 **Artifacts:** `mrouter-proof-bundle/*`
 
+## M-Cache + Runtime
+
+**PR:** https://github.com/gagan114662/ally/pull/21  
+**Commit:** 021abe8
+
+```
+PROOF:CACHE_HIT: 0
+PROOF:CACHE_KEY_HASH: 8e40a9d2d1344963334b2302d504c82e727c10fb
+PROOF:RUNTIME_MODE: fixture
+
+PROOF:CACHE_HIT: 1
+PROOF:CACHE_KEY_HASH: 8e40a9d2d1344963334b2302d504c82e727c10fb
+```
+
+**Artifacts:** `mcache-proof-bundle/*`
 ## Determinism Guarantees
 
 All tools provide:
