@@ -34,13 +34,21 @@ def _choose_winners(candidates: Dict[str, List[str]], scores_by_task: Dict[str, 
     return winners
 
 def _fallback_ok(config: RouterConfig, winners: Dict[str, str]) -> bool:
-    # If a winner isn't in fallback chain, it's fine; this flag just asserts that
-    # for each task there exists at least one alternative if winner becomes unavailable.
-    for task, win in winners.items():
+    # Verify fallback chains are valid and have alternatives
+    for task, winner in winners.items():
         chain = config.fallback.get(task, [])
-        if chain and win not in chain and chain[0] != win:
-            # winner not at head: prepend safely for next runs (logical ok here)
-            pass
+        if not chain:
+            # No fallback defined - acceptable
+            continue
+        # Ensure winner has valid fallback alternatives
+        if winner not in chain:
+            # Winner not in fallback chain - ensure chain is non-empty
+            if len(chain) == 0:
+                return False
+        else:
+            # Winner in chain - ensure other alternatives exist
+            if len(chain) < 2:
+                return False
     return True
 
 @register("router.build_matrix")
@@ -49,8 +57,11 @@ def router_build_matrix(**kwargs) -> ToolResult:
     eval_set = _load_eval(cfg.eval_path)
     engines = _load_engine_outputs()
 
-    # filter engines to those in candidates list
-    engines = {k:v for k,v in engines.items() if any(k in cfg.candidates[t] for t in cfg.candidates)}
+    # filter engines to those in candidates list (more efficient)
+    all_candidates = set()
+    for cands in cfg.candidates.values():
+        all_candidates.update(cands)
+    engines = {k:v for k,v in engines.items() if k in all_candidates}
     scores_by_task, det_hash = score_dataset(eval_set, engines)
     winners = _choose_winners(cfg.candidates, scores_by_task)
     fb_ok = _fallback_ok(cfg, winners)
