@@ -46,6 +46,17 @@ ally run router.build_matrix
 # Prints PROOF lines and returns the chosen engine per task using fixtures only.
 ```
 
+### Runtime + Cache (offline by default)
+```bash
+# Deterministic fixture generation (no models needed)
+ally run runtime.generate --json '{"task":"codegen","prompt":"write add","live":false}'
+
+# Use Ollama locally (optional):
+# 1) brew install ollama && ollama serve &
+# 2) pull a small model, e.g. mistral:7b-instruct
+ally run runtime.generate --json '{"task":"nlp","prompt":"summarize","live":true}'
+```
+
 ### Web & Data Tools
 ```bash
 # Fetch and parse web content
