@@ -1,0 +1,62 @@
+# M-QC Template v2 — QC-safe defaults
+# Deterministic: no datetime.now(); use self.Time; imports are canonical.
+
+from AlgorithmImports import *
+
+class {{ class_name }}(QCAlgorithm):
+    def Initialize(self):
+        # Dates (UTC) from inputs; never call datetime.now()
+        self.SetStartDate({{ start_y }}, {{ start_m }}, {{ start_d }})
+        self.SetEndDate({{ end_y }}, {{ end_m }}, {{ end_d }})
+        self.SetCash({{ initial_cash }})
+
+        # Universe
+        self.symbols = []
+        {% for e in equities -%}
+        self.symbols.append(self.AddEquity("{{ e.ticker }}", Resolution.{{ e.resolution }}).Symbol)
+        {% endfor -%}
+        {% for c in cryptos -%}
+        self.symbols.append(self.AddCrypto("{{ c.ticker }}", Resolution.{{ c.resolution }}, Market.{{ c.market }}).Symbol)
+        {% endfor %}
+
+        # Warmup by bars (safe for backtests)
+        self.SetWarmup({{ warmup_bars }})
+
+        # Simple schedule helpers (safe; no invalid Every(..) usage)
+        if self.symbols:
+            self.Schedule.On(self.DateRules.EveryDay(self.symbols[0]),
+                             self.TimeRules.At(9, 35),
+                             self._morning_check)
+
+        # Example indicator wiring (guarded for readiness in injected asserts)
+        if self.symbols:
+            self.sma = self.SMA(self.symbols[0], 20, Resolution.{{ default_resolution }})
+        else:
+            self.sma = None
+
+        # Deterministic seed (downstream libs may use)
+        self.Debug("ALLY_TPL_V2_READY")
+
+    def _morning_check(self):
+        # placeholder scheduled action, safe to keep no-op
+        pass
+
+    def OnData(self, data: Slice):
+        # Always guard warming up; asserts will verify this
+        if self.IsWarmingUp:
+            return
+
+        # Example trade logic block (rendered from caller)
+{{ trade_logic | indent(8) }}
+
+    # Safe order helper example using QC idioms
+    def place_market(self, symbol, qty):
+        order = self.MarketOrder(symbol, qty)
+        self.Debug(f"PLACED {qty} @ {symbol}")
+        return order
+
+    # Example safe query for orders (no .Transactions.Orders property misuse)
+    def get_open_orders(self, symbol=None):
+        if symbol:
+            return [o for o in self.Transactions.GetOrders(lambda o: o.Symbol == symbol and not o.IsClosed)]
+        return [o for o in self.Transactions.GetOrders(lambda o: not o.IsClosed)]
