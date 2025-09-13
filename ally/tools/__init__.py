@@ -209,3 +209,11 @@ try:
     TOOL_REGISTRY["qc.validate_asserts"] = _qc_validate
 except ImportError:
     pass
+
+# Register Portfolio tools
+try:
+    from .portfolio import allocate as portfolio_allocate, attribution as portfolio_attribution
+    TOOL_REGISTRY["portfolio.allocate"] = portfolio_allocate
+    TOOL_REGISTRY["portfolio.attribution"] = portfolio_attribution
+except ImportError:
+    pass
