@@ -825,6 +825,11 @@ jobs:
     name: M-Promotion Gate
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
+    env:
+      CI: true
+      GITHUB_ACTIONS: true
+      PYTHONUNBUFFERED: "1"
+      MPLBACKEND: Agg
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
