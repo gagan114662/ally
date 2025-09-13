@@ -49,18 +49,7 @@ def generate_tearsheet(
     # Generate plots
     plots = _generate_plots(trades, metrics)
     
-    # Create HTML content
-    html_content = _create_html_tearsheet(
-        run_id=run_id,
-        run_data=run_data,
-        kpis=kpis,
-        trades=trades,
-        events=events,
-        plots=plots,
-        summary_dict=summary.model_dump()
-    )
-    
-    # Create summary for deterministic file naming
+    # Create summary for deterministic file naming and HTML generation
     import hashlib
     summary = ReportSummary(
         run_id=run_id,
@@ -73,6 +62,17 @@ def generate_tearsheet(
         audit_hash=hashlib.sha256(f"{run_id}-tearsheet".encode()).hexdigest(),
         inputs_hash=hashlib.sha256(run_id.encode()).hexdigest(),
         code_hash=hashlib.sha256(generate_tearsheet.__code__.co_code).hexdigest()
+    )
+    
+    # Create HTML content with summary data
+    html_content = _create_html_tearsheet(
+        run_id=run_id,
+        run_data=run_data,
+        kpis=kpis,
+        trades=trades,
+        events=events,
+        plots=plots,
+        summary_dict=summary.model_dump()
     )
     
     # Generate deterministic filename
