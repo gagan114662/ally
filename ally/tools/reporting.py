@@ -60,12 +60,18 @@ def generate_tearsheet(
     )
     
     # Create summary for deterministic file naming
+    import hashlib
     summary = ReportSummary(
         run_id=run_id,
+        task=run_data.get("task", "tearsheet_generation"),
+        ts_iso=run_data.get("ts", "2025-01-01T00:00:00Z"), 
         kpis=kpis,
         n_trades=len(trades),
         sections=["overview", "equity_curve", "drawdown", "by_symbol", "trades_table"],
-        html_path=""  # Will be set below
+        html_path="",  # Will be set below
+        audit_hash=hashlib.sha256(f"{run_id}-tearsheet".encode()).hexdigest(),
+        inputs_hash=hashlib.sha256(run_id.encode()).hexdigest(),
+        code_hash=hashlib.sha256(generate_tearsheet.__code__.co_code).hexdigest()
     )
     
     # Generate deterministic filename

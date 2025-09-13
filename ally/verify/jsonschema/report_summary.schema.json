@@ -6,6 +6,12 @@
     "run_id": {
       "type": "string"
     },
+    "task": {
+      "type": "string"
+    },
+    "ts_iso": {
+      "type": "string"
+    },
     "kpis": {
       "type": "object",
       "properties": {
@@ -28,8 +34,39 @@
     },
     "html_path": {
       "type": "string"
+    },
+    "receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "content_sha1": {"type": "string"},
+          "vendor": {"type": "string"},
+          "endpoint": {"type": "string"},
+          "ts_iso": {"type": "string"},
+          "cost_cents": {"type": ["integer", "null"]}
+        },
+        "required": ["content_sha1", "vendor", "endpoint", "ts_iso"]
+      }
+    },
+    "receipt_cost_cents": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "receipt_vendors": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "audit_hash": {
+      "type": "string"
+    },
+    "inputs_hash": {
+      "type": "string"
+    },
+    "code_hash": {
+      "type": "string"
     }
   },
-  "required": ["run_id", "kpis", "n_trades", "sections", "html_path"],
+  "required": ["run_id", "task", "ts_iso", "kpis", "n_trades", "sections", "html_path", "audit_hash", "inputs_hash", "code_hash"],
   "additionalProperties": false
 }
