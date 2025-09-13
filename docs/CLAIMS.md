@@ -126,7 +126,6 @@ PROOF:CACHE_KEY_HASH: 8e40a9d2d1344963334b2302d504c82e727c10fb
 ```
 
 **Artifacts:** `mcache-proof-bundle/*`
-
 ## Determinism Guarantees
 
 All tools provide:
