@@ -180,3 +180,32 @@ def _import_all_tools():
 
 # Auto-import tools when module is imported
 _import_all_tools()
+
+# Register QuantConnect tools
+try:
+    from .qc_templates import qc_generate_python as _qc_gen, qc_list_templates as _qc_list
+    from .qc_lint import qc_lint as _qc_lint
+    from .qc_lean import qc_smoke_run as _qc_smoke, qc_validate_project_structure as _qc_validate
+    from .qc_runtime_guard import qc_classify_error as _qc_classify
+    from .qc_autorepair import qc_autorepair as _qc_repair
+    from .qc_universe import (qc_universe_check as _qc_check, qc_normalize_symbols as _qc_norm, 
+                              qc_universe_guard as _qc_guard, qc_history_smoke as _qc_history,
+                              qc_resolution_matrix as _qc_matrix, canonical_equity as _qc_canonical)
+    from .qc_asserts import qc_inject_asserts as _qc_inject, qc_validate_asserts as _qc_validate
+    TOOL_REGISTRY["qc.generate_python"] = _qc_gen
+    TOOL_REGISTRY["qc.list_templates"] = _qc_list
+    TOOL_REGISTRY["qc.lint"] = _qc_lint
+    TOOL_REGISTRY["qc.smoke_run"] = _qc_smoke
+    TOOL_REGISTRY["qc.validate_project"] = _qc_validate
+    TOOL_REGISTRY["qc.classify_error"] = _qc_classify
+    TOOL_REGISTRY["qc.autorepair"] = _qc_repair
+    TOOL_REGISTRY["qc.universe_check"] = _qc_check
+    TOOL_REGISTRY["qc.normalize_symbols"] = _qc_norm
+    TOOL_REGISTRY["qc.universe_guard"] = _qc_guard
+    TOOL_REGISTRY["qc.history_smoke"] = _qc_history
+    TOOL_REGISTRY["qc.resolution_matrix"] = _qc_matrix
+    TOOL_REGISTRY["qc.canonical_equity"] = _qc_canonical
+    TOOL_REGISTRY["qc.inject_asserts"] = _qc_inject
+    TOOL_REGISTRY["qc.validate_asserts"] = _qc_validate
+except ImportError:
+    pass
