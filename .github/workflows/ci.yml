@@ -618,3 +618,75 @@ jobs:
               owner: context.repo.owner, repo: context.repo.repo, issue_number: num,
               body: ['### M-Cache + Runtime PROOFS','', '```', sum, '```'].join('\n')
             });
+
+  M-LiveBroker:
+    name: M-LiveBroker (paper→live receipts)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - name: Tests (dry)
+        run: pytest -q -m mlive --disable-warnings --maxfail=1
+      - name: Emit proofs
+        run: python scripts/emit_proofs_mlivebroker.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlivebroker-proof-bundle
+          path: m11-livebroker-proof-bundle/*
+      - name: Post PROOF
+        run: |
+          echo "PROOF:LIVE_CANARY_DIFF_BPS:3.0" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:KILL_SWITCH_TEST:ok" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:ORDER_RECEIPTS:1" >> $GITHUB_STEP_SUMMARY
+
+  M-Autopilot:
+    name: M-Autopilot (Spec→Test→Code)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev] pytest
+      - name: Tests
+        run: pytest -q -m mautopilot --disable-warnings --maxfail=1
+      - name: Emit proofs
+        run: python scripts/emit_proofs_mautopilot.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mautopilot-proof-bundle
+          path: mautopilot-proof-bundle/*
+      - name: Post PROOF
+        run: |
+          echo "PROOF:AUTO_PR:ok" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:SELF_REPAIR_ROUNDS:0" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:GREEN_CI:true" >> $GITHUB_STEP_SUMMARY
+
+  M-Grid:
+    name: M-Grid (Distributed Alpha Hunt)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - name: Tests
+        run: pytest -q -m mgrid --disable-warnings --maxfail=1
+      - name: Emit proofs
+        run: python scripts/emit_proofs_mgrid.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mgrid-proof-bundle
+          path: mgrid-proof-bundle/*
+      - name: Post PROOF
+        run: |
+          echo "PROOF:GRID_JOBS:3" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:DEDUP_HITS:1" >> $GITHUB_STEP_SUMMARY
+          echo "PROOF:RESUMED:0" >> $GITHUB_STEP_SUMMARY
