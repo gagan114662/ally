@@ -91,6 +91,104 @@ def test_alignment_no_lookahead():
     # Check that dates match exactly
     assert all(r_aligned.index == f_aligned.index)
 
+def test_pit_off_by_one_guard():
+    """Red-team test: ensure +1 day shift fails PIT alignment properly"""
+    dates = pd.date_range('2023-01-01', periods=10, freq='D')
+
+    returns = pd.DataFrame({'ret': np.random.randn(10)}, index=dates)
+    # Shift factors forward by 1 day (look-ahead bias)
+    factor_dates = dates + pd.Timedelta(days=1)
+    factors = pd.DataFrame({'MKT': np.random.randn(10)}, index=factor_dates)
+
+    r_aligned, f_aligned = pit_align(returns, factors)
+
+    # Should have no overlapping dates (PIT prevents future factor usage)
+    assert len(r_aligned) == 0
+    assert len(f_aligned) == 0
+
+def test_missing_days_no_forward_fill():
+    """Red-team test: missing factor days should not be forward-filled"""
+    dates = pd.date_range('2023-01-01', periods=10, freq='D')
+
+    returns = pd.DataFrame({'ret': np.random.randn(10)}, index=dates)
+
+    # Create factors with 30% missing days (randomly drop)
+    np.random.seed(42)
+    keep_mask = np.random.rand(10) > 0.3
+    factor_dates = dates[keep_mask]
+    factors = pd.DataFrame({'MKT': np.random.randn(len(factor_dates))}, index=factor_dates)
+
+    r_aligned, f_aligned = pit_align(returns, factors)
+
+    # Aligned data should only include intersection (no forward fill)
+    expected_length = len(factor_dates)
+    assert len(r_aligned) == expected_length
+    assert len(f_aligned) == expected_length
+    assert all(r_aligned.index == f_aligned.index)
+
+def test_high_multicollinearity_stability():
+    """Red-team test: verify HAC errors handle multicollinearity"""
+    np.random.seed(42)
+    dates = pd.date_range('2023-01-01', periods=100, freq='D')
+
+    # Create highly correlated factors (MKT and MKT2)
+    mkt = np.random.normal(0, 0.01, 100)
+    mkt2 = mkt + np.random.normal(0, 0.001, 100)  # 99% correlated with MKT
+
+    factors = pd.DataFrame({
+        'MKT': mkt,
+        'SMB': np.random.normal(0, 0.008, 100),
+        'HML': np.random.normal(0, 0.008, 100),
+        'RMW': np.random.normal(0, 0.006, 100),
+        'CMA': np.random.normal(0, 0.006, 100),
+        'MOM': mkt2  # Highly correlated with MKT
+    }, index=dates)
+
+    # Synthetic returns with exposure to MKT
+    returns = pd.DataFrame({
+        'ret': 0.0002 + 0.7 * mkt + np.random.normal(0, 0.005, 100)
+    }, index=dates)
+
+    # Should not crash with multicollinearity
+    result = exposures(returns, factors, lags=3)
+
+    # Should produce finite results (no NaN/inf from matrix inversions)
+    assert np.all(np.isfinite(result["beta"]))
+    assert np.all(np.isfinite(result["t"]))
+    assert 0 <= result["r2"] <= 1
+
+def test_explained_variance_sanity():
+    """Red-team test: R² should be high for factor-only data, low for random"""
+    np.random.seed(42)
+    dates = pd.date_range('2023-01-01', periods=200, freq='D')
+
+    # Create factors
+    factors = pd.DataFrame({
+        'MKT': np.random.normal(0.0005, 0.015, 200),
+        'SMB': np.random.normal(0, 0.01, 200),
+        'HML': np.random.normal(0, 0.01, 200),
+        'RMW': np.random.normal(0, 0.008, 200),
+        'CMA': np.random.normal(0, 0.008, 200),
+        'MOM': np.random.normal(0, 0.012, 200)
+    }, index=dates)
+
+    # Test 1: Factor-only returns (should have high R²)
+    factor_returns = pd.DataFrame({
+        'ret': (0.8 * factors['MKT'] + 0.3 * factors['SMB'] - 0.2 * factors['HML'] +
+                0.1 * factors['RMW'] + 0.05 * factors['CMA'] + 0.15 * factors['MOM'])
+    }, index=dates)
+
+    result_high = exposures(factor_returns, factors, lags=3)
+    assert result_high["r2"] > 0.85, f"Factor-only R² too low: {result_high['r2']}"
+
+    # Test 2: Random returns (should have low R²)
+    random_returns = pd.DataFrame({
+        'ret': np.random.normal(0.0003, 0.02, 200)
+    }, index=dates)
+
+    result_low = exposures(random_returns, factors, lags=3)
+    assert result_low["r2"] < 0.15, f"Random R² too high: {result_low['r2']}"
+
 def test_determinism_hash():
     """Test that hash function produces deterministic results"""
     test_obj = {"alpha_bps": 23.45, "r2": 0.65, "factors": ["MKT", "SMB"]}
