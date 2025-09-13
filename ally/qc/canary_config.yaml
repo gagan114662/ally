@@ -1,0 +1,12 @@
+symbols:
+  - { type: "equity",  ticker: "SPY",    market: "USA",     resolution: "Minute" }
+  - { type: "crypto",  ticker: "BTCUSD", market: "Coinbase", resolution: "Minute" }
+
+# # of calendar days to run; keep short for speed
+days: 5
+
+# seed for determinism (matches repo default)
+seed: 1337
+
+# optional: expected baseline (filled after first green run and commit)
+baseline_hash: null
