@@ -188,6 +188,31 @@ def _import_all_tools():
     except ImportError:
         pass
 
+    try:
+        from . import broker  # Import broker tools
+    except ImportError:
+        pass
+
+    try:
+        from . import autopilot  # Import autopilot tools
+    except ImportError:
+        pass
+
+    try:
+        from . import grid  # Import grid tools
+    except ImportError:
+        pass
+
+    try:
+        from . import ops  # Import ops tools
+    except ImportError:
+        pass
+
+    try:
+        from . import health  # Import health tools
+    except ImportError:
+        pass
+
 # Auto-import tools when module is imported
 _import_all_tools()
 
@@ -217,5 +242,47 @@ try:
     TOOL_REGISTRY["qc.canonical_equity"] = _qc_canonical
     TOOL_REGISTRY["qc.inject_asserts"] = _qc_inject
     TOOL_REGISTRY["qc.validate_asserts"] = _qc_validate
+except ImportError:
+    pass
+
+# Register broker tools
+try:
+    from .broker import place_order as _broker_place
+    TOOL_REGISTRY["broker.place_order"] = _broker_place
+except ImportError:
+    pass
+
+# Register autopilot tools
+try:
+    from .autopilot import run as _autopilot_run
+    TOOL_REGISTRY["autopilot.run"] = _autopilot_run
+except ImportError:
+    pass
+
+# Register grid tools
+try:
+    from .grid import run as _grid_run
+    TOOL_REGISTRY["grid.run"] = _grid_run
+except ImportError:
+    pass
+
+# Register ops tools
+try:
+    from .ops import register as _register_ops
+    _register_ops()
+except ImportError:
+    pass
+
+# Register FDR tools
+try:
+    from .fdr import fdr_gate as _fdr_gate
+    TOOL_REGISTRY["fdr.gate"] = _fdr_gate
+except ImportError:
+    pass
+
+# Register Capacity tools
+try:
+    from .capacity import capacity_curve as _capacity_curve
+    TOOL_REGISTRY["capacity.estimate"] = _capacity_curve
 except ImportError:
     pass
