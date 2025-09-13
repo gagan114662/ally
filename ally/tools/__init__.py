@@ -279,3 +279,10 @@ try:
     TOOL_REGISTRY["fdr.gate"] = _fdr_gate
 except ImportError:
     pass
+
+# Register Capacity tools
+try:
+    from .capacity import capacity_curve as _capacity_curve
+    TOOL_REGISTRY["capacity.estimate"] = _capacity_curve
+except ImportError:
+    pass
