@@ -1,0 +1,9 @@
+{
+  "codegen": [
+    "def add(a,b): return a+b",
+    "class Foo: pass"
+  ],
+  "nlp": ["apple earnings strong", "selloff risk off"],
+  "math": ["4", "3"],
+  "cv": ["uptrend", "bearish move"]
+}

@@ -83,6 +83,34 @@ Each claim outputs:
 - `assert_history_available`: Confirms history data access
 - `assert_portfolio_value`: Guards minimum portfolio value
 
+### M12-001: Portfolio & Multi-Asset Backtesting
+- **Claim**: Portfolio allocation and attribution with deterministic proofs
+- **Verification**: Run `portfolio.allocate` and `portfolio.attribution` with test fixtures
+- **PROOF:PORT_WEIGHTS_SUM**: 1.0
+- **PROOF:PORT_RISK_TARGET**: 1000
+- **PROOF:ATTRIBUTION_OK**: True
+- **PROOF:PORT_DET_HASH**: 388207293d9987a501ed1108b83de3f2f22b9e35
+
+#### Portfolio Methods
+- `vol_target`: Inverse volatility weighting scaled to target volatility
+- `risk_parity`: Equal risk contribution through iterative optimization
+- `hrp`: Hierarchical Risk Parity using correlation-based clustering
+
+## M-Router — Task-Aware Model Selection
+
+**PR:** https://github.com/gagan114662/ally/pull/20  
+**Commit:** e65c686  
+**CI Job:** M-Router (Task-Aware Model Selection)
+
+```
+PROOF:ROUTER_MATRIX: {"codegen":"llama3.1-8b-instruct","cv":"llava-phi-3-mini","math":"deepseek-math-7b","nlp":"llama3.1-8b"}
+PROOF:ROUTER_FALLBACK: ok
+PROOF:EVAL_DET_HASH: f4a1655deddc22dc06eabf8a45f0c6029ca7472b
+PROOF:ROUTER_DET: 46ca8c1e06918f8ea57cb6631b4de2d11e9e3727
+```
+
+**Artifacts:** `mrouter-proof-bundle/*`
+
 ## Determinism Guarantees
 
 All tools provide:

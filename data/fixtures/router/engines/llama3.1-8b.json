@@ -1,0 +1,6 @@
+{
+  "codegen": ["def sum(a,b): return a+b", "class Foo:\n    pass"],
+  "nlp": ["apple beat earnings guidance strong results", "negative market sell off risk off"],
+  "math": ["roughly 4", "near 4"],
+  "cv": ["green up candles", "red down candles"]
+}
