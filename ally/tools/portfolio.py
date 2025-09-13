@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np, hashlib, json
+from datetime import datetime
 from typing import Dict, List
 from ally.schemas.base import ToolResult, Meta
 from ally.schemas.portfolio import AllocateIn, AllocateOut, AttributionOut, AttributionRow
@@ -22,7 +23,7 @@ def allocate(**kwargs) -> ToolResult:
     realized = float(np.sqrt(wv @ C @ wv) * np.sqrt(252.0))
     out = AllocateOut(weights=w, method=inp.method, target_vol=inp.target_vol,
                       realized_vol=realized, ok=abs(sum(w.values()) - 1.0) < 1e-6)
-    return ToolResult(ok=out.ok, data=out.model_dump(), errors=[], meta=Meta(ts=None, duration_ms=0))
+    return ToolResult(ok=out.ok, data=out.model_dump(), errors=[], meta=Meta(ts=datetime.utcnow(), duration_ms=0))
 
 def attribution(prices: Dict[str, List[float]], weights: Dict[str, float], dates: List[str]) -> ToolResult:
     # simple log returns; contribution = w_{t-1} * r_t
@@ -38,4 +39,4 @@ def attribution(prices: Dict[str, List[float]], weights: Dict[str, float], dates
         sum_port += port; sum_contrib += port
     out = AttributionOut(rows=rows, sum_contrib=sum_contrib, sum_portfolio=sum_port,
                          ok=abs(sum_contrib - sum_port) < 1e-9)
-    return ToolResult(ok=out.ok, data=out.model_dump(), errors=[], meta=Meta(ts=None, duration_ms=0))
+    return ToolResult(ok=out.ok, data=out.model_dump(), errors=[], meta=Meta(ts=datetime.utcnow(), duration_ms=0))
