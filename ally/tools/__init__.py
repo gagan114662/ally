@@ -286,3 +286,10 @@ try:
     TOOL_REGISTRY["capacity.estimate"] = _capacity_curve
 except ImportError:
     pass
+
+# Register Regimes tools
+try:
+    from .regimes import regime_gate as _regime_gate
+    TOOL_REGISTRY["regimes.gate"] = _regime_gate
+except ImportError:
+    pass

@@ -816,3 +816,19 @@ jobs:
           python scripts/emit_proofs_mcapacity.py | sed -n 's/^PROOF:/PROOF:/p' >> $GITHUB_STEP_SUMMARY
       - uses: actions/upload-artifact@v4
         with: { name: capacity-proof-bundle, path: capacity-proof-bundle }
+
+  M-Regimes:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: pip install -e .[dev]
+      - run: pytest -q -m mregimes --disable-warnings --maxfail=1
+      - name: Emit PROOF
+        run: |
+          mkdir -p regimes-proof-bundle
+          python scripts/emit_proofs_mregimes.py | sed -n 's/^PROOF:/PROOF:/p' >> $GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@v4
+        with: { name: regimes-proof-bundle, path: regimes-proof-bundle }
