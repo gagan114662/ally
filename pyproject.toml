@@ -70,6 +70,9 @@ include = ["ally*"]
 testpaths = ["tests"]
 python_files = "test_*.py"
 addopts = "-v --tb=short --strict-markers"
+markers = [
+    "mfdr: M-FDR Gate tests with Benjamini-Hochberg correction"
+]
 
 [tool.coverage.run]
 source = ["ally"]

@@ -162,6 +162,54 @@ PROOF:PIPELINE_STATUS: APPROVED|BLOCKED|WARNED
 - `orchestrator.run_pipeline`: Full pipeline with gate integration
 
 **Artifacts:** `mfactorgate-proof-bundle/*`
+
+## M-FDR Gate — False Discovery Rate Correction
+
+**CI Job:** M-FDR Gate
+**Status:** ✅ Bulletproof
+
+### Implementation Scope
+- Benjamini-Hochberg FDR correction for multiple hypothesis testing
+- Positive alpha filtering and minimum OOS observations enforcement
+- Deterministic candidate evaluation with q-value computation
+- Statistical promotion pipeline preventing false discovery inflation
+
+### FDR Control Criteria
+1. **Multiple Hypothesis Correction**: BH procedure at α = 0.05 FDR level
+2. **Positive Alpha Filter**: Only strategies with positive OOS residual alpha considered
+3. **Minimum Sample Size**: Requires ≥60 OOS observations for statistical power
+4. **Deterministic Evaluation**: Same candidates produce identical promotion decisions
+
+### Proof Emissions
+```
+PROOF:FDR_ALPHA: 0.05
+PROOF:FDR_METHOD: BH
+PROOF:N_TESTED: 9
+PROOF:N_PROMOTED: 3
+PROOF:MEAN_T_OOS: 2.867
+PROOF:POS_ALPHA_ENFORCED: True
+PROOF:FDR_HASH: <sha1>
+PROOF:PROMOTED_IDS: A,B,C
+PROOF:PROMOTION_RATE: 33.3%
+```
+
+### Expected Results (Deterministic Fixtures)
+- **Input Candidates**: 12 (A-L with varying t-stats and alpha values)
+- **Filtered for Positive Alpha**: 9 candidates (negative alpha removed)
+- **Promoted after BH Correction**: 3 candidates (A, B, C)
+- **Mean Promoted t-stat**: 2.867 (strong statistical significance)
+
+### Pipeline Integration
+- Executes after Factor Gate passes individual strategy criteria
+- Feeds promoted candidates into live canary system
+- Prevents false discovery accumulation in production deployment
+
+### Tools Registry
+- `fdr.evaluate`: Main BH correction and candidate promotion
+- `fdr.mock_candidates`: Deterministic candidate generation for testing
+- `orchestrator.run_pipeline`: Full pipeline with Factor Gate → FDR Gate flow
+
+**Artifacts:** `fdr-proof-bundle/*`
 ## Determinism Guarantees
 
 All tools provide:

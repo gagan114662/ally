@@ -48,6 +48,16 @@ def main():
         print(f"PROOF:BETAS_OK: {proofs.get('BETAS_OK', 'false')}")
         print(f"PROOF:FACTORLENS_HASH: {proofs.get('FACTORLENS_HASH', 'missing')}")
 
+        # Bulletproof audit proofs
+        print(f"PROOF:PIT_OK: {proofs.get('PIT_OK', 'false')}")
+        print(f"PROOF:NW_LAGS: {proofs.get('NW_LAGS', 0)}")
+        print(f"PROOF:WINDOW_DAYS: {proofs.get('WINDOW_DAYS', 0)}")
+        print(f"PROOF:STEP_DAYS: {proofs.get('STEP_DAYS', 0)}")
+        print(f"PROOF:MIN_OBS: {proofs.get('MIN_OBS', 0)}")
+        print(f"PROOF:OOS_TSTAT: {proofs.get('OOS_TSTAT', 0.0)}")
+        print(f"PROOF:FDR_ALPHA: {proofs.get('FDR_ALPHA', 'pending')}")
+        print(f"PROOF:INSUFFICIENT_OOS: {proofs.get('INSUFFICIENT_OOS', 'false')}")
+
         # Additional verification proofs
         print(f"PROOF:GATE_LOGIC: {'pass' if gate_data.get('gate_pass') else 'fail'}")
         print(f"PROOF:ALPHA_BPS: {gate_data.get('alpha_bps', 0.0)}")
