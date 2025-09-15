@@ -30,7 +30,22 @@ def data_load_ohlcv(**kwargs) -> ToolResult:
     start_time = time.time()
     
     try:
-        if inputs.source == "mock":
+        if inputs.source == "alpha_vantage":
+            # Alpha Vantage live data
+            from ..adapters.data.alpha_vantage_adapter import AlphaVantageAdapter
+            adapter = AlphaVantageAdapter(api_key=inputs.api_key)
+            results = adapter.load_ohlcv(inputs.symbols, inputs.interval, inputs.start, inputs.end, live=inputs.live)
+        elif inputs.source == "polygon":
+            # Polygon.io live data
+            from ..adapters.data.polygon_adapter import PolygonAdapter
+            adapter = PolygonAdapter(api_key=inputs.api_key)
+            results = adapter.load_ohlcv(inputs.symbols, inputs.interval, inputs.start, inputs.end, live=inputs.live)
+        elif inputs.source == "finnhub":
+            # Finnhub live data
+            from ..adapters.data.finnhub_adapter import FinnhubAdapter
+            adapter = FinnhubAdapter(api_key=inputs.api_key)
+            results = adapter.load_ohlcv(inputs.symbols, inputs.interval, inputs.start, inputs.end, live=inputs.live)
+        elif inputs.source == "mock":
             # Generate mock data for testing
             results = _generate_mock_ohlcv(inputs.symbols, inputs.interval, inputs.start, inputs.end)
         elif inputs.source == "csv":
@@ -54,6 +69,21 @@ def data_load_ohlcv(**kwargs) -> ToolResult:
         for symbol_data in results.values():
             all_timestamps.update(symbol_data['timestamp'])
             
+        # Collect receipt hashes from results
+        receipt_hashes = []
+        provider_info = {}
+        
+        for symbol, df in results.items():
+            if hasattr(df, 'attrs'):
+                if 'receipt_hash' in df.attrs:
+                    receipt_hashes.append(df.attrs['receipt_hash'])
+                if 'provider' in df.attrs:
+                    provider_info[symbol] = {
+                        'provider': df.attrs['provider'],
+                        'fetched_at': df.attrs.get('fetched_at'),
+                        'receipt_hash': df.attrs.get('receipt_hash')
+                    }
+        
         panel = DataPanel(
             symbols=list(results.keys()),
             interval=inputs.interval,
@@ -65,22 +95,42 @@ def data_load_ohlcv(**kwargs) -> ToolResult:
                 "source": inputs.source,
                 "load_time": time.time() - start_time,
                 "symbols_requested": inputs.symbols,
-                "symbols_loaded": list(results.keys())
+                "symbols_loaded": list(results.keys()),
+                "provider_info": provider_info,
+                "receipt_hashes": receipt_hashes,
+                "live_mode": inputs.live,
+                "utc_timestamp": datetime.utcnow().isoformat()
             }
         )
         
-        return ToolResult.success(
+        result = ToolResult.success(
             data={
                 'panel': panel.model_dump(),
                 'summary': {
                     'symbols_loaded': len(results),
                     'total_rows': len(all_timestamps),
                     'date_range': f"{inputs.start} to {inputs.end}",
-                    'interval': inputs.interval
+                    'interval': inputs.interval,
+                    'provider': inputs.source,
+                    'receipt_hashes': receipt_hashes
                 }
             },
             warnings=warnings
         )
+        
+        # Store receipt for the overall tool execution if live mode
+        if inputs.live and receipt_hashes:
+            tool_inputs = {
+                "symbols": inputs.symbols,
+                "interval": inputs.interval,
+                "start": inputs.start,
+                "end": inputs.end,
+                "source": inputs.source,
+                "live": inputs.live
+            }
+            result.store_receipt("data.load_ohlcv", tool_inputs, result.data)
+        
+        return result
         
     except Exception as e:
         return ToolResult.error([f"Data loading failed: {e}"])

@@ -33,6 +33,7 @@ class Meta(BaseModel):
     warnings: List[str] = Field(default_factory=list)
     inputs_hash: Optional[str] = None
     code_hash: Optional[str] = None
+    receipt_hash: Optional[str] = None  # SHA-1 hash of raw payload for receipts
     
     if HAS_V2:
         @field_serializer('ts')
@@ -87,6 +88,29 @@ class ToolResult(BaseModel):
             data=data,
             meta=meta
         )
+    
+    def store_receipt(self, tool_name: str, inputs: Dict[str, Any], 
+                     raw_payload: Any = None) -> str:
+        """
+        Store receipt for this tool result
+        
+        Args:
+            tool_name: Name of the tool that generated this result
+            inputs: Tool input parameters
+            raw_payload: Optional raw payload (defaults to self.data)
+        
+        Returns:
+            Receipt hash
+        """
+        # Import here to avoid circular imports
+        from ..utils.receipts import store_tool_receipt
+        
+        if raw_payload is None:
+            raw_payload = self.data
+            
+        receipt_hash = store_tool_receipt(tool_name, inputs, raw_payload)
+        self.meta.receipt_hash = receipt_hash
+        return receipt_hash
 
 
 class ToolInput(BaseModel):

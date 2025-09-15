@@ -1,0 +1,237 @@
+{
+  "timestamp": "2025-09-15T13:20:42.005302",
+  "repository": "https://github.com/gagan114662/ally",
+  "phases": {
+    "phase_5_research": {
+      "files": {
+        "ally/research/walkforward.py": {
+          "exists": true,
+          "hash": "bd86dd7d0b44a487fd2603062ee091746942fa8c0072b7d57d05ebdb4ad49265"
+        },
+        "ally/research/ts_cv.py": {
+          "exists": true,
+          "hash": "d3c38f94628bd95a9479668d753535a27f68e92d107494d38cca2228d38c9999"
+        },
+        "tests/test_walkforward.py": {
+          "exists": true,
+          "hash": "34b9c2aa6a35c04a8ee7d72cd5ecc1e71f00173014e211c04428bb12e1bbe2ec"
+        },
+        "tests/test_ts_cv.py": {
+          "exists": true,
+          "hash": "a39c8d3ea558ab97506fa7b58763e7e19f69fb5f62077400ede91de2a4a3f5dd"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/research/walkforward.py:sha256:bd86dd7d0b44a487",
+        "PROOF:file:ally/research/ts_cv.py:sha256:d3c38f94628bd95a",
+        "PROOF:file:tests/test_walkforward.py:sha256:34b9c2aa6a35c04a",
+        "PROOF:file:tests/test_ts_cv.py:sha256:a39c8d3ea558ab97"
+      ]
+    },
+    "phase_6_costs_robustness": {
+      "files": {
+        "ally/research/costs.py": {
+          "exists": true,
+          "hash": "2e8e1cda61a211c8465e78ead13d1fff8785dcee45ab82abd80618cb81f99939"
+        },
+        "ally/research/robustness.py": {
+          "exists": true,
+          "hash": "cd213002bcf46fc8bf46d2cfc96d19ffff318833dd4de5e4696f48eb4fdee84a"
+        },
+        "tests/test_costs.py": {
+          "exists": true,
+          "hash": "8f591847b3e8e65f58848bb329504d30de115cef83528c9f0b1f61f2f5f3506b"
+        },
+        "tests/test_robustness.py": {
+          "exists": true,
+          "hash": "c3c82b0635423e09d9ed25d406d92ea48f07fbb8cd5e2db9da0270882d891de1"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/research/costs.py:sha256:2e8e1cda61a211c8",
+        "PROOF:file:ally/research/robustness.py:sha256:cd213002bcf46fc8",
+        "PROOF:file:tests/test_costs.py:sha256:8f591847b3e8e65f",
+        "PROOF:file:tests/test_robustness.py:sha256:c3c82b0635423e09"
+      ]
+    },
+    "phase_7_portfolio": {
+      "files": {
+        "ally/research/portfolio.py": {
+          "exists": true,
+          "hash": "1730223834132fdd29efffd8ed54f5a4f71cb45a959491f8d07c640b263bafd2"
+        },
+        "ally/research/constraints.py": {
+          "exists": true,
+          "hash": "b58db660282621f673c4baa171a3b4c0952c6d40ccf588e59d0e46418750b661"
+        },
+        "ally/research/sizing.py": {
+          "exists": true,
+          "hash": "8dd6982f6cc3940684f3f07585d7f2e4e369801703ed33e998145e4e919c0137"
+        },
+        "tests/test_sizing_constraints.py": {
+          "exists": true,
+          "hash": "0fed85456d0d4cb6e18c55e6dd2e485d4f070e7976ad519f5fb7a1efbb3b4595"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/research/portfolio.py:sha256:1730223834132fdd",
+        "PROOF:file:ally/research/constraints.py:sha256:b58db660282621f6",
+        "PROOF:file:ally/research/sizing.py:sha256:8dd6982f6cc39406",
+        "PROOF:file:tests/test_sizing_constraints.py:sha256:0fed85456d0d4cb6"
+      ]
+    },
+    "phase_8_ops": {
+      "files": {
+        "ally/ops/policy.yaml": {
+          "exists": true,
+          "hash": "7097df1810e2befac4f1f1de1fabd9e49c3e5ea32c6705adc3f370559e7ba01c"
+        },
+        "ally/utils/receipts.py": {
+          "exists": true,
+          "hash": "2770a32f2f6cb03123b17540c3f1f448ca268e817d9e9ce3a3e119aad0db54c0"
+        },
+        "ally/utils/file_receipts.py": {
+          "exists": true,
+          "hash": "580039a64b9da9c3488ee9f14b833469a4f2542dec7b3241289c1e83ac43f46f"
+        },
+        "verify_receipts.py": {
+          "exists": true,
+          "hash": "21988d3f4bbca27f17bf3ff14881778749f54ff0091f1f40a10e241011e234d4"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/ops/policy.yaml:sha256:7097df1810e2befa",
+        "PROOF:file:ally/utils/receipts.py:sha256:2770a32f2f6cb031",
+        "PROOF:file:ally/utils/file_receipts.py:sha256:580039a64b9da9c3",
+        "PROOF:file:verify_receipts.py:sha256:21988d3f4bbca27f"
+      ]
+    },
+    "ensemble_meta": {
+      "files": {
+        "ally/research/ensemble.py": {
+          "exists": true,
+          "hash": "247bcac2d9a06f61ee05b199972a32a6a6c177bad7f54da365d229a16f2816e1"
+        },
+        "ally/research/meta_learner.py": {
+          "exists": true,
+          "hash": "83dfa33c9496f793bd1e6d7d962a29c3426a4f886eb04cdaa5ee2010a96c25fc"
+        },
+        "tests/test_ensemble_ops.py": {
+          "exists": true,
+          "hash": "bc9c9b27872d4ab43bfc162a8e38057d7be1a933fea82876d8f04092ed3e9859"
+        },
+        "tests/test_meta_learner.py": {
+          "exists": true,
+          "hash": "84b55c27af7d72c5be579192eb311b8de079d49353b912a36e36c2a4858a712d"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/research/ensemble.py:sha256:247bcac2d9a06f61",
+        "PROOF:file:ally/research/meta_learner.py:sha256:83dfa33c9496f793",
+        "PROOF:file:tests/test_ensemble_ops.py:sha256:bc9c9b27872d4ab4",
+        "PROOF:file:tests/test_meta_learner.py:sha256:84b55c27af7d72c5"
+      ]
+    },
+    "evolution_fdr": {
+      "files": {
+        "ally/research/evolution.py": {
+          "exists": true,
+          "hash": "95568c3102f57beaba607e89a99b160b2b916cd916490326823c73e67ee5f21f"
+        },
+        "ally/research/fdr.py": {
+          "exists": true,
+          "hash": "c7b00cbaaa8fc46283f2e2c109282f4fe5fb13d756fc5e92dbaf196d2a4e5905"
+        },
+        "tests/test_evolution.py": {
+          "exists": true,
+          "hash": "02e55781016b8e6df93179a9b52989fb3801e050cd8a603daba370a3c4ef9c0b"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/research/evolution.py:sha256:95568c3102f57bea",
+        "PROOF:file:ally/research/fdr.py:sha256:c7b00cbaaa8fc462",
+        "PROOF:file:tests/test_evolution.py:sha256:02e55781016b8e6d"
+      ]
+    },
+    "trading_execution": {
+      "files": {
+        "ally/tools/trading_router.py": {
+          "exists": true,
+          "hash": "26a083bbad0a9bc4fc70ee19c02ad5309baaf413eafcce7ac4644da40f03b4f8"
+        },
+        "ally/tools/trading_risk.py": {
+          "exists": true,
+          "hash": "8e9d5ab8984b69adb50ebc3ad22f759cba047a83a42162877222dc56fa3b850f"
+        },
+        "ally/tools/broker.py": {
+          "exists": true,
+          "hash": "f5f3f37bb254f857a4ea27e83ae0548c4174ef381fe2ebacd124d3edb2eca9ca"
+        },
+        "tests/test_router_simulator.py": {
+          "exists": true,
+          "hash": "6c7630b352571fdaa6c8b68d4adcce163e7e3bdb20c96a13decab47497829b63"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/tools/trading_router.py:sha256:26a083bbad0a9bc4",
+        "PROOF:file:ally/tools/trading_risk.py:sha256:8e9d5ab8984b69ad",
+        "PROOF:file:ally/tools/broker.py:sha256:f5f3f37bb254f857",
+        "PROOF:file:tests/test_router_simulator.py:sha256:6c7630b352571fda"
+      ]
+    },
+    "phase_11_status": {
+      "files": {
+        "ally/status/runbook.py": {
+          "exists": true,
+          "hash": "b562847abb1f83e4a4c6d8e710cda04c79509284a1bdbb65cb73f4375c1a73a6"
+        },
+        "ally/status/journal.py": {
+          "exists": true,
+          "hash": "f9ea032300ac35de1c7c99acb62b1ce75eb80001809ed62f939a37aeeae34ac7"
+        },
+        "ally/status/telemetry.py": {
+          "exists": true,
+          "hash": "fe0b10d47e533281f6a21f481b7c040e9980aa191e3b5cd8db7001b8130b2aa1"
+        },
+        "ally/cli/status_cli.py": {
+          "exists": true,
+          "hash": "9118e9af68ee94973e2b0e75aa6630cf21878afa5063bd76a791af6b38054f14"
+        },
+        "tests/test_status_runbook.py": {
+          "exists": true,
+          "hash": "c913b0ebd16211b2aa24b05b72362a9cbf9110dd5a8cb172974426e3eebf5257"
+        },
+        "tests/test_status_journal.py": {
+          "exists": true,
+          "hash": "eba57d049c92a69abd026a24d7f57e3416710e15033aad2dddfcc010c72ebb69"
+        },
+        "tests/test_status_telemetry.py": {
+          "exists": true,
+          "hash": "a571b7266e5ee27d7fccae9b1c687edd72bd90386be59ed064df42d966f43a8a"
+        },
+        "scripts/ci_phase11_status.sh": {
+          "exists": true,
+          "hash": "9ce6f440fe4e01f0228460dcf4179e44d353fa82129adf0ce115e7ad4ce1beac"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/status/runbook.py:sha256:b562847abb1f83e4",
+        "PROOF:file:ally/status/journal.py:sha256:f9ea032300ac35de",
+        "PROOF:file:ally/status/telemetry.py:sha256:fe0b10d47e533281",
+        "PROOF:file:ally/cli/status_cli.py:sha256:9118e9af68ee9497",
+        "PROOF:file:tests/test_status_runbook.py:sha256:c913b0ebd16211b2",
+        "PROOF:file:tests/test_status_journal.py:sha256:eba57d049c92a69a",
+        "PROOF:file:tests/test_status_telemetry.py:sha256:a571b7266e5ee27d",
+        "PROOF:file:scripts/ci_phase11_status.sh:sha256:9ce6f440fe4e01f0"
+      ]
+    }
+  }
+}

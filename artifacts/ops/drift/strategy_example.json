@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-09-14T19:58:14.250590Z",
+  "strategy_hash": "TEST_STRAT_XS_MOMENTUM_abc123",
+  "status": "OK",
+  "tracking_error": 0.025,
+  "min_zscore": -1.2,
+  "recon_pass": true,
+  "days_analyzed": 21,
+  "violations": []
+}

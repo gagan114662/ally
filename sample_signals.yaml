@@ -1,0 +1,21 @@
+strategy: "sample_strategy"
+created_at: "2024-01-15T10:00:00Z"
+signals:
+  - ts: "2024-01-15T10:00:00Z"
+    symbol: "AAPL"
+    action: "buy"
+    qty: 100
+    type: "market"
+  
+  - ts: "2024-01-15T10:05:00Z"
+    symbol: "MSFT"
+    action: "buy"
+    qty: 200
+    type: "limit"
+    limit: 350.0
+  
+  - ts: "2024-01-15T10:10:00Z"
+    symbol: "AAPL"
+    action: "sell"
+    qty: 50
+    type: "market"
