@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-09-15T14:55:41.648355+00:00",
+  "generator": "generate_fixture_manifest.py",
+  "fixtures": {
+    "data/fixtures/factor_panels.json": {
+      "exists": true,
+      "size": 90,
+      "sha256": "c70fc53a28464482",
+      "modified": "2025-09-15T10:55:10.425799"
+    },
+    "data/fixtures/synthetic_ohlcv.json": {
+      "exists": true,
+      "size": 143,
+      "sha256": "9491ad62be961b72",
+      "modified": "2025-09-15T10:55:10.425799"
+    },
+    "data/fixtures/walk_forward_results.json": {
+      "exists": true,
+      "size": 83,
+      "sha256": "654b4eb51cbbab7d",
+      "modified": "2025-09-15T10:55:10.425799"
+    },
+    "artifacts/scoring/offline_benchmarks.json": {
+      "exists": true,
+      "size": 74,
+      "sha256": "bf47482fff8d5ac3",
+      "modified": "2025-09-15T10:55:10.425799"
+    }
+  }
+}

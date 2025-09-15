@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 189, in _run_module_as_main
+  File "<frozen runpy>", line 112, in _get_module_details
+  File "/data/data/com.termux/files/home/ally/ally/cli.py", line 8, in <module>
+    import orjson
+ModuleNotFoundError: No module named 'orjson'
