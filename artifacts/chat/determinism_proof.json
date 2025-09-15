@@ -1,0 +1,11 @@
+{
+  "deterministic": true,
+  "file_hashes": {
+    "artifacts/chat/transcript_ci.jsonl": "cfccfd810ab6592a",
+    "artifacts/chat/tui_snapshot_compact.txt": "cc7e0d58c7c14438",
+    "artifacts/chat/tui_snapshot_json.txt": "486c9db047dff167"
+  },
+  "phase": "phase-12-tui-chat",
+  "timestamp": "2025-01-01T00:00:10.000000Z",
+  "transcript_entries": 6
+}
