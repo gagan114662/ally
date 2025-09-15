@@ -119,6 +119,64 @@ tests/             # Test suite with synthetic fixtures
 data/fixtures/     # Deterministic test data
 ```
 
+## 🔧 CI/CD & Quality Assurance
+
+Ally uses a sophisticated CI/CD pipeline with deterministic builds and audit trails.
+
+### Required Checks (Must Pass to Merge)
+
+- **Smoke Tests**: Basic functionality and tool registry validation
+- **Static Analysis**: Code quality with Ruff linting and MyPy type checking
+- **Unit Tests**: Fast isolated tests with coverage reporting
+
+### Advisory Checks (Quality Gates)
+
+- **M-QC (QuantConnect)**: Algorithm generation, linting, and smoke testing
+- **M-Router**: Task-aware model selection verification
+- **M-Cache**: Runtime caching and fixture validation
+- **Phase Contracts**: Full system integration tests
+
+### Artifacts & Proofs
+
+Every CI run generates:
+- `artifacts/audit_check_ci.json` - Audit validation results
+- `artifacts/phase_badges.json` - Phase status dashboard
+- `artifacts/receipts.jsonl` - Complete execution receipts
+- Coverage reports, test logs, and proof bundles
+
+### Phase Status Dashboard
+
+PRs automatically receive a phase status comment showing:
+- ✅ Passing phases
+- 🟡 Partial/warning phases
+- ❌ Failing phases
+- Test coverage and execution counts
+
+### Branch Protection
+
+Required status checks:
+1. `test` (smoke + static + unit-fast)
+2. CI artifacts must be uploaded
+3. No failing required checks
+
+### Local Development
+
+```bash
+# Setup with test dependencies
+pip install -e .[dev]
+pip install -r requirements-tests.txt
+
+# Run core tests
+pytest tests/test_memory_reporting.py -v
+
+# Check code quality
+ruff check .
+mypy ally/
+
+# Generate coverage
+pytest --cov=ally --cov-report=html
+```
+
 ## 🤝 Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing guidelines, and code style.

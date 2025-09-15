@@ -84,7 +84,10 @@ class AuditLogger:
         exec_file = self.current_run_dir / f"{tool_name}_{int(time.time())}.json"
         with open(exec_file, 'w') as f:
             json.dump(execution, f, indent=2)
-            
+
+        # Write JSONL receipt
+        self._write_jsonl_receipt(execution)
+
         # Update manifest
         self._update_manifest_with_execution(execution)
         
@@ -175,3 +178,51 @@ class AuditLogger:
         
         manifest["tools_executed"].append(exec_summary)
         self._write_manifest(manifest)
+
+    def _write_jsonl_receipt(self, execution: Dict[str, Any]) -> None:
+        """Write execution as JSONL receipt for CI artifacts"""
+        # Create simplified receipt for JSONL
+        receipt = {
+            "receipt_id": f"{execution['tool_name']}_{int(time.time())}",
+            "tool": execution["tool_name"],
+            "timestamp": execution["timestamp"],
+            "inputs_hash": execution["inputs_hash"],
+            "code_hash": execution.get("code_hash"),
+            "status": "ok" if execution["result"]["ok"] else "error",
+            "duration_ms": execution["result"]["duration_ms"],
+            "error_count": len(execution["result"]["errors"]),
+            "warning_count": len(execution["result"]["warnings"]),
+            "run_id": self.current_run_id
+        }
+
+        # Write to both local receipts.jsonl and artifacts
+        receipts_files = [
+            self.current_run_dir / "receipts.jsonl",
+            Path("artifacts") / "receipts.jsonl"
+        ]
+
+        for receipts_file in receipts_files:
+            receipts_file.parent.mkdir(exist_ok=True, parents=True)
+            with open(receipts_file, 'a') as f:
+                f.write(json.dumps(receipt) + '\n')
+
+    def export_receipts_for_ci(self) -> Dict[str, Any]:
+        """Export all receipts for CI validation"""
+        if not self.current_run_dir:
+            return {"receipts": [], "count": 0}
+
+        receipts_file = self.current_run_dir / "receipts.jsonl"
+        receipts = []
+
+        if receipts_file.exists():
+            with open(receipts_file, 'r') as f:
+                for line in f:
+                    if line.strip():
+                        receipts.append(json.loads(line))
+
+        return {
+            "receipts": receipts,
+            "count": len(receipts),
+            "run_id": self.current_run_id,
+            "export_timestamp": datetime.now().isoformat()
+        }
