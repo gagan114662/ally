@@ -2,21 +2,21 @@
 
 ## 🔒 Master Verification Proof
 ```
-PROOF:master:verification:0ea7ed0d27b1b181be0cd3a6ffe80265
+PROOF:master:verification:a0cffd6b93cee5701191dd49081eb13e
 ```
 
 ## 📋 Complete Proof Block
 ```
 <<<ALLY_PROOF_BLOCK_V1
 repo=github.com/gagan114662/ally
-branch=phase-11-status-telemetry
-commit=0a84744a7baf4a90fb54da0cdb95efa1d29e893e
-asof_utc=2025-09-15T13:21:19.719436Z
+branch=phase-12-tui-chat
+commit=d9fde0cf813d1b27e1b7c806db2fa7ad3403b80a
+asof_utc=2025-09-15T13:46:46.341413Z
 
 MASTER_PROOF
-0ea7ed0d27b1b181be0cd3a6ffe80265
+a0cffd6b93cee5701191dd49081eb13e
 
-FILES (35)
+FILES (40)
 ally/research/walkforward.py:bd86dd7d0b44a487
 ally/research/ts_cv.py:d3c38f94628bd95a
 tests/test_walkforward.py:34b9c2aa6a35c04a
@@ -52,13 +52,18 @@ tests/test_status_runbook.py:c913b0ebd16211b2
 tests/test_status_journal.py:eba57d049c92a69a
 tests/test_status_telemetry.py:a571b7266e5ee27d
 scripts/ci_phase11_status.sh:9ce6f440fe4e01f0
+ally/ui/tui.py:1043afb9bf81d465
+ally/chat/controller.py:aca773459ce3c1c8
+ally/cli/chat_cli.py:cd78aab3eea9d55f
+tests/test_tui_chat.py:fa31aadde9fdd8e8
+scripts/ci_phase12_chat.sh:f08f9333ef463e0b
 
 VERIFICATION_REPORT_SHA256
-0ea7ed0d27b1b181be0cd3a6ffe80265c87dd29a162a109ca1e27c499248606d
+a0cffd6b93cee5701191dd49081eb13e6e317b680bd93dfbd13c85fa1e0bf374
 >>>
 ```
 
-## 📊 ALL FILES VERIFIED (35/35)
+## 📊 ALL FILES VERIFIED (40/40)
 
 ### ✅ Phase 5: Research Modules - COMPLETE
 - `ally/research/walkforward.py` ✓
@@ -106,6 +111,13 @@ VERIFICATION_REPORT_SHA256
 - `tests/test_status_journal.py` ✓
 - `tests/test_status_telemetry.py` ✓
 - `scripts/ci_phase11_status.sh` ✓
+
+### ✅ Phase 12: TUI & Chat - COMPLETE
+- `ally/ui/tui.py` ✓
+- `ally/chat/controller.py` ✓
+- `ally/cli/chat_cli.py` ✓
+- `tests/test_tui_chat.py` ✓
+- `scripts/ci_phase12_chat.sh` ✓
 
 ## 📝 Instructions for ChatGPT
 

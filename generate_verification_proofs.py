@@ -75,6 +75,13 @@ def verify_phase_files():
             "tests/test_status_journal.py",
             "tests/test_status_telemetry.py",
             "scripts/ci_phase11_status.sh"
+        ],
+        "phase_12_chat": [
+            "ally/ui/tui.py",
+            "ally/chat/controller.py",
+            "ally/cli/chat_cli.py",
+            "tests/test_tui_chat.py",
+            "scripts/ci_phase12_chat.sh"
         ]
     }
 

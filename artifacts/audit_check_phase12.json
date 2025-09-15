@@ -1,0 +1,25 @@
+{
+  "counts": {
+    "files_claimed": 40,
+    "files_hash_mismatch": 0,
+    "files_missing": 0
+  },
+  "errors": [],
+  "hash_mismatches": [],
+  "meta": {
+    "asof_utc": "2025-09-15T13:46:46.341413Z",
+    "branch": "phase-12-tui-chat",
+    "commit": "d9fde0cf813d1b27e1b7c806db2fa7ad3403b80a",
+    "repo": "github.com/gagan114662/ally"
+  },
+  "missing_files": [],
+  "ok": true,
+  "verification_report": {
+    "actual_sha256": "a0cffd6b93cee5701191dd49081eb13e6e317b680bd93dfbd13c85fa1e0bf374",
+    "claimed_sha256": "a0cffd6b93cee5701191dd49081eb13e6e317b680bd93dfbd13c85fa1e0bf374",
+    "master_from_actual": "a0cffd6b93cee5701191dd49081eb13e",
+    "master_proof": "a0cffd6b93cee5701191dd49081eb13e",
+    "path": "verification_report.json"
+  },
+  "warnings": []
+}
