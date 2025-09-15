@@ -5,7 +5,12 @@ Ally CLI using Typer for tool execution
 import json
 import time
 import typer
-import orjson
+try:
+    import orjson
+    USE_ORJSON = True
+except ImportError:
+    import json as orjson
+    USE_ORJSON = False
 from datetime import datetime
 from typing import Optional
 
@@ -14,6 +19,13 @@ from .schemas.base import ToolResult, Meta
 from .utils.serialization import convert_timestamps
 
 app = typer.Typer(help="Ally CLI - Local-first agent tools for quantitative research")
+
+# Add research subcommands
+try:
+    from .cli.research_cli import research
+    app.add_typer(research, name="research", help="Research orchestrator commands")
+except ImportError:
+    pass  # Research CLI not available
 
 
 @app.command()
@@ -56,11 +68,19 @@ def run(
         
         # Output result
         if pretty:
-            output = orjson.dumps(result.model_dump(), option=orjson.OPT_INDENT_2)
+            if USE_ORJSON:
+                output = orjson.dumps(result.model_dump(), option=orjson.OPT_INDENT_2)
+                typer.echo(output.decode())
+            else:
+                output = orjson.dumps(result.model_dump(), indent=2)
+                typer.echo(output)
         else:
-            output = orjson.dumps(result.model_dump())
-            
-        typer.echo(output.decode())
+            if USE_ORJSON:
+                output = orjson.dumps(result.model_dump())
+                typer.echo(output.decode())
+            else:
+                output = orjson.dumps(result.model_dump())
+                typer.echo(output)
         
         # Exit with error code if tool failed
         if not result.ok:
@@ -72,11 +92,19 @@ def run(
         error_result.meta.ts = datetime.utcnow()
         
         if pretty:
-            output = orjson.dumps(error_result.model_dump(), option=orjson.OPT_INDENT_2)
+            if USE_ORJSON:
+                output = orjson.dumps(error_result.model_dump(), option=orjson.OPT_INDENT_2)
+                typer.echo(output.decode())
+            else:
+                output = orjson.dumps(error_result.model_dump(), indent=2)
+                typer.echo(output)
         else:
-            output = orjson.dumps(error_result.model_dump())
-            
-        typer.echo(output.decode())
+            if USE_ORJSON:
+                output = orjson.dumps(error_result.model_dump())
+                typer.echo(output.decode())
+            else:
+                output = orjson.dumps(error_result.model_dump())
+                typer.echo(output)
         raise typer.Exit(code=1)
 
 
@@ -126,8 +154,12 @@ def run_summary(run_id: str = typer.Argument(..., help="Run ID to summarize")):
         typer.echo(f"❌ Run '{run_id}' not found")
         raise typer.Exit(code=1)
     
-    output = orjson.dumps(summary, option=orjson.OPT_INDENT_2)
-    typer.echo(output.decode())
+    if USE_ORJSON:
+        output = orjson.dumps(summary, option=orjson.OPT_INDENT_2)
+        typer.echo(output.decode())
+    else:
+        output = orjson.dumps(summary, indent=2)
+        typer.echo(output)
 
 
 @app.command()
