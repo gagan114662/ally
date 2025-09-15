@@ -143,6 +143,30 @@ tests/             # Test suite with synthetic fixtures
 data/fixtures/     # Deterministic test data
 ```
 
+## 📊 System Status & Monitoring
+
+Check Ally's current state and operational history:
+
+```bash
+# View current system status
+python -m ally.cli.status_cli status
+
+# Export status as JSON for integration
+python -m ally.cli.status_cli status --json
+
+# View recent operations
+python -m ally.cli.status_cli status --recent 10
+
+# Interactive chat interface
+python -m ally.cli.chat_cli chat
+
+# Text-based dashboard view
+python -m ally.cli.chat_cli tui
+
+# Compact status snapshot
+python -m ally.cli.chat_cli tui --format compact
+```
+
 ## 🤝 Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing guidelines, and code style.

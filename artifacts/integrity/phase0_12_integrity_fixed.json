@@ -1,0 +1,97 @@
+{
+  "asof_utc": "2025-09-15T14:30:40Z",
+  "checks": [
+    {
+      "check": "I1.status_artifacts",
+      "message": "Phase11 status artifacts present",
+      "ok": true
+    },
+    {
+      "check": "I2.chat_artifacts",
+      "message": "Phase12 chat artifacts present",
+      "ok": true
+    },
+    {
+      "check": "I3.receipts_exist",
+      "message": "Receipts entries: 1",
+      "ok": true
+    },
+    {
+      "check": "I4.guard_snapshot",
+      "message": "Sentinel snapshot present sha1[:16]=76970cae5c25248c",
+      "ok": true
+    },
+    {
+      "check": "I5.status_journal_coherence",
+      "message": "Status summary + journal present and non-empty",
+      "ok": true
+    },
+    {
+      "check": "I6.chat_transcript",
+      "message": "Chat transcript lines=6",
+      "ok": true
+    }
+  ],
+  "phases": {
+    "phase0": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase0"
+    },
+    "phase1": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase1"
+    },
+    "phase10": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase10"
+    },
+    "phase11": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase11"
+    },
+    "phase12": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase12"
+    },
+    "phase3": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase3"
+    },
+    "phase4": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase4"
+    },
+    "phase5x": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase5x"
+    },
+    "phase6": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase6"
+    },
+    "phase7": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase7"
+    },
+    "phase8": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase8"
+    },
+    "phase9": {
+      "missing": [],
+      "ok": true,
+      "phase": "phase9"
+    }
+  }
+}
