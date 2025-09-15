@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-15T12:29:47.648046",
+  "timestamp": "2025-09-15T13:20:42.005302",
   "repository": "https://github.com/gagan114662/ally",
   "phases": {
     "phase_5_research": {
@@ -184,6 +184,53 @@
         "PROOF:file:ally/tools/trading_risk.py:sha256:8e9d5ab8984b69ad",
         "PROOF:file:ally/tools/broker.py:sha256:f5f3f37bb254f857",
         "PROOF:file:tests/test_router_simulator.py:sha256:6c7630b352571fda"
+      ]
+    },
+    "phase_11_status": {
+      "files": {
+        "ally/status/runbook.py": {
+          "exists": true,
+          "hash": "b562847abb1f83e4a4c6d8e710cda04c79509284a1bdbb65cb73f4375c1a73a6"
+        },
+        "ally/status/journal.py": {
+          "exists": true,
+          "hash": "f9ea032300ac35de1c7c99acb62b1ce75eb80001809ed62f939a37aeeae34ac7"
+        },
+        "ally/status/telemetry.py": {
+          "exists": true,
+          "hash": "fe0b10d47e533281f6a21f481b7c040e9980aa191e3b5cd8db7001b8130b2aa1"
+        },
+        "ally/cli/status_cli.py": {
+          "exists": true,
+          "hash": "9118e9af68ee94973e2b0e75aa6630cf21878afa5063bd76a791af6b38054f14"
+        },
+        "tests/test_status_runbook.py": {
+          "exists": true,
+          "hash": "c913b0ebd16211b2aa24b05b72362a9cbf9110dd5a8cb172974426e3eebf5257"
+        },
+        "tests/test_status_journal.py": {
+          "exists": true,
+          "hash": "eba57d049c92a69abd026a24d7f57e3416710e15033aad2dddfcc010c72ebb69"
+        },
+        "tests/test_status_telemetry.py": {
+          "exists": true,
+          "hash": "a571b7266e5ee27d7fccae9b1c687edd72bd90386be59ed064df42d966f43a8a"
+        },
+        "scripts/ci_phase11_status.sh": {
+          "exists": true,
+          "hash": "9ce6f440fe4e01f0228460dcf4179e44d353fa82129adf0ce115e7ad4ce1beac"
+        }
+      },
+      "status": "complete",
+      "proof_lines": [
+        "PROOF:file:ally/status/runbook.py:sha256:b562847abb1f83e4",
+        "PROOF:file:ally/status/journal.py:sha256:f9ea032300ac35de",
+        "PROOF:file:ally/status/telemetry.py:sha256:fe0b10d47e533281",
+        "PROOF:file:ally/cli/status_cli.py:sha256:9118e9af68ee9497",
+        "PROOF:file:tests/test_status_runbook.py:sha256:c913b0ebd16211b2",
+        "PROOF:file:tests/test_status_journal.py:sha256:eba57d049c92a69a",
+        "PROOF:file:tests/test_status_telemetry.py:sha256:a571b7266e5ee27d",
+        "PROOF:file:scripts/ci_phase11_status.sh:sha256:9ce6f440fe4e01f0"
       ]
     }
   }

@@ -65,6 +65,16 @@ def verify_phase_files():
             "ally/tools/trading_risk.py",
             "ally/tools/broker.py",
             "tests/test_router_simulator.py"
+        ],
+        "phase_11_status": [
+            "ally/status/runbook.py",
+            "ally/status/journal.py",
+            "ally/status/telemetry.py",
+            "ally/cli/status_cli.py",
+            "tests/test_status_runbook.py",
+            "tests/test_status_journal.py",
+            "tests/test_status_telemetry.py",
+            "scripts/ci_phase11_status.sh"
         ]
     }
 
