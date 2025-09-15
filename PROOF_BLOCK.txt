@@ -1,0 +1,13 @@
+<<<ALLY_PROOF_BLOCK_V1
+repo=github.com/gagan114662/ally
+branch=chore/ci-fix-deterministic
+commit=9a22cf9f
+asof_utc=2025-09-15T16:16:12.164008Z
+MASTER_PROOF
+bfe27bf790e0eb7cb084e98f3f2a1933
+FILES (4)
+.github/workflows/deterministic-ci.yml:aa49a73db74154f2
+scripts/ci_deterministic_min.sh:84cfb2a475661bc5
+artifacts/audit_check_ci.json:52dcf40308216d4e
+artifacts/chat/transcript_ci.jsonl:8b98a4068bcc859c
+>>>
