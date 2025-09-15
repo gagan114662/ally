@@ -1,21 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="0.223" timestamp="2025-09-15T16:45:07.151900+00:00" hostname="localhost"><testcase classname="" name="tests.test_mcp" time="0.000"><error message="collection failure">ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_mcp.py'.
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="5" failures="0" skipped="0" tests="5" time="6.170" timestamp="2025-09-15T12:59:00.931354-04:00" hostname="localhost"><testcase classname="" name="tests.test_alpha_vantage_gating" time="0.000"><error message="collection failure">ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_alpha_vantage_gating.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../../usr/lib/python3.12/importlib/__init__.py:90: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests/test_mcp.py:12: in &lt;module&gt;
-    from ally.tools.mcp import mcp_discover, mcp_call, mcp_list_servers, mcp_list_tools
+tests/test_alpha_vantage_gating.py:14: in &lt;module&gt;
+    from ally.adapters.data.alpha_vantage_adapter import AlphaVantageAdapter
+ally/adapters/data/alpha_vantage_adapter.py:10: in &lt;module&gt;
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'</error></testcase><testcase classname="" name="tests.test_alpha_vantage_offline" time="0.000"><error message="collection failure">ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_alpha_vantage_offline.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_alpha_vantage_offline.py:8: in &lt;module&gt;
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'</error></testcase><testcase classname="" name="tests.test_alpha_vantage_schema" time="0.000"><error message="collection failure">ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_alpha_vantage_schema.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_alpha_vantage_schema.py:8: in &lt;module&gt;
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'</error></testcase><testcase classname="" name="tests.test_polygon_gating" time="0.000"><error message="collection failure">ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_polygon_gating.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_polygon_gating.py:15: in &lt;module&gt;
+    from ally.tools.data import data_load_ohlcv
 ally/tools/__init__.py:8: in &lt;module&gt;
     from ..schemas.base import ToolResult, Meta
 ally/schemas/base.py:6: in &lt;module&gt;
     from pydantic import BaseModel, Field
-E   ModuleNotFoundError: No module named 'pydantic'</error></testcase><testcase classname="" name="tests.test_timestamp_serialization" time="0.000"><error message="collection failure">ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_timestamp_serialization.py'.
+E   ModuleNotFoundError: No module named 'pydantic'</error></testcase><testcase classname="" name="tests.test_polygon_offline" time="0.000"><error message="collection failure">ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_polygon_offline.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../../usr/lib/python3.12/importlib/__init__.py:90: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests/test_timestamp_serialization.py:5: in &lt;module&gt;
+tests/test_polygon_offline.py:8: in &lt;module&gt;
     import pandas as pd
 E   ModuleNotFoundError: No module named 'pandas'</error></testcase></testsuite></testsuites>

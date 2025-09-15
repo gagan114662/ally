@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-09-15T16:45:00.000Z",
+  "junit_analysis": {
+    "status": "failed",
+    "tests": 5,
+    "failures": 0,
+    "errors": 5
+  },
+  "phase_badges": {
+    "phase_0": "error",
+    "phase_1": "error",
+    "phase_3": "error",
+    "phase_4": "error",
+    "phase_5x": "error",
+    "phase_6": "error",
+    "phase_7": "error",
+    "phase_8": "error",
+    "phase_9": "error",
+    "phase_10": "error",
+    "phase_11": "error",
+    "phase_12": "error"
+  },
+  "summary": {
+    "total_phases": 12,
+    "phases_ok": 0,
+    "phases_failed": 12,
+    "overall_status": "degraded"
+  }
+}
