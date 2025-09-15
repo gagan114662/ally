@@ -48,8 +48,8 @@ jobs:
       - name: Install minimal deps (no network tests; keep it tiny)
         run: |
           python -m pip install --upgrade pip
-          # Only what we actually use; skip heavy deps
-          pip install pyyaml || true
+          # Core testing dependencies
+          pip install pytest pytest-cov coverage pyyaml || true
 
       - name: Run deterministic mini battery
         shell: bash

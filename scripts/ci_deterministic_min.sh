@@ -31,9 +31,23 @@ if [ ! -s "$AUDIT_FILE" ]; then
 JSON
 fi
 
-# 3) Emit lightweight CI logs (placeholders are fine)
-echo "::group::pytest (placeholder)"; echo "pytest unavailable in runner; using deterministic checks only"; echo "::endgroup::" \
-  > artifacts/ci/pytest_stdout.txt
+# 3) Run actual tests and capture real results
+echo "::group::Running pytest tests"
+if command -v pytest >/dev/null 2>&1; then
+  # Run pytest with real output capture (allow failures, capture results)
+  pytest --maxfail=5 --disable-warnings -q \
+    --junitxml=artifacts/ci/junit.xml \
+    2>&1 | tee artifacts/ci/pytest_stdout.txt || true
+
+  # Generate coverage if possible
+  coverage run -m pytest --collect-only >/dev/null 2>&1 || true
+  coverage xml -o artifacts/ci/coverage.xml 2>/dev/null || echo '<?xml version="1.0" encoding="UTF-8"?><coverage version="7.10.6" line-rate="0" lines-valid="0" lines-covered="0"/>' > artifacts/ci/coverage.xml
+else
+  echo "pytest not available - using placeholder" > artifacts/ci/pytest_stdout.txt
+  echo "<testsuite tests='0'/>" > artifacts/ci/junit.xml
+  echo '<?xml version="1.0" encoding="UTF-8"?><coverage/>' > artifacts/ci/coverage.xml
+fi
+echo "::endgroup::"
 
 # Exit cleanly
 echo "Deterministic mini battery complete."

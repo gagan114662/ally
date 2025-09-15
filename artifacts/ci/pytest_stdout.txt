@@ -1,1 +1,38 @@
-::endgroup::
+============================= test session starts ==============================
+platform linux -- Python 3.12.11, pytest-8.4.2, pluggy-1.6.0
+rootdir: /data/data/com.termux/files/home/ally
+configfile: pyproject.toml
+plugins: cov-7.0.0
+collected 0 items / 2 errors
+
+==================================== ERRORS ====================================
+______________________ ERROR collecting tests/test_mcp.py ______________________
+ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_mcp.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_mcp.py:12: in <module>
+    from ally.tools.mcp import mcp_discover, mcp_call, mcp_list_servers, mcp_list_tools
+ally/tools/__init__.py:8: in <module>
+    from ..schemas.base import ToolResult, Meta
+ally/schemas/base.py:6: in <module>
+    from pydantic import BaseModel, Field
+E   ModuleNotFoundError: No module named 'pydantic'
+____________ ERROR collecting tests/test_timestamp_serialization.py ____________
+ImportError while importing test module '/data/data/com.termux/files/home/ally/tests/test_timestamp_serialization.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_timestamp_serialization.py:5: in <module>
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'
+- generated xml file: /data/data/com.termux/files/home/ally/artifacts/ci/junit.xml -
+=========================== short test summary info ============================
+ERROR tests/test_mcp.py
+ERROR tests/test_timestamp_serialization.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+============================== 2 errors in 0.22s ===============================
