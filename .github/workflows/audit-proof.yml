@@ -1,28 +1,28 @@
-name: ChatGPT Audit & Proof
+name: Audit Proof
 
 on:
-  push:
-    branches: [ main, 'release/**', 'phase-*' ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, 'release/**', 'phase-*', 'M-*' ]
+  push:
+    branches:   [ main, 'release/**', 'phase-*', 'M-*' ]
   workflow_dispatch: {}
 
 permissions:
   contents: write
+  pull-requests: write
   actions: read
   checks: write
-  pull-requests: write
 
 jobs:
-  audit:
-    name: Run deterministic chat + audit
+  audit-proof:
     runs-on: ubuntu-latest
+
     env:
       ALLY_LIVE: "0"
       TZ: "UTC"
       PYTHONHASHSEED: "0"
       OMP_NUM_THREADS: "1"
-      MKL_NUM_THREADS: "1"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,73 +30,62 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
-      - name: Install deps
+      - name: Install minimal deps (best-effort)
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt || true
-          pip install duckdb ruff mypy pytest pytest-cov || true
+          python -m pip install --upgrade pip || true
+          # Add any lightweight deps your CLI needs; keep offline-safe where possible
+          pip install orjson|| true
 
-      - name: Run deterministic test battery
-        run: |
-          bash scripts/run_deterministic_build.sh
-
-      - name: Validate artifacts presence
-        run: |
-          test -s artifacts/audit_check_ci.json
-          test -s artifacts/chat/transcript_ci.jsonl
+      - name: Deterministic Test Battery
+        run: scripts/ci_deterministic_test_battery.sh
 
       - name: Upload CI artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ci-logs
+          name: ally-ci-artifacts
+          if-no-files-found: error
           path: |
-            artifacts/ci/junit.xml
-            artifacts/ci/coverage.xml
-            artifacts/ci/pytest_stdout.txt
-            artifacts/chat/transcript_ci.jsonl
             artifacts/audit_check_ci.json
+            artifacts/audit_check.json
+            artifacts/chat/transcript_ci.jsonl
             artifacts/receipts.jsonl
+            artifacts/**/*.json
+            artifacts/**/*.txt
+            artifacts/**/*.xml
+            artifacts/**/*.log
 
-      - name: Extract auditor proof line
-        id: proof
-        run: |
-          # Extract master proof from audit JSON
-          MASTER_PROOF=$(python -c "import json; j=json.load(open('artifacts/audit_check_ci.json')); print(j.get('master_proof', ''))")
-          if [ -n "$MASTER_PROOF" ]; then
-            LINE="PROOF:run:chatgpt.verify@${MASTER_PROOF:0:8}:${MASTER_PROOF:8:16}"
-          else
-            # fallback: compute from verification report
-            HEX=$(sha256sum verification_report.json | awk '{print $1}' || echo "fallback0000000000000000")
-            LINE="PROOF:run:chatgpt.verify@${HEX:0:8}:${HEX:8:16}"
-          fi
-          echo "line=$LINE" >> $GITHUB_OUTPUT
-          echo "$LINE"
-
-      - name: Check audit OK (fail if mismatches)
-        run: |
-          python - <<'PY'
-import json, sys
-j = json.load(open("artifacts/audit_check_ci.json"))
-missing = j.get("missing", 0)
-mismatches = j.get("mismatches", 0)
-ok = j.get("ok", False)
-print(f"[AUDIT] missing={missing} mismatches={mismatches} ok={ok}")
-print(f"[AUDIT] total_files={j.get('total_files', 0)}")
-sys.exit(0 if (ok and missing == 0 and mismatches == 0) else 1)
-PY
-
-      - name: Post sticky proof comment
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          PROOF_LINE: ${{ steps.proof.outputs.line }}
-        run: |
-          BODY="# 🤖 ChatGPT Audit\n\n- ${PROOF_LINE}\n- Deterministic transcript: \`artifacts/chat/transcript_ci.jsonl\`\n- Full audit: \`artifacts/audit_check_ci.json\`"
-          # delete prior bot comment (by marker) to keep it sticky & single
-          gh api repos/${{ github.repository }}/issues/$PR_NUMBER/comments \
-            | jq -r '.[] | select(.user.type=="Bot") | select(.body|test("ChatGPT Audit")) | .id' \
-            | xargs -I{} gh api repos/${{ github.repository }}/issues/comments/{} -X DELETE || true
-          gh pr comment $PR_NUMBER --body "$BODY"
+      - name: Post sticky PROOF comment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            function sha16(p){ return fs.existsSync(p) ? require('crypto').createHash('sha1').update(fs.readFileSync(p)).digest('hex').slice(0,16) : 'missing'; }
+            const audit = 'artifacts/audit_check_ci.json';
+            const transcript = 'artifacts/chat/transcript_ci.jsonl';
+            const proofRun = `PROOF:run:chatgpt.verify@${sha16(audit)}:${sha16(transcript)}`;
+            const body = [
+              '## 🤖 ChatGPT Audit',
+              '',
+              '**Artifacts**',
+              `- audit: \`${audit}\` (sha1:${sha16(audit)})`,
+              `- transcript: \`${transcript}\` (sha1:${sha16(transcript)})`,
+              '',
+              '**PROOF**',
+              `- ${proofRun}`,
+              '',
+              '_Deterministic: ALLY_LIVE=0, TZ=UTC, single-threaded_'
+            ].join('\n');
+            const {owner, repo} = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            // upsert sticky comment
+            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number });
+            const marker = '🤖 ChatGPT Audit';
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }

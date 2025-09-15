@@ -1,25 +1,33 @@
 {
-  "counts": {
-    "files_claimed": 27,
-    "files_hash_mismatch": 0,
-    "files_missing": 0
-  },
-  "errors": [],
-  "hash_mismatches": [],
-  "meta": {
-    "asof_utc": "2025-09-15T12:47:04.027515Z",
-    "branch": "phase-5-research-modules",
-    "commit": "fb662615669d44b2f6f914ad92824f372ac9b9cb",
-    "repo": "github.com/gagan114662/ally"
-  },
-  "missing_files": [],
+  "timestamp": "2025-09-15T15:23:18.429345",
+  "repository": "https://github.com/gagan114662/ally",
+  "missing": 0,
+  "mismatches": 0,
   "ok": true,
-  "verification_report": {
-    "actual_sha256": "8ac2d5ad592731d6481ffa4c8804fb719b04068dc9b96000edb596e888e9c946",
-    "claimed_sha256": "8ac2d5ad592731d6481ffa4c8804fb719b04068dc9b96000edb596e888e9c946",
-    "master_from_actual": "8ac2d5ad592731d6481ffa4c8804fb71",
-    "master_proof": "8ac2d5ad592731d6481ffa4c8804fb71",
-    "path": "verification_report.json"
+  "total_files": 40,
+  "phases_verified": [
+    "phase_5_research",
+    "phase_6_costs_robustness",
+    "phase_7_portfolio",
+    "phase_8_ops",
+    "ensemble_meta",
+    "evolution_fdr",
+    "trading_execution",
+    "phase_11_status",
+    "phase_12_chat"
+  ],
+  "master_proof": "697f5a9fea6a16e662d79211855821c9",
+  "deterministic_flags": {
+    "ALLY_LIVE": "0",
+    "TZ": "UTC",
+    "PYTHONHASHSEED": "0",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
   },
-  "warnings": []
+  "test_battery_summary": {
+    "phase_12_transcript": "✅ Generated deterministic chat transcript (6 entries)",
+    "tui_snapshots": "✅ Generated compact/json/dashboard snapshots",
+    "receipts_exported": "✅ Exported receipts from DuckDB",
+    "status": "PASS"
+  }
 }
