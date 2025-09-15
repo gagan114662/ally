@@ -1,0 +1,60 @@
+name: TS-Trend
+universe:
+  asset_class: futures_global
+  inclusion:
+    contracts: [CL1, GC1, ES1, ZN1, ZC1, HG1, NG1, KC1]  # Major futures
+    min_volume: 1000  # Minimum daily volume
+    active_contracts: front_month
+    roll_schedule: 5_days_before_expiry
+
+data:
+  ohlcv:
+    frequency: daily
+    adjustments: true
+    continuous_contract: true
+  fundamentals: null
+
+signal:
+  type: time_series
+  formula: "sma_20 > sma_100 ? 1 : -1"  # SMA crossover
+  lookbacks:
+    sma_20: 20   # 20-day SMA
+    sma_100: 100 # 100-day SMA
+  winsorize: null  # No winsorization for TS signals
+  neutralize: null # No neutralization for TS
+  rebalance: daily
+
+portfolio:
+  scheme: risk_parity
+  vol_target_annual: 0.10  # 10% volatility target
+  constraints:
+    max_weight_single: 0.3   # 30% max per contract
+    max_leverage: 2.0        # 2x max leverage
+    min_weight: 0.05         # 5% minimum position
+
+costs:
+  bps_per_turnover: 5.0  # Lower costs for futures
+
+backtest:
+  start: "2015-01-01"
+  end: "2023-12-31"
+  benchmark: GSCI  # Goldman Sachs Commodity Index
+  seed: 456
+
+gates:
+  factorlens:
+    factors: [MKT_RF, GSCI, CARRY, MOMENTUM, TERM_STRUCTURE]  # Commodity factors
+    alpha_threshold: 0.03  # 3% annual alpha for alternatives
+    t_stat_min: 1.5
+  fdr:
+    level: 0.10  # Higher FDR for alternatives
+    method: benjamini_hochberg
+  promotion:
+    t_stat_threshold: 1.5
+    max_turnover: 5.0   # Higher turnover acceptable for TS
+    max_cost_bps: 30.0
+    min_capacity: 50_000_000  # Lower capacity for futures
+    holdout_fraction: 0.35
+
+proof:
+  emit: true

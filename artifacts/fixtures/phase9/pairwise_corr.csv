@@ -1,0 +1,4 @@
+strategy,XS_Momentum_v1,Value_BTM_v1,TS_Trend_v1
+XS_Momentum_v1,1.00,0.42,0.31
+Value_BTM_v1,0.42,1.00,0.28
+TS_Trend_v1,0.31,0.28,1.00

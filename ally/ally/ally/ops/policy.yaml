@@ -1,0 +1,63 @@
+# === Data Drift ===
+data:
+  ref_window_days: 252
+  test_window_days: 21
+  thresholds:
+    psi_max: 0.20         # Population Stability Index
+    js_max:  0.05         # Jensen–Shannon distance
+    ks_pmin: 0.05         # Kolmogorov–Smirnov p-value minimum
+  schema:
+    require_pit_timestamps: true
+    forbid_future_timestamps: true
+
+# === Strategy Drift ===
+strategy:
+  window_days: 21
+  tracking_error_max: 0.05      # ex-post δ vs ref (annualized)
+  zscore_min: -2.0              # min rolling Z of live vs ref
+  recon:
+    band_abs: 0.003             # |live − paper| band (abs return)
+    min_days_ok: 10
+
+# === Ops/Determinism ===
+ops:
+  repeats: 3
+  tz: "UTC"
+  env:
+    OMP_NUM_THREADS: 1
+    MKL_NUM_THREADS: 1
+  require_psd_cov: true
+
+# === Promotion Guard ===
+promotion:
+  require_all_ok: true
+  block_on:
+    - data_drift
+    - strategy_drift
+    - ops_drift
+
+# === Reporting ===
+reporting:
+  heartbeat_since_hours: 24
+
+# === Phase 9: Ensemble Governance ===
+phase9:
+  caps:
+    weight_per_strategy_max: 0.20
+    weight_per_family_max:   0.40
+    gross_exposure_max:      1.00
+    net_exposure_band:       0.20
+  correlation:
+    pairwise_max: 0.65
+    factor_exposure_max: 1.5
+  risk_budget:
+    ctr_max: 0.15
+    drawdown_scale: true
+  turnover:
+    max_rebalance_turnover: 0.35
+  novelty:
+    min_n_strategies: 3
+    novelty_quota_min: 0.10
+  drift:
+    require_sentinel_ok: true
+    deweight_on_warn: 0.50

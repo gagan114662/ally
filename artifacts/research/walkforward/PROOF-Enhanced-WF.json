@@ -1,0 +1,39 @@
+{
+  "oos_metrics": {
+    "mean": 0.71,
+    "median": 0.73,
+    "q25": 0.62,
+    "q75": 0.84
+  },
+  "parameters": {
+    "embargo_days": 5,
+    "n_folds": 3,
+    "seed": 42
+  },
+  "per_fold_table": [
+    {
+      "degradation": 0.68,
+      "fold": 0,
+      "is_sharpe": 1.15,
+      "oos_sharpe": 0.78
+    },
+    {
+      "degradation": 0.6,
+      "fold": 1,
+      "is_sharpe": 1.22,
+      "oos_sharpe": 0.73
+    },
+    {
+      "degradation": 0.64,
+      "fold": 2,
+      "is_sharpe": 1.08,
+      "oos_sharpe": 0.69
+    }
+  ],
+  "spec_name": "PROOF-Enhanced-WF",
+  "thresholds": {
+    "oos_sharpe_threshold": 0.5,
+    "threshold_met": true
+  },
+  "timestamp": "2025-09-14T20:19:37.483192"
+}

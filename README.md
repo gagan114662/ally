@@ -30,6 +30,30 @@ ally list
 
 ## 🛠️ Core Tools
 
+### Market Data (Phase 1) 🆕
+```bash
+# Alpha Vantage - Live market data (requires API key & ALLY_LIVE=1)
+export ALPHA_VANTAGE_API_KEY=your_api_key_here
+export ALLY_LIVE=1
+ally run data.load_ohlcv '{"symbols":["AAPL","MSFT"],"interval":"1h","start":"2024-01-01","end":"2024-01-05","source":"alpha_vantage","live":true}'
+
+# Polygon.io - Live market data with higher granularity (requires API key & ALLY_LIVE=1)
+export POLYGON_API_KEY=your_polygon_api_key_here
+export ALLY_LIVE=1
+ally run data.load_ohlcv '{"symbols":["AAPL","MSFT"],"interval":"1min","start":"2024-08-01","end":"2024-08-05","source":"polygon","live":true}'
+
+# Finnhub - Live market data with multiple resolutions (requires API key & ALLY_LIVE=1)
+export FINNHUB_API_KEY=your_finnhub_api_key_here
+export ALLY_LIVE=1
+ally run data.load_ohlcv '{"symbols":["AAPL","MSFT"],"interval":"15min","start":"2024-08-01","end":"2024-08-05","source":"finnhub","live":true}'
+
+# Offline mode with deterministic mock data (default)
+ally run data.load_ohlcv '{"symbols":["AAPL","MSFT"],"interval":"1d","start":"2024-01-01","end":"2024-01-05","source":"polygon","live":false}'
+
+# Check proof receipts for live data
+ally proofs
+```
+
 ### Computer Vision (Milestone 4) ✅
 ```bash
 # Detect chart patterns with visual + numeric confirmation

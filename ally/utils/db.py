@@ -65,6 +65,17 @@ class DatabaseManager:
             )
         """)
 
+        self.conn.execute("""
+            CREATE TABLE IF NOT EXISTS receipts (
+                tool_name TEXT NOT NULL,
+                args_hash TEXT NOT NULL,
+                receipt_hash TEXT NOT NULL,
+                payload_raw TEXT NOT NULL,
+                timestamp TEXT NOT NULL,
+                PRIMARY KEY (tool_name, args_hash)
+            )
+        """)
+
         if not DUCKDB_AVAILABLE:
             self.conn.commit()
 
@@ -152,6 +163,42 @@ class DatabaseManager:
         except Exception as e:
             print(f"Error querying database: {e}")
             return {"rows": [], "count": 0}
+
+    def store_receipt(self, tool_name: str, args_hash: str, receipt_hash: str, 
+                     payload_raw: str, timestamp: str) -> bool:
+        """Store a receipt for tool execution."""
+        try:
+            self.conn.execute(
+                "INSERT OR REPLACE INTO receipts (tool_name, args_hash, receipt_hash, payload_raw, timestamp) VALUES (?, ?, ?, ?, ?)",
+                (tool_name, args_hash, receipt_hash, payload_raw, timestamp)
+            )
+            
+            if not DUCKDB_AVAILABLE:
+                self.conn.commit()
+            
+            return True
+        except Exception as e:
+            print(f"Error storing receipt: {e}")
+            return False
+
+    def get_receipt(self, tool_name: str, args_hash: str) -> Optional[Dict[str, Any]]:
+        """Get stored receipt for tool execution."""
+        try:
+            result = self.conn.execute(
+                "SELECT * FROM receipts WHERE tool_name = ? AND args_hash = ?",
+                (tool_name, args_hash)
+            ).fetchone()
+            
+            if result:
+                if DUCKDB_AVAILABLE:
+                    columns = [desc[0] for desc in self.conn.description]
+                    return dict(zip(columns, result))
+                else:
+                    return dict(result)
+            return None
+        except Exception as e:
+            print(f"Error getting receipt: {e}")
+            return None
 
     def close(self):
         """Close database connection."""

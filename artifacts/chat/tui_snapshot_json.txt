@@ -1,0 +1,37 @@
+{
+  "active_timers": [],
+  "counters": {},
+  "deterministic": true,
+  "journal_entries": 10,
+  "last_receipts": [],
+  "phase": "Idle",
+  "recent_operations": [
+    {
+      "note": "Chat last 5 operations query",
+      "timestamp": "2025-01-01T00:00:02.000000Z",
+      "tool": "chat.last_ops"
+    },
+    {
+      "note": "Chat counters query",
+      "timestamp": "2025-01-01T00:00:03.000000Z",
+      "tool": "chat.counters"
+    },
+    {
+      "note": "Chat timers query",
+      "timestamp": "2025-01-01T00:00:04.000000Z",
+      "tool": "chat.timers"
+    },
+    {
+      "note": "Chat receipts query",
+      "timestamp": "2025-01-01T00:00:05.000000Z",
+      "tool": "chat.receipts"
+    },
+    {
+      "note": "Chat help query",
+      "timestamp": "2025-01-01T00:00:06.000000Z",
+      "tool": "chat.help"
+    }
+  ],
+  "substep": "Ready",
+  "timestamp": "2025-01-01T00:00:02.000000Z"
+}

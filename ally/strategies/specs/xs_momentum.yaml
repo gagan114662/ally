@@ -1,0 +1,62 @@
+name: XS-Momentum
+universe:
+  asset_class: equities_us
+  inclusion:
+    market_cap_min: 1_000_000_000  # $1B minimum
+    liquidity_pct: 95  # Top 95% by volume
+    sectors: all
+    exchanges: [NYSE, NASDAQ]
+
+data:
+  ohlcv:
+    frequency: daily
+    adjustments: true
+  fundamentals: null
+
+signal:
+  type: cross_sectional
+  formula: "ret_12m - ret_1m"  # 12-month minus 1-month return
+  lookbacks:
+    ret_12m: 252  # 12 months
+    ret_1m: 21    # 1 month
+  winsorize:
+    level: 0.05  # 5% winsorization
+    method: quantile
+  neutralize:
+    sector: gics_sector
+    market_cap: log_market_cap
+  rebalance: monthly
+
+portfolio:
+  scheme: equal_weight_top_k
+  k: 50
+  constraints:
+    max_weight_single: 0.05  # 5% max per position
+    max_sector_weight: 0.3   # 30% max per sector
+
+costs:
+  bps_per_turnover: 15.0
+
+backtest:
+  start: "2010-01-01"
+  end: "2023-12-31"
+  benchmark: SPY
+  seed: 42
+
+gates:
+  factorlens:
+    factors: [MKT_RF, SMB, HML, RMW, CMA, MOM]
+    alpha_threshold: 0.02  # 2% annual alpha threshold
+    t_stat_min: 2.0
+  fdr:
+    level: 0.05
+    method: benjamini_hochberg
+  promotion:
+    t_stat_threshold: 2.0
+    max_turnover: 3.0
+    max_cost_bps: 25.0
+    min_capacity: 100_000_000
+    holdout_fraction: 0.3
+
+proof:
+  emit: true

@@ -1,0 +1,64 @@
+from AlgorithmImports import *
+import json, os, time
+
+class AllyPaperAlgorithm(QCAlgorithm):
+    def Initialize(self):
+        self.SetStartDate(2024,1,1)
+        self.SetCash(1_000_000)
+        symbols = [s.strip() for s in self.GetParameter("ALLY_SYMBOLS").split(",") if s.strip()]
+        for s in symbols:
+            self.AddEquity(s, Resolution.Minute)
+        self.inbox_path = self.GetParameter("ALLY_INBOX") or "orders_inbox.jsonl"
+        self.last_pos_hash = None
+        self.Debug(f"AllyPaperAlgorithm initialized with symbols: {symbols}")
+        self.Debug(f"Inbox path: {self.inbox_path}")
+
+    def OnData(self, data):
+        # Poll for Ally order intents
+        if os.path.exists(self.inbox_path):
+            with open(self.inbox_path, "r") as f:
+                lines = f.read().strip().splitlines()
+            # consume & truncate atomically
+            if lines:
+                open(self.inbox_path, "w").close()
+                for line in lines:
+                    try:
+                        intent = json.loads(line)
+                        self._execute_intent(intent, data)
+                    except Exception as e:
+                        self.Error(f"IntentError: {e}")
+
+    def _execute_intent(self, it, data):
+        sym = Symbol.Create(it["symbol"], SecurityType.Equity, Market.USA)
+        qty = int(it["qty"])
+        tif = TimeInForce.GoodTilCanceled if it.get("tif","day").lower()=="gtc" else TimeInForce.Day
+        cid = it.get("client_order_id") or self.Time.strftime("%Y%m%d%H%M%S%f")
+        od = None
+        ty = it.get("type","market").lower()
+        
+        try:
+            if ty == "market":
+                od = self.MarketOrder(sym, qty, asynchronous=False, tag=cid)
+            elif ty == "limit":
+                od = self.LimitOrder(sym, qty, float(it["limit_price"]), tag=cid, timeInForce=tif)
+            elif ty == "stop":
+                od = self.StopMarketOrder(sym, qty, float(it["stop_price"]), tag=cid)
+            elif ty == "stop_limit":
+                od = self.StopLimitOrder(sym, qty, float(it["stop_price"]), float(it["limit_price"]), tag=cid, timeInForce=tif)
+            else:
+                self.Error(f"Unsupported order type: {ty}")
+                return
+            self.Debug(f"ALLY_ORDER_SUBMITTED {cid} -> {od.Id if od else 'FAILED'}")
+        except Exception as e:
+            self.Error(f"Order execution failed: {e}")
+
+    def OnOrderEvent(self, orderEvent):
+        """Log order events for Ally adapter to consume"""
+        order = self.Transactions.GetOrderById(orderEvent.OrderId)
+        if order:
+            self.Debug(f"ALLY_ORDER_EVENT {order.Tag} -> {orderEvent.Status} @ {orderEvent.FillPrice} x {orderEvent.FillQuantity}")
+
+    def OnEndOfAlgorithm(self):
+        """Final portfolio summary"""
+        self.Debug(f"ALLY_FINAL_CASH: {self.Portfolio.Cash}")
+        self.Debug(f"ALLY_FINAL_VALUE: {self.Portfolio.TotalPortfolioValue}")
