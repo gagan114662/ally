@@ -1,0 +1,33 @@
+name: "CI: Smoke Tests (Required)"
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    env:
+      ALLY_LIVE: 0
+      TZ: UTC
+      PYTHONHASHSEED: 0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-tests.txt
+      - name: Run smoke tests
+        run: |
+          pytest -m "smoke" --junitxml=artifacts/ci/smoke-junit.xml
+      - name: Upload smoke artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-test-results
+          path: artifacts/ci/smoke-junit.xml

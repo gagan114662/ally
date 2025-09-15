@@ -1,0 +1,58 @@
+name: "CI: Static + Unit Tests (Required)"
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-tests.txt
+      - name: Run ruff linting
+        run: ruff check .
+      - name: Run mypy type checking
+        run: mypy ally/ --ignore-missing-imports
+      - name: Upload static analysis artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: static-analysis-results
+          path: |
+            .ruff_cache/
+            .mypy_cache/
+
+  unit-fast:
+    runs-on: ubuntu-latest
+    env:
+      ALLY_LIVE: 0
+      TZ: UTC
+      PYTHONHASHSEED: 0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements-tests.txt
+      - name: Run unit tests
+        run: |
+          pytest -m "unit and offline and not slow and not live" \
+            --junitxml=artifacts/ci/unit-junit.xml
+      - name: Upload unit test artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-results
+          path: artifacts/ci/unit-junit.xml
