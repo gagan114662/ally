@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-09-14T20:26:24.864948Z",
+  "orders_placed": 5,
+  "orders_filled": 5,
+  "total_trades": 5,
+  "total_notional": 96590.02433823845,
+  "avg_slippage_bps": 46.802711304892014,
+  "order_summary": {
+    "total_orders": 5,
+    "status_breakdown": {
+      "FILLED": 5
+    },
+    "open_orders": 0,
+    "filled_orders": 5,
+    "canceled_orders": 0,
+    "rejected_orders": 0
+  },
+  "trade_summary": {
+    "total_trades": 5,
+    "total_volume": 3027.5380401503166,
+    "total_notional": 96590.02433823845,
+    "avg_trade_size": 19318.00486764769
+  },
+  "config": {
+    "slippage_model": "sqrt",
+    "impact_k": 6.0,
+    "base_bps": 10.0,
+    "latency_bars": 0,
+    "adv_cap_pct": 0.1
+  },
+  "orders_receipt": "6ca61a05abfec618",
+  "trades_receipt": "b99e5b8d058331b6"
+}

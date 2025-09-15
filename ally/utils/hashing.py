@@ -4,13 +4,18 @@ Hashing utilities for deterministic tool execution and caching
 
 import hashlib
 import json
-import xxhash
 from typing import Any, Dict
 import inspect
 from pathlib import Path
 
+try:
+    import xxhash
+    HAS_XXHASH = True
+except ImportError:
+    HAS_XXHASH = False
 
-def hash_inputs(inputs: Dict[str, Any], algorithm: str = "xxh64") -> str:
+
+def hash_inputs(inputs: Dict[str, Any], algorithm: str = "sha256") -> str:
     """
     Create deterministic hash of tool inputs
     
@@ -24,17 +29,22 @@ def hash_inputs(inputs: Dict[str, Any], algorithm: str = "xxh64") -> str:
     # Serialize inputs in deterministic order
     serialized = json.dumps(inputs, sort_keys=True, default=str)
     
-    if algorithm == "xxh64":
+    if algorithm == "xxh64" and HAS_XXHASH:
         return xxhash.xxh64(serialized.encode()).hexdigest()
     elif algorithm == "sha256":
         return hashlib.sha256(serialized.encode()).hexdigest()
     elif algorithm == "md5":
         return hashlib.md5(serialized.encode()).hexdigest()
+    elif algorithm == "sha1":
+        return hashlib.sha1(serialized.encode()).hexdigest()
     else:
+        # Fallback to sha256 if xxh64 requested but not available
+        if algorithm == "xxh64":
+            return hashlib.sha256(serialized.encode()).hexdigest()
         raise ValueError(f"Unsupported algorithm: {algorithm}")
 
 
-def hash_code(func_or_file, algorithm: str = "xxh64") -> str:
+def hash_code(func_or_file, algorithm: str = "sha256") -> str:
     """
     Create hash of function source code or file contents
     
@@ -59,17 +69,22 @@ def hash_code(func_or_file, algorithm: str = "xxh64") -> str:
     else:
         source = str(func_or_file)
     
-    if algorithm == "xxh64":
+    if algorithm == "xxh64" and HAS_XXHASH:
         return xxhash.xxh64(source.encode()).hexdigest()
     elif algorithm == "sha256":
         return hashlib.sha256(source.encode()).hexdigest()
     elif algorithm == "md5":
         return hashlib.md5(source.encode()).hexdigest()
+    elif algorithm == "sha1":
+        return hashlib.sha1(source.encode()).hexdigest()
     else:
+        # Fallback to sha256 if xxh64 requested but not available
+        if algorithm == "xxh64":
+            return hashlib.sha256(source.encode()).hexdigest()
         raise ValueError(f"Unsupported algorithm: {algorithm}")
 
 
-def content_hash(data: bytes, algorithm: str = "xxh64") -> str:
+def content_hash(data: bytes, algorithm: str = "sha256") -> str:
     """
     Create hash of binary content
     
@@ -80,10 +95,48 @@ def content_hash(data: bytes, algorithm: str = "xxh64") -> str:
     Returns:
         Hex string hash
     """
-    if algorithm == "xxh64":
+    if algorithm == "xxh64" and HAS_XXHASH:
         return xxhash.xxh64(data).hexdigest()
     elif algorithm == "sha256":
         return hashlib.sha256(data).hexdigest() 
+    elif algorithm == "md5":
+        return hashlib.md5(data).hexdigest()
+    elif algorithm == "sha1":
+        return hashlib.sha1(data).hexdigest()
+    else:
+        # Fallback to sha256 if xxh64 requested but not available
+        if algorithm == "xxh64":
+            return hashlib.sha256(data).hexdigest()
+        raise ValueError(f"Unsupported algorithm: {algorithm}")
+
+
+def hash_payload(payload: Any, algorithm: str = "sha1") -> str:
+    """
+    Create SHA-1 hash of raw payload data for receipts
+    
+    Args:
+        payload: Raw payload data (string, bytes, dict, etc.)
+        algorithm: Hashing algorithm (default: sha1 for receipts)
+        
+    Returns:
+        Hex string hash of payload
+    """
+    if isinstance(payload, dict):
+        # For dictionaries, serialize deterministically
+        serialized = json.dumps(payload, sort_keys=True, default=str)
+        data = serialized.encode()
+    elif isinstance(payload, str):
+        data = payload.encode()
+    elif isinstance(payload, bytes):
+        data = payload
+    else:
+        # Convert other types to string first
+        data = str(payload).encode()
+    
+    if algorithm == "sha1":
+        return hashlib.sha1(data).hexdigest()
+    elif algorithm == "sha256":
+        return hashlib.sha256(data).hexdigest()
     elif algorithm == "md5":
         return hashlib.md5(data).hexdigest()
     else:

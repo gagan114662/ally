@@ -1,0 +1,19 @@
+{
+  "environment": "live",
+  "job-mode": "parallel-local",
+  "live-mode-brokerage": "PaperBrokerage",
+  "api-access-token": "${QC_API_TOKEN}",
+  "api-user-id": "${QC_USER_ID}",
+  "data-folder": "${QC_DATA_DIR}",
+  "result-destination-folder": "${QC_RESULTS_DIR}",
+  "log-handler": "CompositeLogHandler",
+  "messaging-handler": "QuantConnect.Messaging.Messaging",
+  "algorithm-language": "Python",
+  "algorithm-type-name": "AllyPaperAlgorithm",
+  "algorithm-location": "algorithm.py",
+  "live-data-feed": "IqFeed",
+  "parameters": {
+    "ALLY_INBOX": "orders_inbox.jsonl",
+    "ALLY_SYMBOLS": "AAPL,MSFT"
+  }
+}

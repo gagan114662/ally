@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-09-14T12:00:00Z",
+  "bundle_sha1": "TEST_BUNDLE_SHA",
+  "promotion_decision": "BLOCK",
+  "promotion_allowed": false,
+  "promotion_blocked": true,
+  "blocking_reasons": [],
+  "sentinel_results": [
+    {
+      "sentinel_type": "data_drift",
+      "status": "DRIFT",
+      "receipt_hash": "06b7a40709923054",
+      "violations": []
+    },
+    {
+      "sentinel_type": "strategy_drift",
+      "status": "OK",
+      "receipt_hash": "89d2864e9ec2fe15",
+      "violations": []
+    },
+    {
+      "sentinel_type": "ops_drift",
+      "status": "OK",
+      "receipt_hash": "6cb1dcfdf560b6f4",
+      "violations": []
+    }
+  ],
+  "guard_summary": {
+    "decision": "BLOCK",
+    "total_sentinels": 3,
+    "sentinels_ok": 2,
+    "sentinels_failed": 1,
+    "sentinels_error": 0,
+    "blocking_reason_count": 0
+  }
+}

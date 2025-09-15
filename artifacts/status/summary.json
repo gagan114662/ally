@@ -1,0 +1,43 @@
+{
+  "ci_run": true,
+  "counters": {
+    "data_loaded": 1,
+    "error.DataError": 1,
+    "error.total": 1,
+    "spec_parsed": 1,
+    "success.total": 1,
+    "success.validation": 1,
+    "walkforward_runs": 5
+  },
+  "deterministic": true,
+  "journal_entries": 5,
+  "last_params_hash": "ffffffff",
+  "last_receipt_hash": "00000000",
+  "last_tool": "ci.complete",
+  "phase": "Idle",
+  "substep": "Ready",
+  "timers": {
+    "data_loading": {
+      "avg_ms": 1500,
+      "count": 1,
+      "max_ms": 1500,
+      "min_ms": 1500,
+      "total_ms": 1500
+    },
+    "spec_parsing": {
+      "avg_ms": 1000,
+      "count": 1,
+      "max_ms": 1000,
+      "min_ms": 1000,
+      "total_ms": 1000
+    },
+    "walkforward_ms": {
+      "avg_ms": 8500,
+      "count": 1,
+      "max_ms": 8500,
+      "min_ms": 8500,
+      "total_ms": 8500
+    }
+  },
+  "timestamp": "2025-01-01T00:00:10.000000Z"
+}

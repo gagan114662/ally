@@ -1,0 +1,6 @@
+{"q": "show status", "r": {"data_keys": ["phase", "substep", "timestamp", "counters", "timers", "recent_ops", "journal_entries"], "message": "status", "ok": true, "receipt": {"params_hash": "fc072366292d7446", "receipt_hash": "461f0b565b0eaf59", "tool": "chat.status"}}}
+{"q": "last 5 operations", "r": {"data_keys": ["ops", "count"], "message": "last_ops", "ok": true, "receipt": {"params_hash": "c50300dc83c46a79", "receipt_hash": "8a7589c600b37325", "tool": "chat.last_ops"}}}
+{"q": "counters", "r": {"data_keys": ["counters", "total"], "message": "counters", "ok": true, "receipt": {"params_hash": "3a5d3bbf4638f947", "receipt_hash": "8aaafb5a019c57ec", "tool": "chat.counters"}}}
+{"q": "timers", "r": {"data_keys": ["timer_stats"], "message": "timers", "ok": true, "receipt": {"params_hash": "0418f28c463def7a", "receipt_hash": "c6c7aec4c641c218", "tool": "chat.timers"}}}
+{"q": "receipts", "r": {"data_keys": ["receipts", "count"], "message": "receipts", "ok": true, "receipt": {"params_hash": "f1c0354f67b92342", "receipt_hash": "67b5af4b86ea16cd", "tool": "chat.receipts"}}}
+{"q": "help", "r": {"data_keys": ["help", "unknown_prompt"], "message": "help", "ok": false, "receipt": {"params_hash": "b57cb5fac7cdf99b", "receipt_hash": "34137c40af4c4dbe", "tool": "chat.help"}}}

@@ -1,0 +1,3 @@
+model: "bps=10,impact=k*sqrt(q),k=6.0,borrow_bps=50"
+capacity_usd: 50000000
+max_turnover: 0.35

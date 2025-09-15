@@ -1,0 +1,35 @@
+{
+  "asof": "2025-09-15T12:00:00Z",
+  "strategies": [
+    {
+      "id": "XS_Momentum_v1",
+      "family": "momentum",
+      "weight_hint": 0.40,
+      "oos_sharpe": 0.92,
+      "vol_annual": 0.18,
+      "risk_tag": "core",
+      "promotion_bundle_sha": "bndl_xs_mom_001",
+      "drift_status": "OK"
+    },
+    {
+      "id": "Value_BTM_v1",
+      "family": "value",
+      "weight_hint": 0.35,
+      "oos_sharpe": 0.71,
+      "vol_annual": 0.17,
+      "risk_tag": "core",
+      "promotion_bundle_sha": "bndl_value_001",
+      "drift_status": "OK"
+    },
+    {
+      "id": "TS_Trend_v1",
+      "family": "trend",
+      "weight_hint": 0.25,
+      "oos_sharpe": 0.65,
+      "vol_annual": 0.19,
+      "risk_tag": "satellite",
+      "promotion_bundle_sha": "bndl_ts_trend_001",
+      "drift_status": "OK"
+    }
+  ]
+}
