@@ -1,10 +1,8 @@
 name: "CI: Phase Contract Tests (Advisory)"
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
 
 jobs:
   contract:

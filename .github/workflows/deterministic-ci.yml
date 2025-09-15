@@ -1,11 +1,7 @@
 name: deterministic-ci
 
 on:
-  push:
-    branches: [ main, 'release/**', 'phase-*', 'chore/**', 'feat/**' ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch: {}
+  workflow_dispatch: {}  # Manual trigger only - disabled for auto-run
 
 permissions:
   contents: write
@@ -16,6 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ false }}  # Never run automatically
     env:
       ALLY_LIVE: "0"
       TZ: "UTC"

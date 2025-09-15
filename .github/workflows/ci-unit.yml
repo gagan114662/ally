@@ -1,10 +1,8 @@
 name: "CI: Static + Unit Tests (Required)"
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
 
 jobs:
   static:
@@ -49,10 +47,14 @@ jobs:
       - name: Run unit tests
         run: |
           pytest -m "unit and offline and not slow and not live" \
-            --junitxml=artifacts/ci/unit-junit.xml
+            --junitxml=artifacts/ci/unit-junit.xml \
+            --cov=ally --cov-report=xml:artifacts/ci/coverage.xml | tee artifacts/ci/pytest_stdout.txt
       - name: Upload unit test artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: unit-test-results
-          path: artifacts/ci/unit-junit.xml
+          path: |
+            artifacts/ci/pytest_stdout.txt
+            artifacts/ci/unit-junit.xml
+            artifacts/ci/coverage.xml

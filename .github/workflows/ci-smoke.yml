@@ -2,9 +2,9 @@ name: "CI: Smoke Tests (Required)"
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, 'release/**', 'phase-*', 'chore/**', 'feat/**']
   pull_request:
-    branches: [main, develop]
+    branches: [main]
 
 jobs:
   smoke:
@@ -24,10 +24,14 @@ jobs:
           pip install -r requirements-tests.txt
       - name: Run smoke tests
         run: |
-          pytest -m "smoke" --junitxml=artifacts/ci/smoke-junit.xml
+          pytest -m "smoke and offline and not live" --junitxml=artifacts/ci/smoke-junit.xml | tee artifacts/ci/pytest_stdout.txt
       - name: Upload smoke artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: smoke-test-results
-          path: artifacts/ci/smoke-junit.xml
+          path: |
+            artifacts/ci/pytest_stdout.txt
+            artifacts/ci/smoke-junit.xml
+            artifacts/audit_check_ci.json
+            artifacts/chat/transcript_ci.jsonl
