@@ -1,0 +1,5 @@
+{
+  "data":     {"tool": "ops.drift.data",     "receipt_hash": "06b7a40709923054"},
+  "strategy": {"tool": "ops.drift.strategy", "receipt_hash": "89d2864e9ec2fe15"},
+  "ops":      {"tool": "ops.drift.ops",      "receipt_hash": "6cb1dcfdf560b6f4"}
+}

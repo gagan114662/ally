@@ -14,8 +14,10 @@ class LoadOHLCVIn(ToolInput):
     interval: str = Field(..., description="Time interval (1m, 5m, 1h, 1d, etc.)")
     start: str = Field(..., description="Start date (YYYY-MM-DD or ISO format)")
     end: str = Field(..., description="End date (YYYY-MM-DD or ISO format)")
-    source: str = Field("duckdb", description="Data source (duckdb, csv, mock)")
+    source: str = Field("mock", description="Data source (alpha_vantage, polygon, finnhub, quandl, yfinance, csv, mock)")
     data_path: Optional[str] = Field(None, description="Path to data files")
+    live: bool = Field(False, description="Enable live data fetching (requires ALLY_LIVE=1)")
+    api_key: Optional[str] = Field(None, description="API key for live data sources")
     
 
 class LoadDataIn(ToolInput):

@@ -1,0 +1,39 @@
+{
+  "universe": ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"],
+  "weights": {
+    "AAPL": 0.012,
+    "MSFT": 0.009,
+    "GOOGL": 0.008,
+    "AMZN": 0.007,
+    "TSLA": 0.006
+  },
+  "method": "erc",
+  "kelly_cap": 0.25,
+  "vol_target": 0.10,
+  "ex_ante_vol": 0.098,
+  "ex_ante_sr": 0.82,
+  "gross_exposure": 1.97,
+  "net_exposure": 0.12,
+  "turnover": 1.21,
+  "cost_drag_annual": 0.021,
+  "constraints_ok": true,
+  "violations": [],
+  "binding_caps": [],
+  "timestamp": "2025-09-14T17:30:00Z",
+  "portfolio_value_usd": 10000000,
+  "optimization_metadata": {
+    "converged": true,
+    "iterations": 50,
+    "method": "erc"
+  },
+  "sizing_metadata": {
+    "kelly_fraction": 0.25,
+    "vol_scaling": 1.02,
+    "sizing_applied": true
+  },
+  "risk_analysis": {
+    "risk_contributions": [0.20, 0.20, 0.20, 0.20, 0.20],
+    "risk_concentration": 0.20,
+    "effective_assets": 5.0
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "timestamp": "2025-09-14T20:08:35.659978Z",
+  "target_weights": {
+    "XS_Momentum_v1": 0.18,
+    "Value_BTM_v1": 0.18,
+    "TS_Trend_v1": 0.18,
+    "Cash": 0.46
+  },
+  "last_weights": {
+    "XS_Momentum_v1": 0.34,
+    "Value_BTM_v1": 0.36,
+    "TS_Trend_v1": 0.3
+  },
+  "weight_deltas": {
+    "TS_Trend_v1": -0.12,
+    "Value_BTM_v1": -0.18,
+    "XS_Momentum_v1": -0.16000000000000003,
+    "Cash": 0.46
+  },
+  "turnover": 0.46,
+  "turnover_ok": false,
+  "turnover_violations": [
+    "turnover=0.460>0.35"
+  ],
+  "cost_analysis": {
+    "total_cost_usd": 23400.0,
+    "total_cost_bps": 23.400000000000002,
+    "strategy_costs": {
+      "TS_Trend_v1": {
+        "delta_weight": -0.12,
+        "notional_usd": 1200000.0,
+        "cost_bps": 16.0,
+        "cost_usd": 1920.0
+      },
+      "Value_BTM_v1": {
+        "delta_weight": -0.18,
+        "notional_usd": 1800000.0,
+        "cost_bps": 19.0,
+        "cost_usd": 3420.0
+      },
+      "XS_Momentum_v1": {
+        "delta_weight": -0.16000000000000003,
+        "notional_usd": 1600000.0000000002,
+        "cost_bps": 18.0,
+        "cost_usd": 2880.0000000000005
+      },
+      "Cash": {
+        "delta_weight": 0.46,
+        "notional_usd": 4600000.0,
+        "cost_bps": 33.0,
+        "cost_usd": 15180.0
+      }
+    }
+  },
+  "orders_generated": 4,
+  "orders_filled": 4,
+  "backend": "simulator",
+  "rebalance_plan": {
+    "orders": [
+      {
+        "order_id": "ORD_0001",
+        "strategy": "TS_Trend_v1",
+        "side": "SELL",
+        "notional_usd": 1200000.0,
+        "weight_delta": -0.12,
+        "status": "PENDING"
+      },
+      {
+        "order_id": "ORD_0002",
+        "strategy": "Value_BTM_v1",
+        "side": "SELL",
+        "notional_usd": 1800000.0,
+        "weight_delta": -0.18,
+        "status": "PENDING"
+      },
+      {
+        "order_id": "ORD_0003",
+        "strategy": "XS_Momentum_v1",
+        "side": "SELL",
+        "notional_usd": 1600000.0000000002,
+        "weight_delta": -0.16000000000000003,
+        "status": "PENDING"
+      },
+      {
+        "order_id": "ORD_0004",
+        "strategy": "Cash",
+        "side": "BUY",
+        "notional_usd": 4600000.0,
+        "weight_delta": 0.46,
+        "status": "PENDING"
+      }
+    ],
+    "filled_orders": [
+      {
+        "order_id": "ORD_0001",
+        "strategy": "TS_Trend_v1",
+        "side": "SELL",
+        "notional_usd": 1200000.0,
+        "weight_delta": -0.12,
+        "status": "FILLED",
+        "fill_price": 1.0,
+        "fill_time": "2025-09-14T20:08:35.659952Z",
+        "fill_notional": 1200000.0,
+        "execution_cost_bps": 12.0,
+        "backend": "simulator"
+      },
+      {
+        "order_id": "ORD_0002",
+        "strategy": "Value_BTM_v1",
+        "side": "SELL",
+        "notional_usd": 1800000.0,
+        "weight_delta": -0.18,
+        "status": "FILLED",
+        "fill_price": 1.0,
+        "fill_time": "2025-09-14T20:08:35.659968Z",
+        "fill_notional": 1800000.0,
+        "execution_cost_bps": 12.0,
+        "backend": "simulator"
+      },
+      {
+        "order_id": "ORD_0003",
+        "strategy": "XS_Momentum_v1",
+        "side": "SELL",
+        "notional_usd": 1600000.0000000002,
+        "weight_delta": -0.16000000000000003,
+        "status": "FILLED",
+        "fill_price": 1.0,
+        "fill_time": "2025-09-14T20:08:35.659972Z",
+        "fill_notional": 1600000.0000000002,
+        "execution_cost_bps": 12.0,
+        "backend": "simulator"
+      },
+      {
+        "order_id": "ORD_0004",
+        "strategy": "Cash",
+        "side": "BUY",
+        "notional_usd": 4600000.0,
+        "weight_delta": 0.46,
+        "status": "FILLED",
+        "fill_price": 1.0,
+        "fill_time": "2025-09-14T20:08:35.659974Z",
+        "fill_notional": 4600000.0,
+        "execution_cost_bps": 12.0,
+        "backend": "simulator"
+      }
+    ],
+    "summary": {
+      "strategies_rebalanced": 4,
+      "total_turnover": 0.46,
+      "projected_cost_bps": 23.400000000000002,
+      "projected_cost_usd": 23400.0
+    }
+  }
+}

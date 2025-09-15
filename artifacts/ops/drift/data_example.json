@@ -1,0 +1,54 @@
+{
+  "timestamp": "2025-09-14T19:58:14.150687Z",
+  "status": "DRIFT",
+  "schema_ok": true,
+  "features_checked": 3,
+  "features_with_drift": 1,
+  "feature_results": [
+    {
+      "feature": "feature1",
+      "psi": 0.05,
+      "js_distance": 0.11940409350068854,
+      "ks_statistic": 0.12698412698412698,
+      "ks_pvalue": 0.5,
+      "drift_detected": true,
+      "violations": [
+        "JS distance 0.1194 exceeds threshold 0.05"
+      ],
+      "status": "DRIFT"
+    },
+    {
+      "feature": "feature2",
+      "psi": 0.05,
+      "js_distance": 0.0,
+      "ks_statistic": 0.0,
+      "ks_pvalue": 0.5,
+      "drift_detected": false,
+      "violations": [],
+      "status": "OK"
+    },
+    {
+      "feature": "feature3",
+      "psi": 0.05,
+      "js_distance": 0.0,
+      "ks_statistic": 1.0,
+      "ks_pvalue": 0.05,
+      "drift_detected": false,
+      "violations": [],
+      "status": "OK"
+    }
+  ],
+  "covariance_drift": {
+    "frobenius_norm": 0.07071067811865474,
+    "max_eigenvalue_drift": 0.03,
+    "condition_number_ratio": 1.05
+  },
+  "violations": [],
+  "config": {
+    "ref_window_days": 252,
+    "test_window_days": 21,
+    "psi_max": 0.2,
+    "js_max": 0.05,
+    "ks_pmin": 0.05
+  }
+}

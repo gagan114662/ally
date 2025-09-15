@@ -1,0 +1,31 @@
+{
+  "asof": "2025-09-15T16:00:00Z",
+  "positions": {
+    "AAPL": {
+      "quantity": 1500,
+      "avg_price": 175.50,
+      "side": "LONG"
+    },
+    "MSFT": {
+      "quantity": 900,
+      "avg_price": 330.25,
+      "side": "LONG"
+    },
+    "GOOGL": {
+      "quantity": 1200,
+      "avg_price": 140.75,
+      "side": "LONG"
+    },
+    "SPY": {
+      "quantity": 400,
+      "avg_price": 445.00,
+      "side": "LONG"
+    },
+    "DUST": {
+      "quantity": -500,
+      "avg_price": 10.25,
+      "side": "SHORT"
+    }
+  },
+  "cash_usd": 75000
+}

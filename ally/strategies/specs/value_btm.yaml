@@ -1,0 +1,67 @@
+name: Value-BTM
+universe:
+  asset_class: equities_us
+  inclusion:
+    market_cap_min: 500_000_000  # $500M minimum
+    liquidity_pct: 90  # Top 90% by volume
+    sectors: all
+    exchanges: [NYSE, NASDAQ]
+    exclude_financials: false
+    exclude_utilities: false
+
+data:
+  ohlcv:
+    frequency: daily
+    adjustments: true
+  fundamentals:
+    frequency: quarterly
+    fields: [book_equity, market_cap, shares_outstanding]
+    lag_days: 90  # 90-day reporting lag
+
+signal:
+  type: cross_sectional
+  formula: "book_equity / market_cap"  # Book-to-Market ratio
+  lookbacks:
+    book_equity: 90  # Use most recent quarterly data
+  winsorize:
+    level: 0.01  # 1% winsorization (less aggressive for value)
+    method: quantile
+  neutralize:
+    sector: gics_sector
+    size: log_market_cap
+  rebalance: quarterly  # Quarterly rebalancing for fundamentals
+
+portfolio:
+  scheme: equal_weight_top_k
+  k: 100  # Larger portfolio for value
+  constraints:
+    max_weight_single: 0.02  # 2% max per position
+    max_sector_weight: 0.25  # 25% max per sector
+    min_book_value: 0  # Exclude negative book value
+
+costs:
+  bps_per_turnover: 12.0  # Lower turnover expected
+
+backtest:
+  start: "2005-01-01"  # Longer history for value
+  end: "2023-12-31"
+  benchmark: SPY
+  seed: 123
+
+gates:
+  factorlens:
+    factors: [MKT_RF, SMB, HML, RMW, CMA, MOM]
+    alpha_threshold: 0.015  # 1.5% annual alpha
+    t_stat_min: 1.8
+  fdr:
+    level: 0.05
+    method: benjamini_hochberg
+  promotion:
+    t_stat_threshold: 1.8
+    max_turnover: 1.5  # Lower turnover for value
+    max_cost_bps: 20.0
+    min_capacity: 200_000_000  # Higher capacity for value
+    holdout_fraction: 0.25
+
+proof:
+  emit: true
